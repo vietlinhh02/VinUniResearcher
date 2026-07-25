@@ -525,3 +525,91 @@ misconception, agent variant và rubric. Course author duyệt/sửa rồi mới
 Nhưng câu hỏi “LLM có tự chuyển một lab bất kỳ thành guided teachable lab tốt không?” là một
 research/system problem riêng: phải đánh giá độ đúng của spec, thời gian authoring và ảnh hưởng
 đến chất lượng learning design. Không gộp nó vào study đầu tiên về hiệu quả của dạy AI.
+
+## 14. Một flow và một prototype chung cho toàn khóa
+
+Không xây hai sản phẩm: một bản TeachYou-like và một bản proposed. Có **một course engine, một UI
+flow và một data model**. `TeachYou-like` chỉ là mode đối chứng ở backend khi chạy research; flow
+mặc định của sản phẩm là AI apprentice thực hành và được test.
+
+```text
+Course map
+  -> Day lab
+  -> guided coding cards
+  -> giải thích/dạy AI
+  -> AI practice check
+  -> daily evidence và skill progress
+  -> module review khi các skill có liên quan
+```
+
+### 14.1. Flow người học nhìn thấy
+
+```text
+1. Chọn Day N trong course map.
+2. Mở slide/lesson và repo lab gốc của ngày đó.
+3. Làm từng guided coding card:
+     code context/test failure
+       -> chọn phương án
+       -> giải thích lý do
+       -> starter code cập nhật
+       -> public test
+4. Chuyển sang "Dạy AI apprentice":
+     AI nhắc lại rule vừa được dạy và phần còn chưa hiểu.
+5. Mở "AI practice check":
+     AI nhận một micro-task cùng objective, với input/test condition khác.
+     AI tạo attempt; runner trả evidence pass/fail.
+6. Nếu AI fail:
+     người học giải thích hoặc sửa rule cho AI;
+     knowledge state cập nhật;
+     AI thử lại, tối đa 2–3 vòng.
+7. Kết thúc day:
+     lưu choices, explanations, code/test evidence, knowledge state và AI progress.
+8. Khi đến module review hoặc thời điểm nhắc lại:
+     người học làm transfer card độc lập, không có AI trợ giúp.
+```
+
+Người học không phải code từ trang trắng. Các lựa chọn dẫn dắt code ở đầu lab; khi tiến bộ hơn,
+course có thể mở dần quyền sửa trực tiếp snippet hoặc repo. Dù bằng lựa chọn hay code trực tiếp,
+người học luôn phải giải thích reasoning và code cuối cùng luôn phải qua test.
+
+### 14.2. Một UI, hai research modes
+
+Trong research, participant được server gán condition; không có hai app khác nhau.
+
+| Bước UI chung: AI practice check | `reflective` / TeachYou-like | `enactment` / proposed product |
+|---|---|---|
+| Knowledge state | AI nhắc lại điều được dạy và hỏi follow-up bám state | Giống `reflective` |
+| Hoạt động sau khi dạy | AI hội thoại trong time window cố định, không tạo code attempt | AI tạo code/configuration attempt cho micro-task isomorphic |
+| Evidence trả về | Tóm tắt và câu hỏi phản tư | Hidden runner trả pass/fail/failure trace tối thiểu |
+| Việc người học làm | Giải thích tiếp cho AI | Giải thích/sửa rule cho AI sau khi thấy attempt |
+
+Hai mode giữ cố định: slide, lab, guided cards, starter code, public tests, persona, model setting,
+knowledge-state format và thời lượng. Chỉ khác việc AI có **enact** kiến thức trên task/test mới
+hay không. Vì đây là một feature flag, prototype không bị nhân đôi và log schema giống nhau.
+
+### 14.3. Thành phần tối thiểu của prototype
+
+| Thành phần | Trách nhiệm |
+|---|---|
+| Course map | Hiện ngày/module, skill dependency và progress |
+| Lab Teaching Spec | Quy định card, options, expected reasoning, misconception, tests và agent variant cho từng lab |
+| Guided coding UI | Hiện code context, choice, explanation và test result |
+| Knowledge-state service | Lưu claim người học đã dạy, evidence source và phần AI chưa biết |
+| Agent service | Giữ vai apprentice, hỏi bám state và tạo attempt theo mode |
+| Isolated runner | Chạy code attempt qua public/hidden tests; không giữ API key của người học |
+| Evidence log | Lưu lựa chọn, explanation, test summary, AI attempt, correction và completion dưới participant ID giả danh |
+| Transfer-card service | Giao task độc lập khi đến thời điểm review, khóa AI feedback đến khi submit |
+
+Day 01 là Lab Teaching Spec đầu tiên. Toàn khóa dùng lại engine này bằng cách thêm spec cho từng
+lab; không cần build sandbox/UX mới cho mỗi ngày.
+
+### 14.4. Phân biệt product flow và research measurement
+
+| Lớp | Product cần làm | Research cần đo |
+|---|---|---|
+| Trong mỗi lab | Guided coding, dạy AI, AI practice check, public tests | Agent fidelity, explanation quality, completion |
+| Qua module/course | Skill map, review card và transfer challenge khi phù hợp | Hidden TransferScore, retention và course-level progression |
+
+Không bắt Day N+1 phải liên quan Day N. Mỗi day có micro-task AI riêng; transfer card được gửi
+sau khoảng thời gian cố định hoặc ở cuối module có các skill liên quan. Course map chỉ dùng để
+chọn đúng skill cần review, không áp đặt curriculum giả tạo.
