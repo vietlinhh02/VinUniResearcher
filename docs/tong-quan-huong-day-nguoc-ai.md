@@ -613,3 +613,89 @@ lab; không cần build sandbox/UX mới cho mỗi ngày.
 Không bắt Day N+1 phải liên quan Day N. Mỗi day có micro-task AI riêng; transfer card được gửi
 sau khoảng thời gian cố định hoặc ở cuối module có các skill liên quan. Course map chỉ dùng để
 chọn đúng skill cần review, không áp đặt curriculum giả tạo.
+
+## 15. Flow này đo gì trong paper?
+
+Paper đo **người học học được gì từ flow**, không dùng việc AI pass làm kết luận rằng người học
+đã học tốt. Dữ liệu được thu theo chuỗi hoạt động:
+
+```text
+Chọn + giải thích
+  -> code/test
+  -> dạy AI
+  -> AI attempt pass/fail
+  -> người học sửa cách AI hiểu
+  -> transfer challenge độc lập
+```
+
+| Phần flow | Dữ liệu thu được | Nó đo gì trong paper? |
+|---|---|---|
+| Guided coding choice | lựa chọn, thời gian, lần đổi lựa chọn | Hiểu quyết định coding ở mức card |
+| Explanation bắt buộc | text/voice được chấm rubric | Chất lượng reasoning |
+| Public test của lab | pass/fail và failure category | Hoàn thành artifact trong ngày; không phải learning outcome chính |
+| AI practice check | rule đã dùng, attempt, pass/fail, số vòng sửa | Người học có truyền đạt rule đủ để AI áp dụng không |
+| User correction sau AI fail | lời giải thích sửa lỗi và evidence được trỏ tới | Knowledge-building và repair behaviour |
+| Transfer card không có AI | hidden coding tests và blind explanation rubric | Khả năng tự áp dụng kiến thức sang task mới |
+
+### 15.1. Primary outcome: learner TransferScore
+
+Primary outcome là `TransferScore` của **người học** trong một transfer card độc lập. Card dùng
+learning objectives của day/module nhưng có code context, input hoặc failure condition chưa từng
+thấy. Trước khi submit, AI apprentice không được phản hồi, gợi ý hoặc sửa code cho người học.
+
+```text
+TransferScore = (điểm hidden coding tests + điểm blind explanation rubric)
+                / tổng điểm có thể đạt
+                x 100
+```
+
+Ví dụ sau module về API calling, system prompt và retry: transfer card đưa một function mới có
+message structure và mock error khác. Người học tự chọn/cấu hình/giải thích; backend ánh xạ hoặc
+chạy code kết quả qua hidden tests. Nếu nhóm `enactment` có `TransferScore` cao hơn nhóm
+`reflective`, đây là evidence cho hiệu quả của verified recursive enactment.
+
+### 15.2. Secondary và process metrics
+
+| Metric | Cách tính/chấm | Diễn giải đúng |
+|---|---|---|
+| ExplanationScore | `0`: chọn không có lý do; `1`: nêu đúng rule; `2`: nêu rule, nguyên nhân/hệ quả và loại trừ phương án sai | Độ sâu reasoning, không thay thế transfer |
+| Knowledge-building rate | lượt giải thích có elaboration/sense-making / lượt có nội dung học thuật | Mechanism/process, không phải proof learning |
+| AgentPassRate | tỷ lệ AI pass micro-task sau khi được dạy | Evidence knowledge state đã được truyền đạt, không phải learner outcome |
+| RepairCount | số vòng người học phải dạy/sửa AI trước khi pass | Chỉ descriptive; ít vòng chưa chắc học tốt hơn |
+| Public-test completion | card/lab public tests đạt được | Artifact completion cùng ngày |
+| Agent fidelity | answer leakage, persona drift, ungrounded/redundant question | Can thiệp có được thực thi đúng không |
+| UX | mental effort, agent credibility, boredom/frustration | Khả thi và trade-off trải nghiệm |
+
+Không dùng số lượt chat hay số từ làm proxy cho learning. Hội thoại dài có thể chỉ phản ánh AI lặp
+lại, người học mắc kẹt hoặc agent hỏi quá nhiều.
+
+### 15.3. Research questions và contrast
+
+```text
+RQ1. Enactment có làm tăng learner TransferScore so với reflective/TeachYou-like không?
+RQ2. Enactment có làm thay đổi ExplanationScore, knowledge-building và repair behaviour không?
+RQ3. Agent có giữ knowledge boundary, không leak đáp án và không gây chán không?
+```
+
+Hai condition có chung slide, lab, guided coding cards, starter code, public tests, persona, model
+setting, knowledge-state format và time window. Chỉ thay đổi bước AI practice check:
+
+```text
+reflective: AI hội thoại/hỏi theo knowledge state
+enactment:  AI hội thoại và thử áp dụng knowledge state vào micro-task có hidden runner
+```
+
+Vì vậy primary contrast là tác động của **AI enactment được test**, không phải tác động chung của
+việc dùng AI hoặc việc làm guided coding lab.
+
+### 15.4. Chấm và phân tích đáng tin
+
+- Hidden coding tests phải cố định, không trùng public tests và không dùng LLM làm người chấm chính.
+- Explanation mở được hai rater biết domain chấm mù condition theo rubric đã đóng băng; báo cáo
+  reliability giữa rater.
+- Pre-test ngắn và prior coding experience được thu trước intervention để kiểm soát chênh lệch đầu vào.
+- Với between-subject study, estimate chính có thể là effect của `Condition` lên `TransferScore`,
+  điều chỉnh cho pre-test và kinh nghiệm. Với within-subject design, dùng paired/mixed analysis và
+  kiểm soát topic/order.
+- Agent pass, transcript và log sửa AI giúp giải thích cơ chế kết quả; chúng không được nâng thành
+  learning gain nếu transfer outcome không ủng hộ.
