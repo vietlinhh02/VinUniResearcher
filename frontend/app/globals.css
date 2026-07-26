@@ -1,26 +1,88 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
+@theme {
+  /* Colors — mirrored from DESIGN.md colors: */
+  --color-primary: #134d8b;
+  --color-primary-deep: #0a2848;
+  --color-accent: #c72127;
+  --color-accent-deep: #a11b20;
+  --color-on-primary: #ffffff;
+  --color-ink: #2e2e2e;
+  --color-body: #3a3a3a;
+  --color-charcoal: #575757;
+  --color-mute: #646464;
+  --color-ash: #8d8d8d;
+  --color-stone: #bbbbbb;
+  --color-on-dark: #fcfcfc;
+  --color-on-dark-mute: rgba(252, 252, 252, 0.72);
+  --color-canvas: #ffffff;
+  --color-surface-bone: #f2f6f9;
+  --color-surface-card: #ffffff;
+  --color-surface-dark: #202020;
+  --color-surface-deep: #000000;
+  --color-hairline: rgba(32, 32, 32, 0.12);
+  --color-hairline-strong: #202020;
+  --color-divider-dark: rgba(255, 255, 255, 0.2);
+  --color-badge-success: #2b9a66;
+  --color-link: #134d8b;
+  --color-ring-focus: rgba(59, 130, 246, 0.5);
+  --color-hero-glow: #2a6cb8;
+  --color-hero-pink: #b7cfe8;
+  /* Semantic đỏ chỉ dùng cho trạng thái lỗi (functional, không decorative) */
+  --color-danger: #b3261e;
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
+  /* Soft drop — DESIGN.md elevation level 4, chỉ cho phần tử nổi (toast) */
+  --shadow-soft: 0 8px 24px rgba(32, 32, 32, 0.08);
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+  /* Animations */
+  --animate-fade-up: fade-up 0.7s ease-out both;
+
+  @keyframes fade-up {
+    from {
+      opacity: 0;
+      transform: translateY(16px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
   }
+
+  /* Fonts — loaded via next/font in app/layout.tsx. Google Sans is not on
+     next/font; Manrope is the documented substitute (DESIGN.md, "Note on
+     Font Substitutes"). */
+  --font-display: var(--font-display-sans), Manrope, ui-sans-serif, system-ui, sans-serif;
+  --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+  --font-code: var(--font-inter-tight), ui-sans-serif, system-ui, sans-serif;
+
+  /* Radius — DESIGN.md rounded scale */
+  --radius-xs: 4px;
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --radius-lg: 16px;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background: var(--color-canvas);
+  color: var(--color-ink);
+  font-family: var(--font-sans);
+}
+
+/* Ẩn scrollbar toàn site (vẫn cuộn bình thường) */
+* {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+*::-webkit-scrollbar {
+  display: none;
+}
+
+/* Hero atmospheric mesh (DESIGN.md, Decorative Depth): navy core →
+   hero-glow mid-stop → hero-pink outer wash. */
+.hero-mesh {
+  background-color: var(--color-primary);
+  background-image:
+    radial-gradient(120% 90% at 15% -10%, var(--color-hero-glow) 0%, transparent 55%),
+    radial-gradient(120% 70% at 85% 110%, var(--color-hero-pink) 0%, transparent 60%);
 }

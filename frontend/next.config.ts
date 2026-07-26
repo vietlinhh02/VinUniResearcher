@@ -1,7 +1,10 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  /* config options here */
+  images: {
+    // Avatar người dùng sinh từ DiceBear (PNG endpoint)
+    remotePatterns: [{ protocol: "https", hostname: "api.dicebear.com" }],
+  },
 };
 
 export default nextConfig;
