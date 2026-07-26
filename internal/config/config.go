@@ -17,6 +17,9 @@ type Config struct {
 // HTTPConfig holds HTTP server settings.
 type HTTPConfig struct {
 	Port int
+	// CORSOrigin is the browser origin allowed to call the API with
+	// credentials (the frontend dev server in development).
+	CORSOrigin string
 }
 
 // DBConfig holds PostgreSQL connection settings.
@@ -41,7 +44,8 @@ func Load() Config {
 	return Config{
 		Env: getEnv("APP_ENV", "development"),
 		HTTP: HTTPConfig{
-			Port: getEnvInt("HTTP_PORT", 8080),
+			Port:       getEnvInt("HTTP_PORT", 8080),
+			CORSOrigin: getEnv("CORS_ORIGIN", "http://localhost:3000"),
 		},
 		DB: DBConfig{
 			Host:     getEnv("POSTGRES_HOST", "localhost"),

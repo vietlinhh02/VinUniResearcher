@@ -66,13 +66,22 @@ Mở `http://localhost:3000`. Xem thêm hướng dẫn dành cho frontend tại
 | `GET` | `/healthz` | Kiểm tra trạng thái service và PostgreSQL. |
 | `POST` | `/api/v1/users` | Tạo người dùng với `email` và `name`. |
 | `GET` | `/api/v1/users/{id}` | Lấy người dùng theo ID. |
+| `POST` | `/api/v1/auth/register` | Đăng ký với `email`, `name`, `password` (≥ 8 ký tự); set cookie phiên. |
+| `POST` | `/api/v1/auth/login` | Đăng nhập với `email`, `password`; set cookie phiên. |
+| `POST` | `/api/v1/auth/logout` | Đăng xuất, xóa phiên hiện tại. |
+| `GET` | `/api/v1/auth/me` | Lấy người dùng hiện tại từ cookie phiên. |
 
-Ví dụ tạo người dùng:
+Phiên đăng nhập dùng cookie `mentee_session` (HttpOnly, SameSite=Lax, hạn 7
+ngày); server chỉ lưu SHA-256 hash của token trong bảng `sessions`. Frontend ở
+origin khác được phép gọi kèm cookie qua CORS — cấu hình bằng biến `CORS_ORIGIN`
+(mặc định `http://localhost:3000`).
+
+Ví dụ đăng ký:
 
 ```bash
-curl -X POST http://localhost:8080/api/v1/users \
+curl -X POST http://localhost:8080/api/v1/auth/register \
   -H 'Content-Type: application/json' \
-  -d '{"email":"student@example.com","name":"Nguyen Van A"}'
+  -d '{"email":"student@example.com","name":"Nguyen Van A","password":"secret123"}'
 ```
 
 ## Cấu trúc repository

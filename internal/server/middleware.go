@@ -42,6 +42,27 @@ func logging(next http.Handler) http.Handler {
 	})
 }
 
+// cors allows the configured browser origin to call the API with credentials
+// (cookies) and answers preflight requests.
+func cors(origin string) middleware {
+	return func(next http.Handler) http.Handler {
+		return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+			w.Header().Set("Access-Control-Allow-Origin", origin)
+			w.Header().Set("Access-Control-Allow-Credentials", "true")
+			w.Header().Add("Vary", "Origin")
+
+			if r.Method == http.MethodOptions {
+				w.Header().Set("Access-Control-Allow-Methods", "GET, POST, PUT, PATCH, DELETE, OPTIONS")
+				w.Header().Set("Access-Control-Allow-Headers", "Content-Type")
+				w.Header().Set("Access-Control-Max-Age", "600")
+				w.WriteHeader(http.StatusNoContent)
+				return
+			}
+			next.ServeHTTP(w, r)
+		})
+	}
+}
+
 // recoverer converts panics into 500 responses instead of killing the server.
 func recoverer(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {

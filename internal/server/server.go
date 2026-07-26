@@ -24,7 +24,7 @@ func New(cfg config.Config, db *gorm.DB) *Server {
 	return &Server{
 		httpServer: &http.Server{
 			Addr:              fmt.Sprintf(":%d", cfg.HTTP.Port),
-			Handler:           newRouter(db),
+			Handler:           newRouter(cfg, db),
 			ReadHeaderTimeout: 5 * time.Second,
 			ReadTimeout:       10 * time.Second,
 			WriteTimeout:      10 * time.Second,

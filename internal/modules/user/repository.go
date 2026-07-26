@@ -17,6 +17,7 @@ var ErrDuplicateEmail = errors.New("email already registered")
 type Repository interface {
 	Create(ctx context.Context, u *User) error
 	GetByID(ctx context.Context, id int64) (*User, error)
+	GetByEmail(ctx context.Context, email string) (*User, error)
 }
 
 type gormRepository struct {
@@ -35,6 +36,19 @@ func (r *gormRepository) Create(ctx context.Context, u *User) error {
 		return ErrDuplicateEmail
 	}
 	return err
+}
+
+// GetByEmail fetches a user by email, returning ErrNotFound if missing.
+func (r *gormRepository) GetByEmail(ctx context.Context, email string) (*User, error) {
+	var u User
+	err := r.db.WithContext(ctx).Where("email = ?", email).First(&u).Error
+	if errors.Is(err, gorm.ErrRecordNotFound) {
+		return nil, ErrNotFound
+	}
+	if err != nil {
+		return nil, err
+	}
+	return &u, nil
 }
 
 // GetByID fetches a user by ID, returning ErrNotFound if missing.
