@@ -8,6 +8,14 @@ Nếu chưa biết bắt đầu từ đâu, đọc
 
 ## Tài liệu chính
 
+- [`tong-quan-tai-lieu-du-an.md`](tong-quan-tai-lieu-du-an.md): bản đồ tài liệu,
+  trạng thái hiện tại và các mâu thuẫn cần xử lý trước khi build.
+- [`tong-quan-huong-day-nguoc-ai.md`](tong-quan-huong-day-nguoc-ai.md): hướng nghiên cứu
+  hiện hành cho bước dạy ngược AI trong lab AI thực chiến.
+- [`prd-buoc-day-nguoc-ai.md`](prd-buoc-day-nguoc-ai.md): phạm vi sản phẩm, yêu cầu,
+  data model, API và lộ trình prototype.
+- [`dinh-huong-ai-thuc-chien-de-hoi-mentor.md`](dinh-huong-ai-thuc-chien-de-hoi-mentor.md):
+  các lựa chọn và câu hỏi cần chốt với mentor.
 - [`research/literature-review.md`](research/literature-review.md): literature review
   và phạm vi bằng chứng.
 - [`research/evidence-matrix.csv`](research/evidence-matrix.csv): bảng bằng chứng có
@@ -24,10 +32,12 @@ Nếu chưa biết bắt đầu từ đâu, đọc
 
 1. Đọc [`research/literature-review.md`](research/literature-review.md) để hiểu phần
    nào đã có bằng chứng.
-2. Đọc [`research/protocol.md`](research/protocol.md) trước khi tuyển người tham gia.
-3. Phân công và hoàn tất research foundation theo
+2. Đọc [`tong-quan-tai-lieu-du-an.md`](tong-quan-tai-lieu-du-an.md) để phân biệt
+   hướng cũ, hướng hiện hành và trạng thái từng artifact.
+3. Đọc [`research/protocol.md`](research/protocol.md) trước khi tuyển người tham gia.
+4. Phân công và hoàn tất research foundation theo
    [`buoc-1-research-foundation-team-3-nguoi.md`](buoc-1-research-foundation-team-3-nguoi.md).
-4. Chỉ thu thập dữ liệu sau khi hoàn tất phê duyệt đạo đức nghiên cứu.
+5. Chỉ thu thập dữ liệu sau khi hoàn tất phê duyệt đạo đức nghiên cứu.
    Hoàn tất usability pilot trước khi thu thập dữ liệu.
 
 [`tong-quan-ai-tutor-toan-dien.md`](tong-quan-ai-tutor-toan-dien.md) là bản tổng quan
