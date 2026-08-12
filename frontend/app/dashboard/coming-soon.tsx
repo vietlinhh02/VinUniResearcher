@@ -12,7 +12,7 @@ export function ComingSoon({ icon: IconComponent, title, description, features }
   return (
     <div className="w-full">
       <div className="flex items-center gap-3">
-        <h1 className="font-display text-3xl font-bold leading-none tracking-tight text-ink sm:text-4xl">
+        <h1 className="font-display text-3xl font-light leading-tight tracking-tight text-ink sm:text-4xl">
           {title}
         </h1>
         <span className="rounded-full bg-surface-bone px-3 py-1 text-xs font-semibold text-charcoal">
@@ -21,10 +21,10 @@ export function ComingSoon({ icon: IconComponent, title, description, features }
       </div>
       <p className="mt-3 max-w-xl text-base text-body">{description}</p>
 
-      <div className="mt-8 rounded-lg border border-hairline bg-surface-card p-8">
+      <div className="mt-8 rounded-lg border border-hairline bg-surface-card p-8 shadow-soft">
         <IconComponent size={44} weight="duotone" className="text-primary" />
-        <p className="mt-4 font-display text-xl font-semibold text-ink">
-          Dự kiến trong giai đoạn pilot
+        <p className="mt-4 font-display text-xl font-light text-ink">
+          Dự kiến được triển khai trong giai đoạn thử nghiệm sản phẩm
         </p>
         <ul className="mt-4 flex max-w-lg flex-col gap-3">
           {features.map((feature) => (

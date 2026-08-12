@@ -12,11 +12,11 @@ export default function ProgressPage() {
     <ComingSoon
       icon={ChartLineUp}
       title="Tiến độ"
-      description="Bức tranh dài hạn về việc dạy — và học — của bạn qua các phiên."
+      description="Theo dõi khả năng giải thích, sửa suy luận và tự vận dụng kiến thức qua nhiều bài thực hành."
       features={[
-        "Knowledge tracing cho người dạy qua từng phiên",
-        "Chất lượng giải thích chấm theo thang SOLO",
-        "Biểu đồ số phiên, lỗ hổng đã đóng và chủ đề đã vững",
+        "Theo dõi trạng thái kiến thức đã được xác nhận qua từng phiên",
+        "So sánh chất lượng lời dạy trước và sau khi quan sát lỗi của AI",
+        "Đo kết quả bằng bài toán mới được giải khi không có AI hỗ trợ",
       ]}
     />
   );

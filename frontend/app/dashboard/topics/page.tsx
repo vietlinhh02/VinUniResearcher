@@ -12,11 +12,11 @@ export default function TopicsPage() {
     <ComingSoon
       icon={Books}
       title="Chủ đề"
-      description="Chọn khái niệm bạn muốn dạy và đặt mục tiêu cho từng phiên."
+      description="Mỗi bài thực hành xác định một hoặc một vài kỹ năng quan trọng cần được dạy lại và kiểm chứng."
       features={[
-        "Danh sách chủ đề thuật toán cho pilot (bắt đầu từ môn bạn đang học)",
-        "Mục tiêu học tập cụ thể cho từng phiên dạy",
-        "Theo dõi chủ đề nào đã dạy, chủ đề nào nên dạy lại",
+        "Mục tiêu học tập và dữ liệu tóm tắt nhận từ bài thực hành",
+        "Cấu trúc giải thích phù hợp riêng với từng loại kỹ năng",
+        "Bài toán biến thể, tiêu chí kiểm tra và giới hạn phản hồi",
       ]}
     />
   );

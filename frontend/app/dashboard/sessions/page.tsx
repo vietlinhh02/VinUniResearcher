@@ -12,12 +12,12 @@ export default function SessionsPage() {
     <ComingSoon
       icon={ChalkboardTeacher}
       title="Phiên dạy"
-      description="Nơi bạn đứng lớp: mở một phiên, giảng bằng lời của bạn, và để học trò AI hỏi ngược."
+      description="Mỗi phiên bắt đầu sau khi bạn hoàn thành bài thực hành: dạy lại kỹ năng trọng tâm, xác nhận kiến thức và quan sát AI xử lý bài toán biến thể."
       features={[
-        "Mở phiên dạy với học trò AI hỏi ngược kiểu Socratic",
-        "Transcript đầy đủ từng lượt giảng — hỏi trong phiên",
-        "Hai chế độ học trò (active / passive) theo protocol pilot",
-        "Kết thúc phiên bằng phần tổng kết những gì học trò đã nắm được",
+        "Nhận dữ liệu tóm tắt an toàn sau khi hoàn thành bài thực hành",
+        "Lưu đầy đủ lời dạy cùng nguồn gốc của từng phần kiến thức",
+        "Xác nhận trạng thái kiến thức trước khi AI được phép sử dụng",
+        "Quan sát kết quả bài toán biến thể và sửa lại phần giải thích còn thiếu",
       ]}
     />
   );

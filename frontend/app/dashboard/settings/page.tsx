@@ -16,7 +16,7 @@ export default function SettingsPage() {
       features={[
         "Cập nhật họ tên và thông tin hồ sơ",
         "Đổi mật khẩu",
-        "Xuất hoặc xóa dữ liệu nghiên cứu của bạn (theo cam kết ethics)",
+        "Xuất hoặc xóa dữ liệu nghiên cứu theo cam kết đạo đức nghiên cứu",
       ]}
     />
   );

@@ -1,13 +1,18 @@
 "use client";
 
+import { useGSAP } from "@gsap/react";
+import gsap from "gsap";
 import Image from "next/image";
 import Link from "next/link";
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { usePathname, useRouter } from "next/navigation";
-import { CircleNotch, SignOut, SquaresFour } from "@phosphor-icons/react";
+import { SignOut, SquaresFour } from "@phosphor-icons/react";
 import { toast } from "sonner";
 
 import { postJSON, type User } from "@/lib/api";
+import { LoadingScreen } from "./loading-screen";
+
+gsap.registerPlugin(useGSAP);
 
 export function avatarURL(user: User, size: number) {
   const params = new URLSearchParams({
@@ -19,11 +24,32 @@ export function avatarURL(user: User, size: number) {
 }
 
 export default function UserMenu({ user }: { user: User }) {
+  const containerRef = useRef<HTMLDivElement>(null);
+  const menuRef = useRef<HTMLDivElement>(null);
   const router = useRouter();
   const pathname = usePathname();
   const inDashboard = pathname.startsWith("/dashboard");
   const [open, setOpen] = useState(false);
   const [loggingOut, setLoggingOut] = useState(false);
+
+  useGSAP(
+    () => {
+      if (!open || !menuRef.current) return;
+
+      const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+      gsap.fromTo(
+        menuRef.current,
+        { autoAlpha: 0, y: 8 },
+        {
+          autoAlpha: 1,
+          y: 0,
+          duration: reduceMotion ? 0 : 0.24,
+          ease: "power2.out",
+        },
+      );
+    },
+    { dependencies: [open], scope: containerRef, revertOnUpdate: true },
+  );
 
   async function handleLogout() {
     setOpen(false);
@@ -40,13 +66,13 @@ export default function UserMenu({ user }: { user: User }) {
   }
 
   return (
-    <div className="relative">
+    <div ref={containerRef} className="relative flex h-10 items-center justify-center">
       <button
         type="button"
         onClick={() => setOpen((current) => !current)}
         aria-expanded={open}
         aria-haspopup="menu"
-        className="rounded-full transition-opacity hover:opacity-80 focus-visible:outline-hidden focus-visible:ring-3 focus-visible:ring-ring-focus"
+        className="flex h-10 w-10 items-center justify-center rounded-full transition-opacity hover:opacity-80 focus-visible:outline-hidden focus-visible:ring-3 focus-visible:ring-ring-focus"
       >
         <Image
           src={avatarURL(user, 72)}
@@ -66,8 +92,9 @@ export default function UserMenu({ user }: { user: User }) {
             className="fixed inset-0 z-10 cursor-default"
           />
           <div
+            ref={menuRef}
             role="menu"
-            className="absolute right-0 z-20 mt-2 w-56 animate-fade-up rounded-md border border-hairline bg-surface-card py-2 shadow-soft"
+            className="absolute top-full right-0 z-20 mt-2 w-56 rounded-md border border-hairline bg-surface-card py-2 shadow-soft"
           >
             <div className="border-b border-hairline px-4 pb-2">
               <p className="text-sm font-semibold text-ink">{user.name}</p>
@@ -98,13 +125,10 @@ export default function UserMenu({ user }: { user: User }) {
       )}
 
       {loggingOut && (
-        <div className="fixed inset-0 z-50 flex animate-fade-up flex-col items-center justify-center gap-4 bg-canvas/90 backdrop-blur-sm">
-          <CircleNotch size={40} weight="bold" className="animate-spin text-primary" />
-          <p className="font-display text-lg font-semibold text-ink">
-            Đang đăng xuất…
-          </p>
-          <p className="text-sm text-charcoal">Hẹn gặp lại ở buổi dạy sau!</p>
-        </div>
+        <>
+          <div className="fixed inset-0 z-40 cursor-wait" aria-hidden="true" />
+          <LoadingScreen label="Đang đăng xuất…" />
+        </>
       )}
     </div>
   );
