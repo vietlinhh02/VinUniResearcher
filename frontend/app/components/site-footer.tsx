@@ -2,8 +2,8 @@ import Link from "next/link";
 import { ArrowUpRight, MapPin } from "@phosphor-icons/react/dist/ssr";
 
 const PRODUCT_LINKS = [
-  { href: "/#tinh-nang", label: "Tính năng" },
-  { href: "/#cach-hoat-dong", label: "Cách hoạt động" },
+  { href: "/#quy-trinh", label: "Quy trình học" },
+  { href: "/#kiem-chung", label: "Nguyên tắc kiểm chứng" },
   { href: "/register", label: "Đăng ký" },
   { href: "/login", label: "Đăng nhập" },
 ] as const;
@@ -34,9 +34,8 @@ export function SiteFooter() {
           <div className="lg:col-span-2">
             <p className="font-display text-lg font-bold lowercase">mentee</p>
             <p className="mt-3 max-w-sm text-sm text-on-dark-mute">
-              Nền tảng Learning-by-Teaching tiếng Việt — bạn đóng vai giáo viên,
-              AI đóng vai học trò tò mò. Vì cách trung thực nhất để biết mình đã
-              hiểu là giải thích được cho người khác.
+              Nghiên cứu dạy lại có kiểm chứng: người học dạy AI, quan sát AI áp dụng lời dạy và sửa
+              suy luận dựa trên lỗi nhìn thấy được.
             </p>
             <p className="mt-4 flex items-center gap-2 text-sm text-on-dark-mute">
               <MapPin size={16} weight="bold" />

@@ -24,10 +24,7 @@ export function ImageSlideshow({
   const [index, setIndex] = useState(0);
 
   useEffect(() => {
-    const id = setInterval(
-      () => setIndex((current) => (current + 1) % slides.length),
-      intervalMs,
-    );
+    const id = setInterval(() => setIndex((current) => (current + 1) % slides.length), intervalMs);
     return () => clearInterval(id);
   }, [slides.length, intervalMs]);
 
@@ -41,6 +38,7 @@ export function ImageSlideshow({
             alt={slide.alt}
             fill
             sizes={sizes}
+            quality={90}
             priority={i === 0}
             className={`object-cover transition-opacity duration-1000 ease-out ${
               i === index ? "opacity-100" : "opacity-0"

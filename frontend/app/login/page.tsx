@@ -16,7 +16,7 @@ export default async function LoginPage() {
   return (
     <AuthShell
       title="Đăng nhập"
-      subtitle="Tiếp tục hành trình dạy AI học trò của bạn."
+      subtitle="Đăng nhập để tiếp tục bài thực hành và xem lại tiến độ học tập của bạn."
       footerText="Chưa có tài khoản?"
       footerLinkHref="/register"
       footerLinkLabel="Đăng ký"

@@ -16,7 +16,7 @@ export default async function RegisterPage() {
   return (
     <AuthShell
       title="Đăng ký"
-      subtitle="Tạo tài khoản để bắt đầu dạy AI học trò đầu tiên của bạn."
+      subtitle="Tạo tài khoản để bắt đầu học bằng cách dạy lại và kiểm chứng cùng Mentee."
       footerText="Đã có tài khoản?"
       footerLinkHref="/login"
       footerLinkLabel="Đăng nhập"

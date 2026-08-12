@@ -5,28 +5,28 @@ import { ButtonLink } from "./button";
 import UserMenu from "./user-menu";
 
 const NAV_LINKS = [
-  { href: "/#tinh-nang", label: "Tính năng" },
-  { href: "/#cach-hoat-dong", label: "Cách hoạt động" },
-  { href: "/#ve-vinuni", label: "Về VinUni" },
+  { href: "/#quy-trinh", label: "Quy trình" },
+  { href: "/#nghien-cuu", label: "Câu hỏi nghiên cứu" },
+  { href: "/#kiem-chung", label: "Nguyên tắc kiểm chứng" },
 ] as const;
 
 export function SiteHeader({ user }: { user: User | null }) {
   return (
-    <header className="sticky top-0 z-10 border-b border-hairline bg-canvas/90 backdrop-blur-sm">
-      <div className="mx-auto flex h-[60px] w-full max-w-6xl items-center justify-between gap-6 px-6">
+    <header className="fixed inset-x-0 top-0 z-20 px-3 pt-3 sm:px-6 sm:pt-4">
+      <div className="mx-auto flex h-[68px] w-full max-w-[1600px] items-center justify-between gap-6 rounded-full border border-hairline bg-canvas/90 px-6 shadow-soft backdrop-blur-md sm:px-8">
         <Link
           href={user ? "/dashboard" : "/"}
-          className="font-display text-xl font-bold lowercase text-ink"
+          className="font-display text-2xl font-semibold lowercase tracking-tight text-ink"
         >
           mentee
         </Link>
 
-        <nav className="hidden items-center gap-6 md:flex">
+        <nav className="hidden items-center gap-1 rounded-full bg-surface-bone p-1 md:flex">
           {NAV_LINKS.map((link) => (
             <Link
               key={link.href}
               href={link.href}
-              className="text-sm font-semibold text-charcoal transition-colors hover:text-primary"
+              className="rounded-full px-4 py-2 text-sm font-normal text-charcoal transition-colors hover:bg-canvas hover:text-primary"
             >
               {link.label}
             </Link>

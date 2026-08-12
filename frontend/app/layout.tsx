@@ -20,8 +20,7 @@ const interTight = Inter_Tight({
 
 export const metadata: Metadata = {
   title: "mentee — Bạn giảng. AI hỏi. Kiến thức ở lại.",
-  description:
-    "Nền tảng Learning-by-Teaching: bạn đóng vai giáo viên, AI đóng vai học trò.",
+  description: "Nền tảng Learning-by-Teaching: bạn đóng vai giáo viên, AI đóng vai học trò.",
 };
 
 export default function RootLayout({
