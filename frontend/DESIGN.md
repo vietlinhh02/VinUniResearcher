@@ -1,156 +1,144 @@
 ---
 version: alpha
-name: Mentee-design-analysis
-description: |
-  Mentee's marketing surface pairs a warm-cream learning canvas with a confident
-  navy brand accent and a Google Sans display typeface sized aggressively large at
-  72px+. The system reads as "AI lab notebook crossed with print magazine":
-  cream and bone surfaces, dark ink type, tight code/chat wells, irregular
-  hand-drawn-feeling diagrams, and navy used sparingly on the most
-  consequential CTA. Photography of contributors and example outputs is
-  square-ish with mid-radius corners; everything else is borderless or hairline.
+name: Stripi-design-analysis
+description: An inspired interpretation of Stripi's design language — a financial-infrastructure brand built on a deep navy ink, an electric indigo primary, and a recurring atmospheric gradient mesh that occupies the upper third of nearly every marketing page. The system pairs the proprietary Sohne family at thin (300) weights with negative letter-spacing for editorial-density display headlines, and uses tabular-figure body type where money and numerics matter. Buttons are tight-radius pills, cards live on near-white surfaces, and the dashboard track flips polarity to a familiar dark-app shell.
 
 colors:
-  primary: "#134d8b"
-  primary-deep: "#0a2848"
-  accent: "#c72127"
-  accent-deep: "#a11b20"
+  primary: "#533afd"
+  primary-deep: "#4434d4"
+  primary-press: "#2e2b8c"
+  primary-soft: "#665efd"
+  primary-bg-subdued-hover: "#b9b9f9"
+  brand-dark-900: "#1c1e54"
+  ink: "#0d253d"
+  ink-secondary: "#273951"
+  ink-mute: "#64748d"
+  ink-mute-2: "#61718a"
   on-primary: "#ffffff"
-  ink: "#2e2e2e"
-  body: "#3a3a3a"
-  charcoal: "#575757"
-  mute: "#646464"
-  ash: "#8d8d8d"
-  stone: "#bbbbbb"
-  on-dark: "#fcfcfc"
-  on-dark-mute: "rgba(252,252,252,0.72)"
   canvas: "#ffffff"
-  surface-bone: "#f2f6f9"
-  surface-card: "#ffffff"
-  surface-dark: "#202020"
-  surface-deep: "#000000"
-  hairline: "rgba(32,32,32,0.12)"
-  hairline-strong: "#202020"
-  divider-dark: "rgba(255,255,255,0.2)"
-  hero-warm: "#134d8b"
-  hero-glow: "#2a6cb8"
-  hero-pink: "#b7cfe8"
-  badge-success: "#2b9a66"
-  link: "#134d8b"
-  ring-focus: "rgba(59,130,246,0.5)"
-  github-dark: "#24292e"
+  canvas-soft: "#f6f9fc"
+  canvas-cream: "#f5e9d4"
+  hairline: "#e3e8ee"
+  hairline-input: "#a8c3de"
+  ruby: "#ea2261"
+  magenta: "#f96bee"
+  lemon: "#9b6829"
+  shadow-blue: "#003770"
 
 typography:
   display-xxl:
-    fontFamily: Google Sans
-    fontSize: 128px
-    fontWeight: 700
-    lineHeight: 1.0
-    letterSpacing: -3px
+    fontFamily: "sohne-var, 'SF Pro Display', system-ui, -apple-system, sans-serif"
+    fontSize: 56px
+    fontWeight: 300
+    lineHeight: 1.03
+    letterSpacing: -1.4px
+    fontFeature: ss01
   display-xl:
-    fontFamily: Google Sans
-    fontSize: 72px
-    fontWeight: 700
-    lineHeight: 1.0
-    letterSpacing: -1.8px
-  display-lg:
-    fontFamily: Google Sans
+    fontFamily: "sohne-var, 'SF Pro Display', system-ui, -apple-system, sans-serif"
     fontSize: 48px
-    fontWeight: 700
-    lineHeight: 1.0
-    letterSpacing: -1px
+    fontWeight: 300
+    lineHeight: 1.15
+    letterSpacing: -0.96px
+    fontFeature: ss01
+  display-lg:
+    fontFamily: "sohne-var, 'SF Pro Display', system-ui, -apple-system, sans-serif"
+    fontSize: 32px
+    fontWeight: 300
+    lineHeight: 1.1
+    letterSpacing: -0.64px
+    fontFeature: ss01
   display-md:
-    fontFamily: Google Sans
-    fontSize: 30px
-    fontWeight: 600
-    lineHeight: 1.2
-    letterSpacing: -0.5px
+    fontFamily: "sohne-var, 'SF Pro Display', system-ui, -apple-system, sans-serif"
+    fontSize: 26px
+    fontWeight: 300
+    lineHeight: 1.12
+    letterSpacing: -0.26px
+    fontFeature: ss01
   heading-lg:
-    fontFamily: Inter
-    fontSize: 38.4px
-    fontWeight: 600
-    lineHeight: 0.83
-    letterSpacing: -0.5px
+    fontFamily: "sohne-var, 'SF Pro Display', system-ui, -apple-system, sans-serif"
+    fontSize: 22px
+    fontWeight: 300
+    lineHeight: 1.1
+    letterSpacing: -0.22px
+    fontFeature: ss01
   heading-md:
-    fontFamily: Inter
-    fontSize: 24px
-    fontWeight: 600
-    lineHeight: 1.33
-    letterSpacing: -0.35px
-  heading-sm:
-    fontFamily: Inter
+    fontFamily: "sohne-var, 'SF Pro Display', system-ui, -apple-system, sans-serif"
     fontSize: 20px
-    fontWeight: 600
+    fontWeight: 300
     lineHeight: 1.4
-    letterSpacing: -0.3px
-  subtitle:
-    fontFamily: Google Sans
+    letterSpacing: -0.2px
+    fontFeature: ss01
+  heading-sm:
+    fontFamily: "sohne-var, 'SF Pro Display', system-ui, -apple-system, sans-serif"
     fontSize: 18px
-    fontWeight: 600
-    lineHeight: 1.56
+    fontWeight: 300
+    lineHeight: 1.4
     letterSpacing: 0
+    fontFeature: ss01
   body-lg:
-    fontFamily: Inter
-    fontSize: 18px
-    fontWeight: 400
-    lineHeight: 1.56
+    fontFamily: "sohne-var, 'SF Pro Display', system-ui, -apple-system, sans-serif"
+    fontSize: 16px
+    fontWeight: 300
+    lineHeight: 1.4
     letterSpacing: 0
+    fontFeature: ss01
   body-md:
-    fontFamily: Inter
-    fontSize: 16px
-    fontWeight: 400
-    lineHeight: 1.5
+    fontFamily: "sohne-var, 'SF Pro Display', system-ui, -apple-system, sans-serif"
+    fontSize: 15px
+    fontWeight: 300
+    lineHeight: 1.4
     letterSpacing: 0
-  body-sm:
-    fontFamily: Inter
+    fontFeature: ss01
+  body-tabular:
+    fontFamily: "sohne-var, 'SF Pro Display', system-ui, -apple-system, sans-serif"
     fontSize: 14px
-    fontWeight: 400
-    lineHeight: 1.43
-    letterSpacing: 0
+    fontWeight: 300
+    lineHeight: 1.4
+    letterSpacing: -0.42px
+    fontFeature: tnum
   button-md:
-    fontFamily: Inter
+    fontFamily: "sohne-var, 'SF Pro Display', system-ui, -apple-system, sans-serif"
     fontSize: 16px
-    fontWeight: 600
+    fontWeight: 400
     lineHeight: 1.0
     letterSpacing: 0
+    fontFeature: ss01
   button-sm:
-    fontFamily: Inter
+    fontFamily: "sohne-var, 'SF Pro Display', system-ui, -apple-system, sans-serif"
     fontSize: 14px
-    fontWeight: 600
+    fontWeight: 400
     lineHeight: 1.0
     letterSpacing: 0
+    fontFeature: ss01
   caption:
-    fontFamily: Inter
-    fontSize: 12px
+    fontFamily: "sohne-var, 'SF Pro Display', system-ui, -apple-system, sans-serif"
+    fontSize: 13px
     fontWeight: 400
-    lineHeight: 1.33
-    letterSpacing: 0
-  caption-tight:
-    fontFamily: Inter
-    fontSize: 14px
-    fontWeight: 600
-    lineHeight: 1.43
-    letterSpacing: -0.35px
-  code-md:
-    fontFamily: Inter Tight
-    fontSize: 14px
-    fontWeight: 400
-    lineHeight: 1.43
-    letterSpacing: 0
-  code-sm:
-    fontFamily: Inter Tight
+    lineHeight: 1.4
+    letterSpacing: -0.39px
+    fontFeature: tnum
+  micro:
+    fontFamily: "sohne-var, 'SF Pro Display', system-ui, -apple-system, sans-serif"
     fontSize: 11px
-    fontWeight: 400
-    lineHeight: 1.5
+    fontWeight: 300
+    lineHeight: 1.4
     letterSpacing: 0
+    fontFeature: ss01
+  micro-cap:
+    fontFamily: "sohne-var, 'SF Pro Display', system-ui, -apple-system, sans-serif"
+    fontSize: 10px
+    fontWeight: 400
+    lineHeight: 1.15
+    letterSpacing: 0.1px
+    fontFeature: ss01
 
 rounded:
-  none: 0px
   xs: 4px
   sm: 6px
-  md: 10px
-  lg: 16px
-  full: 9999px
+  md: 8px
+  lg: 12px
+  xl: 16px
+  pill: 9999px
 
 spacing:
   xxs: 2px
@@ -160,280 +148,214 @@ spacing:
   lg: 16px
   xl: 24px
   xxl: 32px
-  xxxl: 48px
-  section: 96px
-  band: 160px
+  huge: 64px
 
 components:
-  button-primary:
+  button-primary-pill:
     backgroundColor: "{colors.primary}"
     textColor: "{colors.on-primary}"
     typography: "{typography.button-md}"
-    rounded: "{rounded.full}"
-    padding: 12px 24px
-    height: 44px
-  button-primary-pressed:
-    backgroundColor: "{colors.primary-deep}"
+    rounded: "{rounded.pill}"
+    padding: 8px 16px
+  button-primary-pill-pressed:
+    backgroundColor: "{colors.primary-press}"
     textColor: "{colors.on-primary}"
     typography: "{typography.button-md}"
-    rounded: "{rounded.full}"
-  button-dark:
-    backgroundColor: "{colors.surface-dark}"
-    textColor: "{colors.on-dark}"
-    typography: "{typography.button-md}"
-    rounded: "{rounded.full}"
-    padding: 12px 24px
-    height: 44px
-  button-outline:
-    backgroundColor: "{colors.surface-card}"
-    textColor: "{colors.ink}"
-    typography: "{typography.button-md}"
-    rounded: "{rounded.full}"
-    padding: 11px 23px
-    height: 44px
-  button-ghost:
-    backgroundColor: "{colors.canvas}"
-    textColor: "{colors.ink}"
-    typography: "{typography.button-md}"
-    rounded: "{rounded.full}"
+    rounded: "{rounded.pill}"
     padding: 8px 16px
-    height: 36px
-  button-icon:
-    backgroundColor: "{colors.surface-card}"
-    textColor: "{colors.ink}"
-    rounded: "{rounded.full}"
-    size: 36px
+  button-secondary:
+    backgroundColor: "{colors.canvas}"
+    textColor: "{colors.primary}"
+    typography: "{typography.button-md}"
+    rounded: "{rounded.pill}"
+    padding: 8px 16px
+  button-on-dark:
+    backgroundColor: "{colors.brand-dark-900}"
+    textColor: "{colors.on-primary}"
+    typography: "{typography.button-md}"
+    rounded: "{rounded.pill}"
+    padding: 8px 16px
   text-input:
-    backgroundColor: "{colors.surface-card}"
-    textColor: "{colors.ink}"
-    typography: "{typography.body-md}"
-    rounded: "{rounded.full}"
-    padding: 12px 20px
-    height: 44px
-  hero-band:
-    backgroundColor: "{colors.hero-warm}"
-    textColor: "{colors.on-dark}"
-    typography: "{typography.display-xl}"
-    rounded: "{rounded.none}"
-    padding: 96px 32px
-  model-card:
-    backgroundColor: "{colors.surface-card}"
-    textColor: "{colors.ink}"
-    typography: "{typography.body-md}"
-    rounded: "{rounded.md}"
-    padding: 16px
-  collection-tile:
     backgroundColor: "{colors.canvas}"
     textColor: "{colors.ink}"
-    typography: "{typography.heading-md}"
-    rounded: "{rounded.md}"
-    padding: 24px
-  pricing-tier:
-    backgroundColor: "{colors.surface-card}"
+    typography: "{typography.body-md}"
+    rounded: "{rounded.sm}"
+    padding: 8px 12px
+  text-input-focused:
+    backgroundColor: "{colors.canvas}"
+    textColor: "{colors.ink}"
+    typography: "{typography.body-md}"
+    rounded: "{rounded.sm}"
+    padding: 8px 12px
+  card-feature-light:
+    backgroundColor: "{colors.canvas}"
     textColor: "{colors.ink}"
     typography: "{typography.body-md}"
     rounded: "{rounded.lg}"
     padding: 32px
-  pricing-tier-featured:
-    backgroundColor: "{colors.surface-dark}"
-    textColor: "{colors.on-dark}"
+  card-pricing:
+    backgroundColor: "{colors.canvas}"
+    textColor: "{colors.ink}"
     typography: "{typography.body-md}"
     rounded: "{rounded.lg}"
     padding: 32px
-  code-block:
-    backgroundColor: "{colors.surface-dark}"
-    textColor: "{colors.on-dark}"
-    typography: "{typography.code-md}"
-    rounded: "{rounded.md}"
+  card-pricing-featured:
+    backgroundColor: "{colors.brand-dark-900}"
+    textColor: "{colors.on-primary}"
+    typography: "{typography.body-md}"
+    rounded: "{rounded.lg}"
+    padding: 32px
+  card-cream-band:
+    backgroundColor: "{colors.canvas-cream}"
+    textColor: "{colors.ink}"
+    typography: "{typography.body-md}"
+    rounded: "{rounded.lg}"
+    padding: 32px
+  card-dashboard-mockup:
+    backgroundColor: "{colors.canvas}"
+    textColor: "{colors.ink}"
+    typography: "{typography.body-tabular}"
+    rounded: "{rounded.lg}"
     padding: 24px
-  code-tab:
-    backgroundColor: "{colors.surface-deep}"
-    textColor: "{colors.on-dark-mute}"
-    typography: "{typography.code-sm}"
+  pill-tag-soft:
+    backgroundColor: "{colors.primary-bg-subdued-hover}"
+    textColor: "{colors.primary-deep}"
+    typography: "{typography.micro-cap}"
+    rounded: "{rounded.pill}"
+    padding: 4px 8px
+  nav-bar-on-mesh:
+    backgroundColor: "{colors.canvas}"
+    textColor: "{colors.ink}"
+    typography: "{typography.body-md}"
     rounded: "{rounded.xs}"
-    padding: 6px 12px
-  badge-status:
-    backgroundColor: "{colors.badge-success}"
-    textColor: "{colors.on-dark}"
-    typography: "{typography.caption}"
-    rounded: "{rounded.full}"
-    padding: 4px 10px
-  badge-tag:
+    padding: 16px 24px
+  link-on-light:
     backgroundColor: "{colors.canvas}"
-    textColor: "{colors.ink}"
-    typography: "{typography.caption}"
-    rounded: "{rounded.full}"
-    padding: 4px 10px
-  nav-bar:
+    textColor: "{colors.primary}"
+    typography: "{typography.body-md}"
+    rounded: "{rounded.xs}"
+    padding: 0px
+  footer-light:
     backgroundColor: "{colors.canvas}"
-    textColor: "{colors.ink}"
-    typography: "{typography.button-sm}"
-    rounded: "{rounded.none}"
-    height: 60px
-  sub-nav-pill:
-    backgroundColor: "{colors.surface-card}"
-    textColor: "{colors.ink}"
-    typography: "{typography.button-sm}"
-    rounded: "{rounded.full}"
-    padding: 6px 14px
-  contributor-avatar:
-    backgroundColor: "{colors.surface-card}"
-    textColor: "{colors.ink}"
-    rounded: "{rounded.full}"
-    size: 40px
-  footer:
-    backgroundColor: "{colors.surface-deep}"
-    textColor: "{colors.on-dark}"
-    typography: "{typography.body-sm}"
-    rounded: "{rounded.none}"
-    padding: 64px 32px
+    textColor: "{colors.ink-mute}"
+    typography: "{typography.caption}"
+    rounded: "{rounded.xs}"
+    padding: 64px 24px
 ---
 
 ## Overview
 
-Mentee is a learning-by-teaching platform with the soul of an AI lab notebook.
-The public marketing surface sits on a warm cream canvas (`{colors.canvas}` —
-`#f9f7f3`) rather than a plain white default, and the navy brand accent
-(`{colors.primary}` — `#17324d`) provides the single strong visual anchor.
-Illustration, model-like topic cards, and dark conversation wells make the
-learning loop feel tangible without adding decorative noise.
+Stripi's design language opens with the gradient mesh. A wide horizontal band of pastel cream, sherbet orange, lavender, electric indigo, and ruby pink occupies the upper third of nearly every marketing page — the brand's instantly-recognizable atmospheric backdrop. Type and product UI mockups float above it on `{colors.canvas}` (white), with the gradient acting as both decoration and visual anchor. The lower portion of the page returns to white, with feature explanations on `{colors.canvas-soft}` (a barely-tinted cool off-white) and dashboard product mockups composited as faux IDE/console panels in deep navy.
 
-The typography is the load-bearing decoration. **Google Sans** appears at
-sizes up to 128px in hero bands, with a tight `lineHeight: 1.0` and negative
-letter-spacing that lets multi-line headlines pack into geometric blocks.
-**Inter** takes care of body, button labels, and metadata, while **Inter Tight**
-carries every code and conversation well. Three families, three jobs, no overlap.
+The color system has two primary roles. **Indigo** (`{colors.primary}` — `#533afd`) is the brand's signature CTA color, used sparingly: one filled pill per band. **Deep navy** (`{colors.ink}` — `#0d253d`) is the universal body text color and the fill of dashboard mockups, the featured pricing tier, and the dark-app surfaces on the dashboard track. Ruby (`{colors.ruby}`) and magenta (`{colors.magenta}`) appear inside the gradient mesh and as accent dots in product UI mockups; they are not used as button colors.
 
-Page rhythm cycles between a default cream canvas, a bold full-bleed navy
-hero band, and a `{colors.surface-dark}` (`#202020`) section that hosts the
-code stories — the "how it works" walkthrough. Curves are intentional and
-soft: every interactive surface (buttons, inputs, tags, avatars) uses
-`{rounded.full}`, while content cards and code wells step up to `{rounded.md}`
-or `{rounded.lg}`. There are no sharp corners on Mentee; the system reads
-as friendly precision for a learning product.
+Typography is built around **Sohne** at weight 300 with negative letter-spacing — the brand's editorial-density display signature. Display sizes (32–56px) use -1.4px to -0.64px tracking; body sizes use 0; tabular caption sizes (where money and numerics matter) use the OpenType `tnum` feature plus a tightening -0.36 to -0.42px tracking. The `ss01` stylistic set is enabled across all roles.
 
 **Key Characteristics:**
-- A warm cream canvas (`{colors.canvas}` — `#f9f7f3`) replaces the typical white background, paired with `{colors.surface-bone}` for inset cards.
-- Navy (`{colors.primary}` — `#17324d`) is reserved for the primary CTA, the hero band, and inline link colour. Never decorative.
-- Display headlines run massive — `{typography.display-xxl}` at 128px in hero bands and `{typography.display-xl}` at 72px on section openers — with tight `lineHeight: 1.0` and negative letter-spacing.
-- Three-family typography stack: `Google Sans` for display, `Inter` for UI/body, `Inter Tight` for code/chat.
-- Every interactive element is fully rounded (`{rounded.full}` 9999px) — buttons, inputs, badges, avatars — while content cards step to `{rounded.md}` 10px.
-- Dark code wells (`{colors.surface-dark}` background) sit inside the cream canvas as full-bleed reading surfaces, mimicking print pull-quotes.
-- Section rhythm: cream → navy hero → cream → dark code-story band → cream → black footer.
+- Gradient-mesh backdrop on every marketing hero — cream/orange/lavender/indigo/ruby horizontally washed across the upper third of the page.
+- Single-indigo CTA hierarchy: filled `{colors.primary}` pill is the only filled button on marketing surfaces.
+- Sohne thin (weight 300) display tier with negative tracking from -1.4px to -0.2px depending on size.
+- Tabular-figure body type (`tnum`) for any cell containing money or numerics — the brand's quiet financial-data signal.
+- Dark-app dashboard track: deep navy product UI mockups sit composited above the white canvas, frequently with rendered code or dashboard tables inside.
+- Pill-shaped buttons (`{rounded.pill}` 9999px) with tight `8px 16px` padding — short, decisive, transactional.
+- Cream-band feature cards (`{colors.canvas-cream}`) introduce a warm interlude between blue/white sections without breaking the brand's chromatic logic.
 
 ## Colors
 
+> **Source pages:** home (`/`), `/payments`, `/pricing`, `dashboard.stripe.com/register/payments`.
+
 ### Brand & Accent
-- **Navy** (`{colors.primary}` — `#17324d`): the brand accent. Reserved for the primary CTA, hero band background, and inline link colour. Treat it as a stamp — one strong navy element per viewport at most.
-- **Navy Pressed** (`{colors.primary-deep}` — `#10263a`): the active/pressed state of `{colors.primary}` — used on `{component.button-primary-pressed}`.
-- **Hero Glow** (`{colors.hero-glow}` — `#2f5d7c`): the lighter blue that appears in the radial atmospheric mesh behind the hero copy.
-- **Hero Wash** (`{colors.hero-pink}` — `#9fb8cc`): a pale blue wash that softens the bottom edge of the hero band before it transitions to cream.
-- **On-Primary** (`{colors.on-primary}` — `#ffffff`): label colour on top of `{colors.primary}` surfaces.
+- **Indigo** (`{colors.primary}` — `#533afd`): The brand's signature CTA color. Filled-pill button, link emphasis, gradient anchor.
+- **Indigo Deep** (`{colors.primary-deep}` — `#4434d4`): A deeper indigo used in gradient mid-stops and as the press-state warmer alternative.
+- **Indigo Press** (`{colors.primary-press}` — `#2e2b8c`): Pressed-state lift of the primary.
+- **Indigo Soft** (`{colors.primary-soft}` — `#665efd`): A lighter indigo used in product-UI accents and chart highlights.
+- **Indigo Subdued** (`{colors.primary-bg-subdued-hover}` — `#b9b9f9`): Pale indigo fill used as soft tag background.
+- **Brand Dark 900** (`{colors.brand-dark-900}` — `#1c1e54`): The deep navy used on the featured pricing tier and dashboard chrome.
+- **Ruby** (`{colors.ruby}` — `#ea2261`): Gradient accent and chart highlight; never a button.
+- **Magenta** (`{colors.magenta}` — `#f96bee`): Brighter pink stop in gradient meshes.
+- **Lemon** (`{colors.lemon}` — `#9b6829`): Warm sherbet stop in gradient backdrops.
 
 ### Surface
-- **Canvas** (`{colors.canvas}` — `#f9f7f3`): the default page background. Warm cream, never pure white.
-- **Surface Bone** (`{colors.surface-bone}` — `#f3f0e8`): a half-step deeper cream used for inset card groups and feature bands.
-- **Surface Card** (`{colors.surface-card}` — `#ffffff`): pure white for individual model cards, search inputs, and pricing tiers — the only place white appears.
-- **Surface Dark** (`{colors.surface-dark}` — `#202020`): code wells, featured pricing tier, and the "how it works" walkthrough band.
-- **Surface Deep** (`{colors.surface-deep}` — `#000000`): footer canvas and the inset code-tab strip inside `{component.code-block}`.
-- **Hairline** (`{colors.hairline}` — `rgba(32,32,32,0.12)`): low-contrast 1px dividers on cream surfaces.
-- **Hairline Strong** (`{colors.hairline-strong}` — `#202020`): button outlines, focused inputs, and structural separators.
+- **Canvas** (`{colors.canvas}` — `#ffffff`): Default page background.
+- **Canvas Soft** (`{colors.canvas-soft}` — `#f6f9fc`): Cool-tinted off-white used on feature bands beneath the gradient hero.
+- **Canvas Cream** (`{colors.canvas-cream}` — `#f5e9d4`): Warm cream used as a feature-band fill — the brand's chromatic interlude.
+- **Hairline** (`{colors.hairline}` — `#e3e8ee`): 1px borders on cards and tables.
+- **Hairline Input** (`{colors.hairline-input}` — `#a8c3de`): Slightly cooler hairline used on form inputs.
 
 ### Text
-- **Ink** (`{colors.ink}` — `#202020`): primary text colour. Notably warmer than `#000000`, matching the cream canvas.
-- **Body** (`{colors.body}` — `#3a3a3a`): long-form body copy where ink would feel too heavy at 18px+ line lengths.
-- **Charcoal** (`{colors.charcoal}` — `#575757`): captions, metadata, secondary nav.
-- **Mute** (`{colors.mute}` — `#646464`): supporting text and inactive labels.
-- **Ash** (`{colors.ash}` — `#8d8d8d`): tertiary text, placeholder copy.
-- **Stone** (`{colors.stone}` — `#bbbbbb`): disabled foreground, neutral icon outlines.
-- **On-Dark** (`{colors.on-dark}` — `#fcfcfc`): primary text on `{colors.surface-dark}` and `{colors.surface-deep}`.
-- **On-Dark Mute** (`{colors.on-dark-mute}` — `rgba(252,252,252,0.72)`): secondary text in dark regions; preserves the off-white feel without pure white pop.
+- **Ink** (`{colors.ink}` — `#0d253d`): Default body text color across the brand. Deep navy, never pure black.
+- **Ink Secondary** (`{colors.ink-secondary}` — `#273951`): Secondary text on white.
+- **Ink Mute** (`{colors.ink-mute}` — `#64748d`): Helper text, captions, table labels.
+- **Ink Mute 2** (`{colors.ink-mute-2}` — `#61718a`): Near-equivalent to ink-mute used in nav.
+- **On Primary** (`{colors.on-primary}` — `#ffffff`): Text on indigo / dark-navy surfaces.
 
 ### Semantic
-- **Success** (`{colors.badge-success}` — `#2b9a66`): inline success badges and "running" status pills on model cards.
-- **Link** (`{colors.link}` — `#17324d`): inline link colour — same as primary navy, intentionally pulling links into the brand accent.
-- **Focus Ring** (`{colors.ring-focus}` — `rgba(59,130,246,0.5)`): the default focus ring on interactive elements.
-- **GitHub Dark** (`{colors.github-dark}` — `#24292e`): the GitHub-branded button surface (kept off-brand-on-purpose to match GitHub's own tokens).
+The brand does not use a separate semantic color palette in the marketing system — error / success states live in dashboard-product UI specifically.
 
 ## Typography
 
 ### Font Family
 
-Mentee ships a deliberate three-family stack:
+The display and UI tier is **Sohne** (proprietary, licensed from Klim Type Foundry) at weights 300 (thin) and 400 (regular). The variable font (`sohne-var`) is loaded with `font-feature-settings: "ss01"` enabled globally — the stylistic set substitutes a single-story `a` and other character variants that are part of the brand's typographic signature.
 
-- **Google Sans** — display family used for all large titles (30px+). It carries the product personality through tight `lineHeight: 1.0` and negative letter-spacing while retaining Vietnamese glyph support.
-- **Inter** — UI and body family used for body copy, button labels, captions, and metadata.
-- **Inter Tight** — compact family used in every code and conversation well.
-
-All three families load from Google Fonts with system fallbacks so the static preview remains readable if the network font request is unavailable.
+When Sohne is unavailable, fall back to **SF Pro Display** at thin weights, then system-ui. For maximum brand fidelity, **Inter** (open-source) at weight 300 with `font-feature-settings: "ss01"` and `letter-spacing: -1.4px` on display sizes approximates the rhythm closely.
 
 ### Hierarchy
 
 | Token | Size | Weight | Line Height | Letter Spacing | Use |
 |---|---|---|---|---|---|
-| `{typography.display-xxl}` | 128px | 700 | 1.0 | -3px | The single hero "Dạy AI. Hiểu sâu." headline. One per page. |
-| `{typography.display-xl}` | 72px | 700 | 1.0 | -1.8px | Section openers ("Chọn một điều bạn muốn hiểu", "Mentee không giả vờ hiểu"). |
-| `{typography.display-lg}` | 48px | 700 | 1.0 | -1px | Sub-section titles, pricing tier names. |
-| `{typography.display-md}` | 30px | 600 | 1.2 | -0.5px | Feature card titles. |
-| `{typography.heading-lg}` | 38.4px | 600 | 0.83 | -0.5px | Tightly-stacked Inter headlines, used in pricing and learning sections. |
-| `{typography.heading-md}` | 24px | 600 | 1.33 | -0.35px | Card titles, model detail headers. |
-| `{typography.heading-sm}` | 20px | 600 | 1.4 | -0.3px | List section headers. |
-| `{typography.subtitle}` | 18px | 600 | 1.56 | 0 | Lead paragraphs in display sections. |
-| `{typography.body-lg}` | 18px | 400 | 1.56 | 0 | Marketing prose. |
-| `{typography.body-md}` | 16px | 400 | 1.5 | 0 | Default body. |
-| `{typography.body-sm}` | 14px | 400 | 1.43 | 0 | Captions, metadata. |
-| `{typography.button-md}` | 16px | 600 | 1.0 | 0 | Default button label. |
-| `{typography.button-sm}` | 14px | 600 | 1.0 | 0 | Compact button label, sub-nav pills. |
-| `{typography.caption}` | 12px | 400 | 1.33 | 0 | Footer disclosure, copyright. |
-| `{typography.caption-tight}` | 14px | 600 | 1.43 | -0.35px | Emphatic small caption used in pricing tier rows. |
-| `{typography.code-md}` | 14px | 400 | 1.43 | 0 | Code blocks and inline code. |
-| `{typography.code-sm}` | 11px | 400 | 1.5 | 0 | Code-tab labels and small inline tokens. |
+| `{typography.display-xxl}` | 56px | 300 | 1.03 | -1.4px | Hero headline |
+| `{typography.display-xl}` | 48px | 300 | 1.15 | -0.96px | Section opener |
+| `{typography.display-lg}` | 32px | 300 | 1.1 | -0.64px | Card title / sub-section |
+| `{typography.display-md}` | 26px | 300 | 1.12 | -0.26px | Compact card title |
+| `{typography.heading-lg}` | 22px | 300 | 1.1 | -0.22px | Pricing tier name |
+| `{typography.heading-md}` | 20px | 300 | 1.4 | -0.2px | Section sub-heading |
+| `{typography.heading-sm}` | 18px | 300 | 1.4 | 0 | Mini-section label |
+| `{typography.body-lg}` | 16px | 300 | 1.4 | 0 | Marketing body lead |
+| `{typography.body-md}` | 15px | 300 | 1.4 | 0 | Default UI body |
+| `{typography.body-tabular}` | 14px | 300 | 1.4 | -0.42px | Money / numeric tables (uses `tnum`) |
+| `{typography.button-md}` | 16px | 400 | 1.0 | 0 | Pill button label |
+| `{typography.button-sm}` | 14px | 400 | 1.0 | 0 | Compact pill label |
+| `{typography.caption}` | 13px | 400 | 1.4 | -0.39px | Helper, table labels |
+| `{typography.micro}` | 11px | 300 | 1.4 | 0 | Fine print |
+| `{typography.micro-cap}` | 10px | 400 | 1.15 | 0.1px | All-caps eyebrow |
 
 ### Principles
-- Display sizes hold `lineHeight: 1.0` (or 0.83 on `{typography.heading-lg}`) so multi-line stacks read as single typographic blocks.
-- Negative letter-spacing scales with size — bigger types tighten more (-3px at 128px down to -0.3px at 20px). Body type stays at 0.
-- Body weight sits at 400 across `{typography.body-lg}` and `{typography.body-md}` — never bumped to 500 for emphasis. Emphasis comes from family change (Inter → Google Sans) rather than weight.
-- Code and conversation text use Inter Tight so compact speaker labels and transcript lines remain readable without introducing a separate monospace family.
+- **Thin weight is the brand.** Display tiers always render at weight 300. Bumping to 400+ removes the brand's editorial air.
+- **Negative tracking on display.** -1.4px at 56px, scaling proportionally down to -0.2px at 20px. The negative tracking is the brand's typographic signature.
+- **Tabular figures for money.** Any cell rendering currency, transaction amounts, or numeric counts uses `font-feature-settings: "tnum"` plus a tightening tracking. The brand quietly signals its financial DNA through this micro-detail.
+- **`ss01` globally.** Apply `font-feature-settings: "ss01"` to the body element so the stylistic-set substitution is on for every text role.
 
 ### Note on Font Substitutes
-
-When Google Fonts are unavailable, clamp display `lineHeight` to 1.0 explicitly and fall back to Manrope or the platform sans-serif. Keep the negative letter-spacing on display-xxl / display-xl to preserve the intended tightness.
+Sohne is proprietary. Use **Inter** (open-source via Google Fonts) at weight 300 with `letter-spacing: -1.4px` and `font-feature-settings: "ss01"` for display tiers — Inter is the closest open-source analogue. For body sizes, Inter at 300 weight with `font-feature-settings: "tnum"` (where applicable) is the canonical substitute. Avoid Helvetica or system-ui defaults — they're heavier than the brand needs.
 
 ## Layout
 
 ### Spacing System
-- **Base unit**: 4px, with the working scale on multiples of 4 / 8 / 16.
-- **Tokens**: `{spacing.xxs}` 2px · `{spacing.xs}` 4px · `{spacing.sm}` 8px · `{spacing.md}` 12px · `{spacing.lg}` 16px · `{spacing.xl}` 24px · `{spacing.xxl}` 32px · `{spacing.xxxl}` 48px · `{spacing.section}` 96px · `{spacing.band}` 160px.
-- Section padding: `{spacing.section}` (96px) vertical between full-width bands; `{spacing.band}` (160px) when a band needs extra editorial breathing room (the hero, the closing "Imagine what you can build" stripe).
-- Card internal padding: `{spacing.lg}` (16px) on `{component.model-card}`, `{spacing.xxl}` (32px) on `{component.pricing-tier}`.
+- **Base unit**: 8px (with 2 / 4 / 12 sub-tokens for fine work).
+- **Tokens**: `{spacing.xxs}` 2px · `{spacing.xs}` 4px · `{spacing.sm}` 8px · `{spacing.md}` 12px · `{spacing.lg}` 16px · `{spacing.xl}` 24px · `{spacing.xxl}` 32px · `{spacing.huge}` 64px.
+- **Section padding**: 64–96px on marketing surfaces; 32–48px on dashboard / product surfaces.
+- **Card internal padding**: 32px on feature cards; 24px on dashboard mockups.
 
 ### Grid & Container
-- **Max content width** ≈ 1280px on body sections, 1440px on hero bands which run full-bleed.
-- **Model grid** on collections: 4 columns at desktop, 3 at tablet large, 2 at tablet, 1 at mobile.
-- **Pricing**: 3-tier grid centred at desktop, stacking vertically below 1024px; the centre tier flips to `{component.pricing-tier-featured}` (dark inversion) as the recommended option.
-- **Code-story sections**: a 2-up split — narrative copy left, code well right — collapsing to stacked at < 1024px.
+- Marketing pages center in a ~1200px container with the gradient mesh extending edge-to-edge above.
+- Pricing collapses 4-up → 2-up → 1-up at 1024 / 768 breakpoints.
+- Dashboard product mockups use their own internal grids (12-col tables, 3-col card grids) rendered as static composites.
 
 ### Whitespace Philosophy
-- Whitespace on cream is generous and editorial — sections breathe at 96px and key bands open at 160px so the typography can scale up without feeling cramped.
-- Inside cards, the system tightens to 16–32px so model thumbnails, statuses, and metadata sit in a compact list-of-cards rhythm.
-- Hairline `{colors.hairline}` dividers replace shadow on cream surfaces; on dark surfaces, `{colors.divider-dark}` carries the equivalent role.
+The gradient mesh occupies the upper third of the page; the white canvas below is generously padded. Section gaps tend toward 96px, with content tightening to 32px on dashboard / pricing pages where users compare and act.
 
 ## Elevation & Depth
 
 | Level | Treatment | Use |
 |---|---|---|
-| 0 — flat | No shadow, no border | Default cream canvas, full-bleed bands. |
-| 1 — outline | 1px solid `{colors.hairline}` or `{colors.hairline-strong}` | Model cards, pricing tiers, collection tiles. |
-| 2 — bone inset | Surface colour shift to `{colors.surface-bone}` inside a `{colors.canvas}` band | Feature group containers, "How it works" walkthrough. |
-| 3 — dark inversion | Card swaps to `{colors.surface-dark}` against cream | Code wells, featured pricing tier, and the conversation story band. |
-| 4 — soft drop | `0 8px 24px rgba(32,32,32,0.08)` | Hover-anchored model thumbnails (visual only — not interaction-state-documented). |
-
-Drop shadows exist in the extracted tokens but are restrained — used sparingly to lift photography thumbnails one step off the cream canvas. The dominant elevation language is colour-blocking.
+| 0 | Flat | Default surface |
+| 1 | `box-shadow: rgba(0,55,112,0.08) 0 1px 3px` | Card lift on white |
+| 2 | `box-shadow: rgba(0,55,112,0.08) 0 8px 24px, rgba(0,55,112,0.04) 0 2px 6px` | Floating panels, dashboard mockup chrome |
+| 3 | Gradient mesh backdrop | The brand's primary depth medium — atmospheric color rather than literal shadow |
 
 ### Decorative Depth
-- **Hero atmospheric mesh** — the navy-to-blue gradient backing the home hero is a layered radial mesh: `{colors.primary}` core → `{colors.hero-glow}` mid-stop → `{colors.hero-pink}` outer wash. Reserved for the home hero band only.
-- **Code-story dark band** — the "How it works" section uses `{colors.surface-dark}` full-bleed with a single hairline `{colors.divider-dark}` separating narrative copy and code well.
-- **Contributor mosaic** — the home page features a horizontally-scrolling band of circular avatars (`{component.contributor-avatar}`) over a textured cream canvas; this is the only place avatars appear at the brand level.
+The gradient mesh IS the depth system. Implemented as a layered SVG or large background image rather than CSS gradients (the actual mesh has organic blob shapes that aren't CSS-renderable). The mesh provides the brand's signature lift; literal shadows are reserved for product-UI mockups and stay subtle.
 
 ## Shapes
 
@@ -441,131 +363,94 @@ Drop shadows exist in the extracted tokens but are restrained — used sparingly
 
 | Token | Value | Use |
 |---|---|---|
-| `{rounded.none}` | 0px | Hero bands, full-bleed sections, footer. |
-| `{rounded.xs}` | 4px | Code tabs, inline tags inside code wells. |
-| `{rounded.sm}` | 6px | Mid-radius callouts, small inset chips. |
-| `{rounded.md}` | 10px | Model cards, collection tiles, code wells. |
-| `{rounded.lg}` | 16px | Pricing tiers, larger feature cards. |
-| `{rounded.full}` | 9999px | Buttons, inputs, badges, avatars, pills. |
+| `{rounded.xs}` | 4px | Hairline tags, table chrome |
+| `{rounded.sm}` | 6px | Form inputs |
+| `{rounded.md}` | 8px | Compact cards, alerts |
+| `{rounded.lg}` | 12px | Pricing cards, feature cards |
+| `{rounded.xl}` | 16px | Dashboard product mockup chrome |
+| `{rounded.pill}` | 9999px | All buttons, tag pills |
 
 ### Photography Geometry
-- Model thumbnails: square (1:1) with `{rounded.md}` corners, full-bleed image to the card edge.
-- Hero example outputs: 4:3 or 16:9 with `{rounded.md}` corners.
-- Contributor avatars: circular (`{rounded.full}`), 40px on home, 32px in card metadata.
-- The hero band uses a stylised black-ink illustration (a learner teaching an AI pupil) as its photography stand-in — kept inside the navy band rather than overlaid on cream.
+The brand uses **product UI mockups** more than photography. Dashboard composites render as faux IDE/terminal/dashboard chrome inside `{rounded.lg}` 12px containers with a subtle `box-shadow`. Real photography appears in customer logo strips and the rare case-study card; treated as inset 4:3 with no shadow.
 
 ## Components
 
 ### Buttons
 
-**`button-primary`** — navy CTA
-- Background `{colors.primary}`, label `{colors.on-primary}`, type `{typography.button-md}`, padding `12px 24px`, `rounded: {rounded.full}`, height 44px.
-- The single most important action on a page (e.g. "Sign in with GitHub", "Try a model").
-- Pressed state lives in `button-primary-pressed` (background `{colors.primary-deep}`).
+**`button-primary-pill`** — the dominant CTA system-wide.
+- Background `{colors.primary}`, text `{colors.on-primary}`, type `{typography.button-md}`, padding `{spacing.sm} {spacing.lg}` (8px 16px), rounded `{rounded.pill}` 9999px.
+- Pressed state `button-primary-pill-pressed` shifts background to `{colors.primary-press}`.
 
-**`button-dark`** — dark CTA
-- Background `{colors.surface-dark}`, label `{colors.on-dark}`, type `{typography.button-md}`, `rounded: {rounded.full}`.
-- Equal-weight secondary action paired with `{component.button-primary}`, or the primary action on cream when navy would be too loud.
+**`button-secondary`** — outline-style alternative.
+- Background `{colors.canvas}`, text `{colors.primary}`, 1px solid `{colors.primary}` border, same pill geometry.
 
-**`button-outline`** — outlined CTA
-- Background `{colors.surface-card}`, label `{colors.ink}`, 1px solid `{colors.hairline-strong}`, type `{typography.button-md}`, `rounded: {rounded.full}`.
-- Tertiary action; appears alongside primary/dark for "View docs", "Read more".
-
-**`button-ghost`** — inline button
-- Background `{colors.canvas}`, label `{colors.ink}`, no border, type `{typography.button-md}`, `rounded: {rounded.full}`, padding `8px 16px`.
-- Sub-actions inside cards and inline with body copy.
-
-**`button-icon`** — icon button
-- Background `{colors.surface-card}`, label `{colors.ink}`, 1px solid `{colors.hairline}`, `rounded: {rounded.full}`, 36×36px circular.
-- Carousel arrows, copy-to-clipboard, GitHub link icon.
+**`button-on-dark`** — used on dashboard / dark surfaces.
+- Background `{colors.brand-dark-900}`, text `{colors.on-primary}`, same pill geometry.
 
 ### Cards & Containers
 
-**`model-card`** — model listing card
-- Background `{colors.surface-card}`, text `{colors.ink}`, type `{typography.body-md}`, `rounded: {rounded.md}`, padding `{spacing.lg}` (16px).
-- Square thumbnail on top, model owner + name beneath in `{typography.body-sm}`, single-line description in `{colors.charcoal}`, status pill `{component.badge-status}` bottom-left.
+**`card-feature-light`** — feature explanation card on white.
+- Background `{colors.canvas}`, padding `{spacing.xxl}`, rounded `{rounded.lg}` 12px, 1px `{colors.hairline}` border, optional Level 1 shadow.
 
-**`collection-tile`** — collection-of-models tile
-- Background `{colors.canvas}`, text `{colors.ink}`, type `{typography.heading-md}`, `rounded: {rounded.md}`, padding `{spacing.xl}` (24px).
-- Cream-on-cream tile inside a `{colors.surface-bone}` band, used for browsing model categories.
+**`card-pricing`** — standard pricing tier.
+- Background `{colors.canvas}`, padding `{spacing.xxl}`, rounded `{rounded.lg}`, 1px `{colors.hairline}` border. Title `{typography.heading-lg}`, price `{typography.display-md}`, body `{typography.body-md}`, CTA pinned bottom as `button-primary-pill`.
 
-**`pricing-tier`** — pricing tier card
-- Background `{colors.surface-card}`, text `{colors.ink}`, type `{typography.body-md}`, `rounded: {rounded.lg}`, padding `{spacing.xxl}` (32px).
-- 3-up grid; tier name in `{typography.display-lg}` ("Free", "Pro", "Enterprise"), price in `{typography.display-md}`.
+**`card-pricing-featured`** — the inverted dark featured tier.
+- Background `{colors.brand-dark-900}`, text `{colors.on-primary}`, otherwise identical structure to `card-pricing`. The deep-navy fill is the brand's distinctive featured-tier choice.
 
-**`pricing-tier-featured`** — featured pricing tier
-- Background `{colors.surface-dark}`, text `{colors.on-dark}`, type `{typography.body-md}`, `rounded: {rounded.lg}`, padding `{spacing.xxl}`.
-- Centre tier flipped to dark inversion to mark "recommended".
+**`card-cream-band`** — warm interlude card.
+- Background `{colors.canvas-cream}`, text `{colors.ink}`, padding `{spacing.xxl}`, rounded `{rounded.lg}`. Used to break up the indigo / white rhythm with warmth.
 
-**`code-block`** — code well
-- Background `{colors.surface-dark}`, text `{colors.on-dark}`, type `{typography.code-md}`, `rounded: {rounded.md}`, padding `{spacing.xl}` (24px).
-- Tab strip on top using `{component.code-tab}` for switching between languages (Python, Node.js, cURL, HTTP).
-
-**`code-tab`** — code tab chip
-- Background `{colors.surface-deep}`, text `{colors.on-dark-mute}`, type `{typography.code-sm}`, `rounded: {rounded.xs}`, padding `6px 12px`.
-- Active tab swaps text colour to `{colors.on-dark}` and adds a 2px bottom underline in `{colors.primary}`.
-
-**`hero-band`** — full-bleed hero
-- Background `{colors.hero-warm}` with the atmospheric mesh detailed in Elevation, text `{colors.on-dark}`, type `{typography.display-xxl}` for the title.
-- Used only on the home page; secondary pages open with cream + `{typography.display-xl}`.
+**`card-dashboard-mockup`** — composited dashboard / product UI screenshot.
+- Background `{colors.canvas}`, type `{typography.body-tabular}` (with `tnum`), padding `{spacing.xl}` 24px, rounded `{rounded.lg}` 12px, Level 2 shadow. Often contains nested mini-mockups: code preview + dashboard table + chart card.
 
 ### Inputs & Forms
 
-**`text-input`** — default input
-- Background `{colors.surface-card}`, text `{colors.ink}`, type `{typography.body-md}`, 1px solid `{colors.hairline}`, `rounded: {rounded.full}`, padding `12px 20px`, height 44px.
-- Pill-shaped search and email fields. Focus state adds a `{colors.ring-focus}` 3px ring.
+**`text-input`** — standard form field.
+- Background `{colors.canvas}`, text `{colors.ink}`, type `{typography.body-md}`, padding `{spacing.sm} {spacing.md}` (8px 12px), rounded `{rounded.sm}` 6px, 1px `{colors.hairline-input}` border.
+- Focus state `text-input-focused`: border swaps to `{colors.primary}`.
 
 ### Navigation
 
-**`nav-bar`** — top nav (desktop)
-- Background `{colors.canvas}`, type `{typography.button-sm}`, height 60px, single hairline `{colors.hairline}` bottom border.
-- Left: wordmark logo. Centre: top-level nav ("Explore", "Pricing", "Docs", "Blog"). Right: GitHub icon + "Sign in" link + `{component.button-primary}`.
+**`nav-bar-on-mesh`** — top nav floating over the gradient hero.
+- Background `{colors.canvas}` (or transparent depending on scroll), text `{colors.ink}`, padding `{spacing.lg} {spacing.xl}`. Logo wordmark on the left, primary nav center, sign-in + filled `button-primary-pill` on the right.
 
-**`nav-bar`** (mobile)
-- Same height 60px, collapses centre nav into a hamburger icon. Logo stays left, sign-in CTA stays right.
+### Pills, Tags, and Chips
 
-**`sub-nav-pill`** — sub-nav chip
-- Pill chips set in a horizontal row above content (e.g. "All", "Featured", "Image generation", "Audio"), `{component.sub-nav-pill}` styling.
+**`pill-tag-soft`** — subdued indigo tag.
+- Background `{colors.primary-bg-subdued-hover}`, text `{colors.primary-deep}`, type `{typography.micro-cap}`, padding `4px 8px`, rounded `{rounded.pill}`.
 
 ### Signature Components
 
-**`badge-status`** — model status badge
-- Background `{colors.badge-success}`, label `{colors.on-dark}`, type `{typography.caption}`, `rounded: {rounded.full}`, padding `4px 10px`.
-- Anchored on the bottom-left of model cards to indicate "running" or "deployed".
+**Gradient Mesh Backdrop** — pastel cream → sherbet orange → lavender → indigo → ruby pink stops blurred horizontally across the upper third of the page. Implemented as SVG or a large background image — not a flat CSS gradient (the real mesh has organic blob shapes).
 
-**`badge-tag`** — neutral tag
-- Background `{colors.canvas}`, label `{colors.ink}`, 1px solid `{colors.hairline}`, type `{typography.caption}`, `rounded: {rounded.full}`, padding `4px 10px`.
-- Capability tags ("text-to-image", "video", "audio") on model cards.
+**Composited Dashboard Mockup** — multi-layer faux-product-UI compositions: an IDE panel on the left, a dashboard table center, a chart card on the right, all rendered at small scale inside `{rounded.lg}` containers with subtle Level 2 shadows. The composite is the brand's most-photographed feature.
 
-**`contributor-avatar`** — community contributor
-- Background `{colors.surface-card}` placeholder behind 1:1 photography, `rounded: {rounded.full}`, 40×40px (32px in metadata contexts).
-- Used in the home-page contributor mosaic.
+**Tabular-Figure Money Type** — every number rendering money, count, or transaction value uses `font-feature-settings: "tnum"`. The brand's quiet signal that it's a financial-infrastructure platform.
 
-**`footer`** — global footer
-- Background `{colors.surface-deep}`, text `{colors.on-dark}`, type `{typography.body-sm}`, `rounded: {rounded.none}`, padding `64px 32px`.
-- Multi-column quick-links grid above a copyright row separated by `{colors.divider-dark}`.
+**`link-on-light`** — inline links on light surfaces.
+- Text `{colors.primary}` rendered in `{typography.body-md}`, no underline by default.
+
+**`footer-light`** — site-wide footer.
+- Background `{colors.canvas}`, text `{colors.ink-mute}`, type `{typography.caption}`, padding `{spacing.huge} {spacing.xl}` (64px 24px). Holds 4–6 columns of link groups, social icons, and a small legal row.
 
 ## Do's and Don'ts
 
 ### Do
-- Use `{colors.canvas}` (cream) as the default page background. White (`{colors.surface-card}`) appears only on individual cards, inputs, and the hero illustration backdrop.
-- Reserve `{colors.primary}` for the primary CTA, the home hero band, and inline links — three roles, nothing else.
-- Set every interactive element to `{rounded.full}` — buttons, inputs, badges, avatars, pills.
-- Step content cards up to `{rounded.md}` (10px) or `{rounded.lg}` (16px) — never sharp corners.
-- Open hero bands with `{typography.display-xxl}` (128px) and `{typography.display-xl}` (72px) at `lineHeight: 1.0` with negative letter-spacing.
-- Use `Google Sans` for all display, `Inter` for UI/body, and `Inter Tight` for code/chat. Keep the lanes strict.
-- Render code in `{component.code-block}` with a `{colors.surface-dark}` background — code is print, not an inline grey box.
-- Pair photography with `{rounded.md}` corners and full-bleed crop inside cards.
+- Reserve `{colors.primary}` for filled CTAs and inline link emphasis — it should appear sparingly, one filled button per band.
+- Apply the gradient mesh to every marketing hero; bare-canvas heroes feel off-brand.
+- Render display tiers at weight 300 with negative letter-spacing — the thin tracking is the typographic signature.
+- Use `font-feature-settings: "tnum"` on every money / numeric cell.
+- Apply `font-feature-settings: "ss01"` globally on the body element.
+- Pair every feature explanation with a composited product UI mockup; the brand's argument is "look at the actual product."
 
 ### Don't
-- Don't replace cream with pure white at the page level. The brand temperature comes from `{colors.canvas}`.
-- Don't introduce a secondary brand colour. Navy is the only brand accent; semantic green and focus blue are functional, not decorative.
-- Don't loosen display `lineHeight` past 1.0. Tight stacking is structural.
-- Don't bump body weight to 500 for emphasis — change family (`Inter` → `Google Sans`) instead.
-- Don't apply `{rounded.full}` to content cards. Pill-shaped cards break the rhythm.
-- Don't put code in a light grey box. Code wells are always `{colors.surface-dark}` or `{colors.surface-deep}`.
-- Don't use navy on body text or large surfaces — it loses its stamp quality immediately.
-- Don't add drop shadows on cream surfaces. Elevation is colour-blocking; shadows are reserved for floating thumbnails.
+- Don't bump display weight above 300 — at 400 the brand's editorial air collapses.
+- Don't add new accent colors outside the documented gradient stops (cream / orange / lavender / indigo / ruby / magenta).
+- Don't use the indigo `{colors.primary}` as a body-text color — it's a CTA and link color, not a type color at body size.
+- Don't shrink button padding below `8px 16px` — the tight pill is part of the brand's transactional feel.
+- Don't render money cells without `tnum` — it breaks the quiet financial-data signature.
+- Don't replace the pill shape with rounded-rectangles for buttons.
 
 ## Responsive Behavior
 
@@ -573,42 +458,30 @@ Drop shadows exist in the extracted tokens but are restrained — used sparingly
 
 | Name | Width | Key Changes |
 |---|---|---|
-| Desktop XL | ≥ 1440px | Full max-width 1280 body, hero band runs full-bleed, 4-up model grid. |
-| Desktop | 1280–1439px | Container shrinks; padding `{spacing.xl}` (24px) sides. |
-| Tablet Large | 1024–1279px | Model grid 3-up, code-story splits remain 2-up. |
-| Tablet | 768–1023px | Model grid 2-up, code-story stacks (narrative on top, code below), pricing stacks vertically. |
-| Mobile Large | 426–767px | Model grid 1-up at 480px+, nav collapses to hamburger, hero `{typography.display-xxl}` clamps to 64px. |
-| Mobile | ≤ 425px | All grids 1-up, hero clamps to 48px, section padding `{spacing.section}` collapses to 64px. |
+| Wide | ≥ 1440px | Full gradient mesh edge-to-edge; dashboard composite at full scale |
+| Desktop | 1024–1440px | Default content max-width; pricing 4-up |
+| Tablet | 768–1023px | Pricing 2-up; dashboard composite simplifies to 2 panels |
+| Mobile | < 768px | Pricing 1-up; hamburger nav; display drops 56 → 36px |
 
 ### Touch Targets
-- All buttons ship at minimum 44px tall on mobile; default `{component.button-primary}` is 44px tall — comfortably clearing WCAG AAA.
-- `{component.button-icon}` (36px) is bumped to 44px on mobile via increased padding.
-- `{component.sub-nav-pill}` stays at 36px on desktop and grows to 40px on mobile via vertical padding adjustment.
+- Pill buttons hit ≥ 40×40px on mobile via padding scaling. On smaller screens, buttons size up to 44×44px to maintain WCAG AAA.
+- Form fields stay at 40px minimum height.
 
 ### Collapsing Strategy
-- Top-level nav collapses to hamburger at < 1024px; the wordmark and `{component.button-primary}` stay anchored.
-- Hero `{typography.display-xxl}` clamps: 128px → 96px → 64px → 48px across the breakpoint ladder.
-- Pricing 3-up grid stacks vertically at < 1024px with the featured tier remaining centre-stacked.
-- Code-story splits switch from side-by-side to stacked at < 1024px, code well always second.
-- Sub-nav pills convert from a wrap row to a horizontal scroll-rail at < 768px.
+- Display tiers stair-step 56 → 48 → 32 → 26 → 22px through the breakpoints.
+- Gradient mesh re-tiles on mobile to preserve the wash without disappearing.
+- Dashboard composites simplify to single-panel mockups on mobile; the multi-layer composition only renders at desktop+.
+- Pricing tiers stair-step 4-up → 2-up → 1-up.
 
 ### Image Behavior
-- Model thumbnails serve at 1.5× and 2× DPR; below 768px the system swaps to a 600×600 export instead of 1200×1200.
-- Hero atmospheric mesh is rendered as a CSS gradient — no asset cost, no breakpoint variation.
-- Code-block contents wrap softly at < 1024px (no horizontal scroll); long lines break with a continuation marker.
+Product UI composites use `srcset` with art-direction crops at major breakpoints. Mobile crops focus on the most actionable inner panel; desktop crops show the full multi-layer composition.
 
 ## Iteration Guide
 
-1. Focus on ONE component at a time. Most interactive elements share `{rounded.full}` and the `{colors.canvas}` / `{colors.surface-card}` pair — only the role-specific tokens (`{colors.primary}`, `{component.code-block}`) shift between variants.
-2. Reference component names and tokens directly (`{colors.primary}`, `{component.button-primary-pressed}`, `{rounded.lg}`) — do not paraphrase.
-3. Run `npx @google/design.md lint DESIGN.md` after edits; orphaned-tokens warnings will catch unused entries.
-4. Add new variants as separate entries (`-pressed`, `-disabled`, `-featured`) — do not bury them in prose.
-5. Default body type to `{typography.body-md}`; reach for `{typography.subtitle}` only on hero subtitles.
-6. Keep `{colors.primary}` scarce — if more than one navy element appears per viewport, ask whether one should drop to `{colors.surface-dark}` instead.
-
-## Known Gaps
-
-- Active/pressed visual states are documented for `button-primary-pressed` only; other components rely on the focus-ring (`{colors.ring-focus}`) for interactive feedback, which is not extracted as a per-component variant.
-- The model playground / try-this-model interactive surfaces (logged-in feature) are out of scope; only the public marketing canvas is documented.
-- Dashboard / billing / API key management surfaces are not extracted — those live behind authentication.
-- The home hero illustration ("the tinkerer at the workbench") is treated as decorative artwork, not a system component; replicating it requires bespoke illustration rather than tokens.
+1. Focus on ONE component at a time.
+2. Reference component names and tokens directly (`{colors.primary}`, `{button-primary-pill}-pressed`, `{rounded.pill}`).
+3. Run `npx @google/design.md lint DESIGN.md` after edits.
+4. Add new variants as separate entries.
+5. Default body to `{typography.body-md}` (15px); use `{typography.body-tabular}` for any money / numeric cell.
+6. Apply `ss01` globally on the body; apply `tnum` per-element on numeric content.
+7. The gradient mesh is non-negotiable on marketing heroes — bare-canvas heroes break the brand.
