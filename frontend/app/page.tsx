@@ -113,9 +113,20 @@ function HeroVisual() {
     >
       <div className="grid gap-2 sm:grid-cols-3">
         {stages.map(([number, title, description]) => (
-          <div key={number} className="flex min-h-44 flex-col rounded-md bg-canvas p-4">
-            <span className="font-code text-xs text-primary">{number}</span>
-            <p className="mt-auto font-display text-xl font-normal">{title}</p>
+          <div
+            data-hover-card
+            key={number}
+            className="relative flex min-h-44 flex-col rounded-md bg-canvas p-4"
+          >
+            <span data-card-accent className="w-fit font-code text-xs text-primary">
+              {number}
+            </span>
+            <p
+              data-card-text
+              className="mt-auto w-fit origin-left font-display text-xl font-normal will-change-transform"
+            >
+              {title}
+            </p>
             <p className="mt-2 text-xs leading-relaxed text-charcoal">{description}</p>
           </div>
         ))}
@@ -146,11 +157,19 @@ function LearningLoop() {
           {LOOP.map(([number, title, description]) => (
             <article
               data-reveal
+              data-hover-card
               key={number}
-              className="flex min-h-72 flex-col border-b border-r border-hairline bg-canvas p-6"
+              className="relative flex min-h-72 flex-col border-b border-r border-hairline bg-canvas p-6"
             >
-              <span className="font-code text-xs text-ash">{number}</span>
-              <h3 className="mt-auto font-display text-2xl font-light tracking-tight">{title}</h3>
+              <span data-card-accent className="w-fit font-code text-xs text-ash">
+                {number}
+              </span>
+              <h3
+                data-card-text
+                className="mt-auto w-fit origin-left font-display text-2xl font-light tracking-tight will-change-transform"
+              >
+                {title}
+              </h3>
               <p className="mt-3 text-sm leading-relaxed text-charcoal">{description}</p>
             </article>
           ))}
@@ -230,9 +249,14 @@ function EvidenceSection() {
         </div>
         <div className="mt-14 grid gap-px bg-hairline md:grid-cols-2">
           {GUARDRAILS.map(([Icon, title, description]) => (
-            <article data-reveal key={title} className="bg-canvas p-7">
-              <Icon size={28} weight="duotone" className="text-primary" />
-              <h3 className="mt-8 font-display text-2xl font-light">{title}</h3>
+            <article data-reveal data-hover-card key={title} className="relative bg-canvas p-7">
+              <Icon data-card-accent size={28} weight="duotone" className="text-primary" />
+              <h3
+                data-card-text
+                className="mt-8 w-fit origin-left font-display text-2xl font-light will-change-transform"
+              >
+                {title}
+              </h3>
               <p className="mt-3 text-sm leading-relaxed text-charcoal">{description}</p>
             </article>
           ))}
@@ -262,13 +286,19 @@ function ReusableSystem() {
         <div data-reveal className="grid grid-cols-2 gap-3">
           {LABS.map((lab, index) => (
             <div
+              data-hover-card
               key={lab}
-              className="flex min-h-28 flex-col justify-between rounded-md border border-hairline bg-canvas p-4"
+              className="relative flex min-h-28 flex-col justify-between rounded-md border border-hairline bg-canvas p-4"
             >
-              <span className="font-code text-xs text-ash">
+              <span data-card-accent className="w-fit font-code text-xs text-ash">
                 {String(index + 1).padStart(2, "0")}
               </span>
-              <span className="text-sm font-semibold text-ink">{lab}</span>
+              <span
+                data-card-text
+                className="origin-left text-sm font-semibold text-ink will-change-transform"
+              >
+                {lab}
+              </span>
             </div>
           ))}
         </div>

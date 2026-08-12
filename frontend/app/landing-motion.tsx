@@ -11,7 +11,9 @@ export function LandingMotion({ children }: Readonly<{ children: React.ReactNode
   const scope = useRef<HTMLDivElement>(null);
 
   useGSAP(
-    () => {
+    (_context, contextSafe) => {
+      if (!contextSafe) return;
+
       const media = gsap.matchMedia();
       media.add("(prefers-reduced-motion: no-preference)", () => {
         gsap.set("[data-hero], [data-console]", { autoAlpha: 0, y: 24 });
@@ -35,6 +37,57 @@ export function LandingMotion({ children }: Readonly<{ children: React.ReactNode
           },
         });
       });
+
+      media.add(
+        "(hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference)",
+        () => {
+          const cards = gsap.utils.toArray<HTMLElement>("[data-hover-card]");
+
+          const enterCard = contextSafe((event: Event) => {
+            const card = event.currentTarget as HTMLElement;
+            gsap.to(card, {
+              backgroundColor: "var(--color-surface-hover)",
+              duration: 0.24,
+              ease: "power2.out",
+              overwrite: "auto",
+            });
+            gsap.to(card.querySelectorAll("[data-card-text]"), {
+              scale: 1.035,
+              duration: 0.24,
+              ease: "power2.out",
+              overwrite: "auto",
+            });
+          });
+
+          const leaveCard = contextSafe((event: Event) => {
+            const card = event.currentTarget as HTMLElement;
+            gsap.to(card, {
+              backgroundColor: "var(--color-canvas)",
+              duration: 0.28,
+              ease: "power2.out",
+              overwrite: "auto",
+            });
+            gsap.to(card.querySelectorAll("[data-card-text]"), {
+              scale: 1,
+              duration: 0.28,
+              ease: "power2.out",
+              overwrite: "auto",
+            });
+          });
+
+          cards.forEach((card) => {
+            card.addEventListener("pointerenter", enterCard);
+            card.addEventListener("pointerleave", leaveCard);
+          });
+
+          return () => {
+            cards.forEach((card) => {
+              card.removeEventListener("pointerenter", enterCard);
+              card.removeEventListener("pointerleave", leaveCard);
+            });
+          };
+        },
+      );
       return () => media.revert();
     },
     { scope },

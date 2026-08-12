@@ -3,3 +3,8 @@ bin/
 *.out
 coverage.txt
 .DS_Store
+
+# Local agent skills and installation metadata
+.agents/
+.claude/
+skills-lock.json
