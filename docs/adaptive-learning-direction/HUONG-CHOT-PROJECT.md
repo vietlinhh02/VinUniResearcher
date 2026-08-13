@@ -1,58 +1,67 @@
 # Hướng chốt của project Mentee
 
-Phiên bản này thay thế hướng `AI enact + runner` trong study đầu tiên. Mentee vẫn là
-một AI apprentice theo tinh thần AlgoBo/TeachYou, nhưng research tập trung vào knowledge
-state và cách AI chọn câu hỏi tiếp theo.
+Mentee vẫn là một AI apprentice theo tinh thần AlgoBo/TeachYou. Thay đổi quan
+trọng sau buổi review là research không còn được mô tả như bài toán “AI chọn
+câu hỏi nào”. Bài toán đầy đủ là khép kín vòng tương tác giữa learner và AI
+bằng một knowledge state có thể kiểm tra.
 
 ## Mentee là gì?
 
-Mentee là một hoạt động Learning-by-Teaching sau khi learner hoàn thành toàn bộ một
-bài lab. Learner đóng vai người dạy. AI đóng vai một học viên mới, lắng nghe, ghi
-nhận điều đã được dạy và hỏi lại khi có phần chưa rõ.
+Mentee là một hoạt động Learning-by-Teaching sau khi learner hoàn thành toàn bộ
+một bài lab. Learner đóng vai người dạy. AI đóng vai một học viên mới, lắng
+nghe, ghi nhận điều đã được dạy và phản hồi khi còn điểm chưa rõ.
 
-Mentee không thay lesson, IDE, sandbox, test, autograder hoặc hệ thống nộp bài. Những
-công cụ đó xác nhận artifact chạy được. Mentee kiểm tra một vấn đề khác:
+Mentee không thay lesson, IDE, sandbox, test, autograder hoặc hệ thống nộp bài.
+Những công cụ đó xác nhận artifact chạy được. Mentee kiểm tra một vấn đề khác:
 learner có giải thích được reasoning đằng sau artifact hay không?
 
-Một người có thể pass lab bằng cách làm theo hướng dẫn, thử nhiều lần hoặc
-dùng code do AI sinh. Vì vậy product cuối cùng không đủ để suy ra người đó
-hiểu:
+Một người có thể pass lab bằng hướng dẫn từng bước, thử nhiều lần hoặc code do
+AI sinh. Product cuối cùng không đủ để suy ra người đó hiểu:
 
 - tại sao giải pháp hoạt động;
 - evidence nào hỗ trợ quyết định;
 - điều kiện và giới hạn của một quy tắc;
-- cách nối kết quả quan sát với bước xử lý tiếp theo;
+- cách nối observation với bước xử lý tiếp theo;
 - cách áp dụng reasoning vào một task mới.
 
-## Research problem
+## Bài toán nghiên cứu
 
-Use case của team là các lab AI Thực Chiến. Bài toán nghiên cứu rộng hơn use case:
+AI Thực Chiến là testbed. Bài toán nghiên cứu rộng hơn một course cụ thể:
 
-> Làm thế nào AI apprentice cập nhật knowledge state từ lời learner và chọn
-> follow-up question phù hợp để làm rõ reasoning gap?
+> Làm thế nào một AI apprentice sử dụng knowledge state đang thay đổi để tạo ra
+> tương tác ngược có căn cứ, giúp learner làm rõ reasoning gap trong một phiên
+> post-lab teach-back?
 
-AI Thực Chiến cung cấp learner, objective, artifact context và môi trường pilot.
-Contribution không phải một chatbot riêng cho course đó. Contribution nằm ở pipeline có
-thể kiểm tra: learner claim, gap, question target và phản hồi tiếp theo được nối
-với nhau bằng provenance.
+Contribution nằm ở cả vòng lặp, không chỉ ở câu hỏi cuối cùng:
+
+```text
+learner turn
+→ state update
+→ unresolved issue
+→ reciprocal response
+→ learner uptake
+→ new state revision
+```
+
+Mỗi bước cần provenance để team biết lỗi nằm ở extraction, diagnosis, response
+selection hay learner uptake.
 
 ## Quan hệ với AlgoBo/TeachYou
 
-Mentee kế thừa ba cơ chế:
+Mentee kế thừa:
 
 1. Reflect–Respond: knowledge state nằm ngoài LLM và giới hạn điều AI thể hiện là
    đã học.
 2. Apprentice persona: AI không chuyển sang vai tutor giải bài.
-3. Active questioning: AI hỏi `why/how`, yêu cầu làm rõ, tạo kết nối hoặc kiểm tra
-   edge case.
+3. Mode-shifting: AI không chỉ tiếp nhận mà còn chủ động yêu cầu learner giải
+   thích sâu hơn.
 
-Mentee thay đổi phần question policy. AlgoBo chuyển sang questioner mode theo chu kỳ
-heuristic. Mentee dùng knowledge state để quyết định phần nào đáng hỏi và nên
-hỏi theo strategy nào.
+AlgoBo dùng chu kỳ heuristic để chuyển sang questioner mode. Mentee quan tâm
+rộng hơn: sau khi state thay đổi, AI nên có hành động đối thoại nào để trả quyền
+giải thích về cho learner?
 
-Teaching Helper chưa nằm trong comparative study. Thay cả question policy lẫn feedback về
-cách dạy trong cùng condition sẽ tạo confound giống hạn chế mà team đã nhận ra
-khi đọc paper.
+Teaching Helper chưa nằm trong phiên đầu tiên. Nếu vừa thay reciprocal policy vừa
+thêm feedback về cách dạy, team sẽ không biết thành phần nào gây ra thay đổi.
 
 ## Flow sản phẩm
 
@@ -63,16 +72,24 @@ khi đọc paper.
 4. Learner dạy lại một skill hẹp cho AI apprentice
 5. State updater trích xuất claim và source span
 6. Learner xác nhận, sửa hoặc xóa claim
-7. Gap detector tìm phần thiếu, mơ hồ hoặc mâu thuẫn
-8. Question selector chọn một target và một strategy
-9. AI hỏi đúng một follow-up question
-10. Learner làm rõ; hệ thống tạo knowledge-state revision mới
-11. Vòng lặp tiếp tục trong question budget và timebox
-12. Apprentice bị khóa; learner làm independent transfer
+7. Issue detector tìm phần thiếu, mơ hồ hoặc mâu thuẫn
+8. Response policy chọn target và reciprocal action
+9. AI phản hồi learner mà không đưa đáp án
+10. Learner làm rõ, sửa hoặc bổ sung
+11. Hệ thống tạo state revision mới và đánh giá target đã thay đổi chưa
+12. Loop tiếp tục trong interaction budget và timebox
+13. Apprentice bị khóa; learner làm independent transfer
 ```
 
-Một lab tạo tối đa một Mentee session. Alpha tập trung vào đúng một objective trong
-phiên đó.
+Hai chiều của loop phải nhìn thấy được trong event log:
+
+```text
+Learner → AI: teaching turn
+AI → Learner: reciprocal response
+Learner → AI: uptake turn
+```
+
+Một AI response không có learner uptake chưa khép kín loop.
 
 ## Lab completion summary
 
@@ -92,11 +109,11 @@ Lab chỉ gửi dữ liệu cần cho phiên:
 }
 ```
 
-`artifactReference` không có nghĩa Mentee được tự tải toàn bộ artifact. Spec phải
-allowlist field cần đọc. API key, secret, clipboard, raw log có PII và source code không
-liên quan đều nằm ngoài payload mặc định.
+`artifactReference` không cho phép Mentee tự tải toàn bộ artifact. Spec phải
+allowlist field cần đọc. API key, secret, clipboard, raw log có PII và source code
+không liên quan đều nằm ngoài payload mặc định.
 
-Checkpoint bên trong lab chỉ là evidence. Trigger duy nhất của phiên post-lab là
+Checkpoint trong lab chỉ là evidence. Trigger của phiên post-lab là
 `lab_status = completed`.
 
 ## Chọn skill cho phiên
@@ -104,18 +121,18 @@ Checkpoint bên trong lab chỉ là evidence. Trigger duy nhất của phiên po
 Skill phù hợp cần reasoning, có thể mô tả bằng teaching map và có transfer task
 độc lập. Không chọn objective chỉ vì nó dễ chấm bằng test.
 
-Ví dụ trong lab RAG, “cấu hình pipeline chạy được” có thể đã được
-autograder kiểm tra. “Phân tích retrieval failure từ evaluation evidence” phù hợp hơn
-với Mentee vì learner phải giải thích giả thuyết, test phân biệt và trade-off.
+Ví dụ trong lab RAG, “cấu hình pipeline chạy được” có thể đã được autograder
+kiểm tra. “Phân tích retrieval failure từ evaluation evidence” phù hợp hơn vì
+learner phải giải thích giả thuyết, test phân biệt và trade-off.
 
 Course author chọn skill trước. LLM không tự quyết định curriculum trong alpha.
 
-## Teaching map
+## Teaching map và knowledge state
 
-Teaching map chia objective thành các knowledge component. Nó giúp learner biết phạm vi
-cần dạy và giúp researcher gán claim/gap nhất quán.
+Teaching map chia objective thành các knowledge component. Nó giúp learner biết
+phạm vi cần dạy và giúp researcher gán claim hoặc issue nhất quán.
 
-Debugging:
+Ví dụ với debugging:
 
 ```text
 Observed failure
@@ -126,32 +143,6 @@ Observed failure
 → fix and regression check
 ```
 
-RAG evaluation:
-
-```text
-Failure slice
-→ hypothesized source
-→ intervention
-→ evaluation design
-→ quality/latency/cost trade-off
-→ decision
-```
-
-Agent workflow:
-
-```text
-Current state
-→ tool or action
-→ expected observation
-→ guardrail
-→ recovery or termination condition
-```
-
-Teaching map là scaffold, không phải đáp án mẫu. Label không được tiết lộ quyết
-định đúng của transfer task.
-
-## Knowledge state
-
 Knowledge state chỉ chứa claim có nguồn từ learner:
 
 ```json
@@ -160,7 +151,7 @@ Knowledge state chỉ chứa claim có nguồn từ learner:
   "claims": [
     {
       "id": "claim-7",
-      "componentId": "hypothesized_source",
+      "componentId": "candidate_cause",
       "content": "Dense retrieval có thể bỏ sót exact identifier",
       "sourceTurn": 3,
       "sourceText": "...",
@@ -171,20 +162,18 @@ Knowledge state chỉ chứa claim có nguồn từ learner:
 ```
 
 Learner nhìn thấy cách hệ thống hiểu lời mình trước khi state được dùng. Mọi
-edit tạo revision mới. LLM không được tự thêm kiến thức đúng chỉ vì nó biết
-câu trả lời.
+edit tạo revision mới. LLM không được thêm kiến thức chỉ vì nó biết câu trả lời.
 
-Các status như `unaddressed`, `partial`, `articulated`, `ambiguous` và `contradictory` chỉ mô
-tả state của cuộc hội thoại. Không status nào đồng nghĩa với mastery.
+Các status như `unaddressed`, `partial`, `articulated`, `ambiguous` và
+`contradictory` chỉ mô tả state hội thoại. Không status nào đồng nghĩa với mastery.
 
-## Gap detection
+## Unresolved issue
 
-Gap detector so confirmed state với teaching map và diagnostic rubric. Nó tạo một danh sách
-candidate target:
+Issue detector so confirmed state với teaching map và diagnostic rubric:
 
 ```json
 {
-  "targetId": "gap-4-1",
+  "targetId": "issue-4-1",
   "componentId": "evaluation_design",
   "issueType": "missing_justification",
   "claimIds": ["claim-9"],
@@ -192,34 +181,40 @@ candidate target:
 }
 ```
 
-Taxonomy ban đầu chỉ gồm missing component, missing justification, missing relationship,
-ambiguity, internal contradiction và missing boundary/example. Taxonomy sẽ được sửa từ
-annotation thực tế, không mở rộng vì muốn spec trông đầy đủ.
+Taxonomy ban đầu gồm missing component, missing justification, missing
+relationship, ambiguity, internal contradiction và missing boundary/example.
+Taxonomy chỉ được mở rộng khi transcript thật cho thấy cần thêm nhãn.
 
-Private rubric có thể giúp detector nhận ra gap, nhưng reference answer không được đưa
-sang response generator. Đây là boundary chống answer leakage.
+Private rubric có thể giúp detector nhận ra issue, nhưng reference answer không
+được đưa sang response generator. Boundary này hạn chế answer leakage.
 
-## Question selection
+## Tương tác ngược của AI
 
-Question selector chọn đúng một candidate target và một trong bốn strategy:
+Response policy chọn một target và một reciprocal action:
 
-- clarification cho claim mơ hồ hoặc mâu thuẫn;
-- elaboration khi learner có kết luận nhưng chưa giải thích vì sao;
-- connection khi hai phần reasoning chưa được nối;
-- edge case khi quy tắc chưa có điều kiện hoặc ví dụ biên.
+| Action | Khi dùng | AI làm gì? |
+| --- | --- | --- |
+| `reflect_back` | Cần xác nhận cách AI hiểu | Nhắc lại và xin xác nhận |
+| `clarify` | Claim mơ hồ | Hỏi learner định nghĩa hoặc chỉ rõ tham chiếu |
+| `probe_reason` | Có kết luận nhưng thiếu lý do | Hỏi `why/how` |
+| `connect` | Hai phần reasoning chưa nối | Yêu cầu learner giải thích quan hệ |
+| `check_conflict` | Hai claim mâu thuẫn | Nêu mâu thuẫn, không tự chọn câu đúng |
+| `request_example` | Quy tắc thiếu boundary | Yêu cầu ví dụ hoặc edge case |
 
-Câu hỏi phải map về target và learner claim nếu claim đã tồn tại. Với
-`missing_component`, target có thể chỉ map về teaching component. Ví dụ:
+Ví dụ:
 
 ```text
-Learner claim:
+Learner:
 “Mình sẽ chạy hybrid retrieval để kiểm tra.”
 
-Gap:
+Knowledge-state issue:
 Chưa nói kết quả nào sẽ phân biệt giả thuyết retrieval failure.
 
-Follow-up question:
-“Kết quả nào sẽ giúp bạn biết nguyên nhân nằm ở retrieval?”
+AI → Learner:
+“Kết quả nào sẽ giúp mình biết nguyên nhân nằm ở retrieval?”
+
+Learner uptake:
+“Mình sẽ so Recall@10 theo nhóm query trước và sau thay đổi.”
 ```
 
 Câu hỏi không phù hợp:
@@ -228,89 +223,89 @@ Câu hỏi không phù hợp:
 “Bạn nên đo Recall@10 trên nhóm product code đúng không?”
 ```
 
-Câu thứ hai gợi metric và slice cần tìm. AI đã quay lại vai tutor.
+Câu thứ hai đưa sẵn phần learner cần tìm. AI đã quay lại vai tutor.
 
-## Điều kiện dừng
+## Khi nào một loop được xem là khép kín?
 
-Phiên dừng khi hết question budget, hết timebox, learner kết thúc hoặc gap detector
-không còn target theo rubric. Giao diện chỉ báo phiên đã hoàn tất. Nó không nói
-“knowledge state clear 100%”.
+Một vòng có đủ bốn bằng chứng:
 
-Independent transfer mới cung cấp bằng chứng về việc learner tự áp dụng skill. Ngay
-cả transfer score cũng phải được diễn giải trong phạm vi objective và rubric đã
-đo.
+1. AI response trỏ tới target trong state.
+2. Learner có một uptake turn sau response đó.
+3. State updater tạo revision từ uptake turn.
+4. Target chuyển trạng thái hoặc được giữ nguyên kèm evidence.
 
-## Study đầu tiên
+`Target resolved` chỉ có nghĩa learner đã làm rõ theo rubric của phiên. Nó không có
+nghĩa learner hiểu 100%.
+
+Phiên dừng khi hết interaction budget, hết timebox, learner kết thúc hoặc không còn
+unresolved target theo rubric. Independent transfer mới đo khả năng tự áp dụng.
+
+## Kế hoạch đánh giá
 
 ### Technical evaluation
 
-Trước khi có learner, hai chuyên gia gán claim, gap, question target và strategy trên một
-bộ transcript. Team đánh giá từng stage, không chỉ nhìn câu trả lời cuối:
+Hai chuyên gia gán claim, issue, response target và action trên một bộ transcript.
+Team đánh giá:
 
 - state extraction và source grounding;
-- gap agreement;
-- target/strategy agreement;
+- issue agreement;
+- target/action agreement;
 - groundedness, relevance, answer leakage và persona drift.
 
-### Comparative pilot
+### Usability và feasibility pilot
 
-Hai condition giữ nguyên model, prompt chung, persona, UI, lesson material, knowledge-state
-format, thời lượng và question opportunities.
+Learner trải nghiệm một reciprocal loop hoàn chỉnh. Pilot kiểm tra:
 
-| Condition | Policy |
+- learner có hiểu vai dạy và cách xác nhận state không;
+- AI response có dẫn tới learner uptake không;
+- uptake có tạo state revision và thay đổi target không;
+- loop có gây lặp, gián đoạn hoặc cognitive load quá cao không;
+- event log có dựng lại được toàn bộ vòng tương tác không.
+
+Pilot này chưa trả lời policy nào tốt hơn hoặc Mentee có tạo learning gain không.
+
+### Comparative study sau pilot
+
+Comparator chưa được chốt. Có hai câu hỏi hợp lệ nhưng khác nhau:
+
+| So sánh | Câu hỏi được kiểm tra |
 | --- | --- |
-| Fixed | Đi theo lesson path và strategy order viết trước |
-| State-aware | Chọn target và strategy từ confirmed knowledge state |
+| One-way vs Reciprocal | Tương tác ngược và uptake tạo khác biệt gì? |
+| Fixed vs State-aware | Cách chọn response có thích nghi tạo khác biệt gì? |
 
-Việc giữ cùng question budget rất quan trọng. Nếu state-aware condition hỏi nhiều
-hơn, team không biết kết quả đến từ adaptivity hay chỉ từ thêm tương tác.
+Team chọn một contrast sau khi xem failure data của feasibility pilot và xác định
+contribution muốn bảo vệ. Không gộp hai manipulation vào cùng study.
 
-Primary process outcome là knowledge-building rate. Technical fidelity, mental effort và UX
-được báo riêng. Independent transfer là learning outcome, nhưng ở feasibility pilot nhỏ
-nên được ghi là exploratory.
+## Tại sao không cho AI chạy lại lab ở study đầu tiên?
 
-Research question chính:
+Nếu AI nhận knowledge state rồi giải một task mới, output phụ thuộc vào lời
+learner dạy và capability của model. Khi output sai, team không dễ tách hai
+nguyên nhân. Runner chỉ xác nhận output sai; nó không tự giải quyết confound đó.
 
-> State-aware follow-up questioning có khơi gợi nhiều knowledge-building hơn fixed
-> questioning trong một phiên post-lab Learning-by-Teaching hay không?
-
-## Tại sao không cho AI chạy lại lab ở study này?
-
-Nếu AI nhận knowledge state rồi giải một task mới, output phụ thuộc vào ít nhất
-hai thứ: chất lượng lời learner dạy và capability của model. Khi output sai, team
-không dễ tách hai nguyên nhân. Bước runner phía sau chỉ xác nhận output sai; nó
-không tự giải quyết confound đó.
-
-Enactment vẫn là một cơ chế Learning-by-Teaching có cơ sở từ recursive feedback.
-Nhưng nó trả lời một research question khác. Team có thể nghiên cứu nó sau bằng
-một intervention riêng, khi đã thiết kế được cách kiểm soát model capability.
+Enactment vẫn có cơ sở từ recursive feedback, nhưng nó trả lời một research
+question khác. Team có thể nghiên cứu sau khi kiểm soát được model capability.
 
 ## Phạm vi build
 
 ### Giai đoạn 1
 
-Freeze một objective, teaching map, gap taxonomy và annotation guide. Tạo expert development
-set trước khi tối ưu prompt.
+Freeze một objective, teaching map, issue taxonomy và annotation guide. Tạo expert
+development set trước khi tối ưu prompt.
 
 ### Giai đoạn 2
 
-Xây text session end-to-end: turn storage, state updater, confirmation, gap detector và question
-selector. Thêm fixed/state-aware policy trên cùng schedule.
+Xây text session end-to-end: turn storage, state updater, confirmation, issue
+detector, response policy, learner uptake và state revision.
 
 ### Giai đoạn 3
 
-Chạy fidelity suite, expert evaluation và usability pilot. Sửa prompt/spec trước khi freeze
-comparative study.
+Chạy fidelity suite, technical evaluation và usability pilot. Sửa prompt/spec trước
+khi freeze feasibility protocol.
 
 ### Giai đoạn 4
 
-Preregister protocol, chạy pilot, báo effect estimate cùng uncertainty. Không diễn giải `p
-> .05` thành hai policy tương đương.
-
-### Sau pilot
-
-Quyết định có mở rộng sang lab thứ hai, delayed transfer hoặc enactment hay không
-dựa trên failure data. Chưa xây learner model xuyên track.
+Đo loop completion, uptake, target change và UX. Sau đó mới chọn comparative RQ,
+power analysis và preregister study tiếp theo.
 
 ## Không làm ở alpha
 
@@ -323,20 +318,20 @@ dựa trên failure data. Chưa xây learner model xuyên track.
 
 ## Hướng chốt trong một đoạn
 
-Mentee là một AI apprentice dùng sau khi learner hoàn thành lab. Learner dạy lại một
-skill hẹp; hệ thống lưu lời dạy thành external knowledge state có provenance. Từ
-state đó, Mentee phát hiện reasoning gap và chọn một follow-up question để learner làm
-rõ. AI Thực Chiến là testbed, còn bài toán nghiên cứu là state-aware question
-selection. Study đầu tiên so sánh policy này với một fixed policy trong cùng số câu
-hỏi và đo knowledge-building; independent transfer được đo riêng. AI enactment và runner
-không còn nằm trong core loop đầu tiên.
+Mentee là một AI apprentice dùng sau khi learner hoàn thành lab. Learner dạy lại
+một skill hẹp; hệ thống lưu lời dạy thành external knowledge state có provenance.
+AI dùng state để phản hồi learner, learner làm rõ hoặc sửa lời dạy, rồi state
+được cập nhật lần nữa. Đây là reciprocal interaction loop mà team cần xây và
+kiểm tra.
+Follow-up question là một response action bên trong loop. AI Thực Chiến là testbed;
+study đầu tiên đánh giá fidelity và feasibility của loop, chưa chốt comparator.
 
 ### Changes
 
 | Pass | What changed | Examples |
 |-|-|-|
-| Structure | Chốt flow theo feedback | Knowledge state → gap → question |
-| Inflation | Bỏ claim platform và mastery | Một objective, một pilot trước |
-| Vocabulary | Giữ thuật ngữ có nguồn | Reflect–Respond, active questioning |
-| Grammar | Dùng ví dụ hội thoại | Câu hỏi grounded và câu hỏi leak |
-| Soul | Nêu lựa chọn của team | Enactment trả lời câu hỏi khác |
+| Structure | Xoay tài liệu quanh loop hai chiều | Response → uptake → state revision |
+| Vocabulary | Mở rộng response taxonomy | Reflect, clarify, probe, connect |
+| Inflation | Tách feasibility khỏi efficacy | Chưa chốt comparator |
+| Grammar | Dùng ví dụ hội thoại đầy đủ | Learner → AI → Learner |
+| Soul | Nêu rõ thứ tự ưu tiên | Xây loop trước, so sánh sau |

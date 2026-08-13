@@ -59,14 +59,14 @@ vào đề tài hiện tại được gắn `suy luận`.
   dạy ChatGPT, hội thoại và việc ChatGPT hỗ trợ tạo code.
 - Khả năng ChatGPT sinh code đúng có thể làm giảm cơ hội luyện debug; điều này phù hợp với
   việc correctness không khác biệt đáng kể.
-- Không có dữ liệu về tiếng Việt hoặc comparison Fixed/State-aware.
+- Không có dữ liệu về tiếng Việt hoặc một vòng reciprocal được truy vết qua knowledge state.
 
 ## 7. Liên quan đến nghiên cứu hiện tại
 
 Paper hỗ trợ đo learning outcome tách khỏi chất lượng lời giải thích và code correctness.
-`Suy luận`: pilot hiện tại nên giữ model, interface, feedback và question budget cố định giữa
-hai condition để không lặp lại confound của nghiên cứu này. Paper không đủ để dự đoán hiệu ứng
-của state-aware question selection.
+`Suy luận`: pilot hiện tại nên giữ model, interface, feedback và response budget ổn định, đồng
+thời tách khả năng sinh code của model khỏi việc AI phản hồi lời dạy. Paper không đủ để dự đoán
+learner có tiếp tục làm rõ reasoning sau phản hồi của AI hay không.
 
 ## 8. Tóm tắt evidence matrix
 

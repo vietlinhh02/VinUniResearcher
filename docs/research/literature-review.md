@@ -6,9 +6,9 @@ chỉnh theo PRISMA.
 
 ## Câu hỏi của review
 
-Khi AI cùng đóng vai học trò và cùng có cơ hội hỏi ngược, việc chọn follow-up
-question từ knowledge state có làm learner giải thích sâu hơn so với đi theo một
-question policy cố định hay không?
+Một AI apprentice cần những cơ chế và bằng chứng nào để khép kín vòng tương
+tác: learner dạy, AI phản hồi từ knowledge state, learner uptake và state được
+cập nhật lần nữa?
 
 ## Cách tìm và chọn nguồn
 
@@ -139,22 +139,21 @@ constructive interaction gây ra learning gain. Nhưng kết quả đủ mạnh 
 cách đo đơn giản kiểu “chat nhiều là học nhiều”.
 
 Nghiên cứu năm 2026 về tutor learning tiếp tục cho thấy tỷ lệ câu trả lời
-knowledge-building dự đoán điểm conceptual và procedural post-test sau khi kiểm soát
-pre-test. Đây vẫn là association, không phải tác động nhân quả riêng của follow-up
-question. Vì vậy pilot hiện tại nên thao tác question policy và dùng knowledge-building
-làm primary process outcome, còn learning gain là secondary outcome.
+knowledge-building dự đoán điểm conceptual và procedural post-test sau khi kiểm
+soát pre-test. Đây vẫn là association. Feasibility pilot nên dùng
+knowledge-building như process metric và đo riêng learner uptake, state revision,
+target transition và transfer.
 
 Nguồn: [Liu et al.](https://doi.org/10.1038/s41598-025-24841-8),
 [Ameen et al.](https://doi.org/10.1007/s41237-026-00294-9).
 
 ### 6. Feedback và persona là biến gây nhiễu cần khóa
 
-Hai thí nghiệm của Okita và Schwartz cho thấy recursive feedback, khi người dạy quan
-sát học trò dùng điều vừa học, hỗ trợ transfer tốt hơn direct feedback. Nghiên
-cứu về humor cho thấy tone của agent có thể thay đổi motivation và effort mà không
-bảo đảm thay đổi learning outcome. Vì vậy fixed và state-aware condition phải giữ
-nguyên persona, tone và cách thể hiện “AI đã học được gì”; chỉ cách chọn
-question target được thay đổi.
+Hai thí nghiệm của Okita và Schwartz cho thấy recursive feedback, khi người dạy
+quan sát học trò dùng điều vừa học, hỗ trợ transfer tốt hơn direct feedback.
+Nghiên cứu về humor cho thấy tone của agent có thể thay đổi motivation và effort
+mà không bảo đảm thay đổi learning outcome. Vì vậy persona, tone và cách thể
+hiện “AI đã học được gì” phải được freeze trong feasibility pilot.
 
 Nguồn: [Okita & Schwartz](https://doi.org/10.1080/10508406.2013.807263),
 [Ceha et al.](https://doi.org/10.1145/3411764.3445068).
@@ -176,28 +175,26 @@ Không dùng các con số này trong abstract, proposal hoặc power analysis.
 
 ## Research gap khả thi sau khi mở rộng corpus
 
-AlgoBo cho thấy một condition có Mode-shifting và Teaching Helper tạo nhiều
-knowledge-building hơn baseline, nhưng hai thành phần thay đổi cùng lúc. Chu kỳ hỏi
-sau mỗi ba lượt cũng không giải quyết việc nên hỏi phần nào khi knowledge state
-có nhiều gap.
+AlgoBo cho thấy external knowledge state và active questions có thể khơi gợi
+knowledge-building. Corpus hiện chưa cung cấp evaluation framework cho toàn bộ vòng
+`state → AI response → learner uptake → state revision` trong post-lab teach-back
+tiếng Việt.
 
 Khoảng trống đủ hẹp cho pilot là:
 
-> Trong corpus hiện tại, chưa có bằng chứng nhân quả cho thấy chọn question target
-> và strategy từ external knowledge state tốt hơn một policy đi theo lesson path cố
-> định, khi model, persona, question opportunities và các scaffold khác được giữ
-> nguyên.
+> Chưa rõ một LLM apprentice có duy trì được reciprocal loop có provenance và
+> fidelity hay không, đặc biệt khi learner trả lời lệch target, bỏ qua response hoặc
+> cho thấy issue detector đã hiểu sai.
 
-Đóng góp phù hợp với cỡ pilot gồm protocol và rubric tiếng Việt, fidelity data cho
-state/gap/question pipeline, cùng một effect estimate ban đầu trên knowledge-building.
-Learning gain và transfer chưa phải confirmatory claim.
+Đóng góp phù hợp với feasibility pilot gồm protocol, annotation rubric, event
+schema và dữ liệu fidelity/uptake. Learning gain và transfer chưa phải causal claim.
 
 ## Kết luận cho thiết kế
 
-Với 20–40 người, thiết kế phù hợp là within-subject counterbalanced trên hai
-objective tương đương. Mỗi người trải nghiệm cả fixed và state-aware policy trong
-cùng question budget. Primary outcome là knowledge-building do hai rater chấm ẩn condition;
-independent transfer là exploratory. Protocol chi tiết nằm tại `protocol.md`.
+Thiết kế đầu tiên là technical evaluation rồi single-condition feasibility pilot.
+Team đo response grounding, learner uptake, state revision, target transition và
+UX. Comparator chỉ được chọn sau khi loop đạt gate. Protocol chi tiết nằm tại
+`protocol.md`.
 
 ## Giới hạn của review này
 
@@ -213,6 +210,6 @@ trên các database, deduplicate và lưu lý do loại từng full text.
 
 | Pass | What changed | Examples |
 |-|-|-|
-| Structure | Nối literature gap với intervention mới | Fixed vs state-aware |
-| Inflation | Hạ learning claim về mức pilot | Transfer là exploratory |
-| Vocabulary | Nói rõ biến được thao tác | Question target và strategy |
+| Structure | Đặt reciprocal loop làm unit | State → response → uptake |
+| Inflation | Bỏ causal design sớm | Feasibility trước comparison |
+| Vocabulary | Thêm uptake và transition | Đo nửa sau của loop |

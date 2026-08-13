@@ -1,112 +1,120 @@
-# Literature synthesis cho hướng state-aware questioning
+# Literature synthesis cho reciprocal interaction loop
 
 Corpus chi tiết nằm trong `06-evidence-matrix.csv`. Đây là bản tổng hợp để ra
 quyết định thiết kế, chưa phải systematic review.
 
 ## Learning-by-Teaching cho biết điều gì?
 
-Betty's Brain, nghiên cứu về protégé effect và meta-analysis của Kobayashi cho thấy
-việc chuẩn bị để dạy và thực sự dạy có thể làm learner đầu tư nhiều
-effort hơn, tổ chức lại kiến thức và cải thiện một số learning outcome. Phần
-lớn bằng chứng này có trước LLM hoặc nằm ngoài applied-AI labs.
+Betty's Brain, nghiên cứu về protégé effect và meta-analysis của Kobayashi cho
+thấy việc chuẩn bị để dạy và thực sự dạy có thể làm learner đầu tư effort, tổ
+chức lại kiến thức và cải thiện một số learning outcome. Phần lớn bằng chứng
+này có trước LLM hoặc nằm ngoài applied-AI labs.
 
-Vì vậy Mentee giữ vai learner-as-teacher, nhưng không lấy literature làm bằng chứng
+Mentee giữ vai learner-as-teacher, nhưng không lấy literature làm bằng chứng
 rằng prototype hiện tại chắc chắn hiệu quả. Learning outcome vẫn phải được đo
 bằng task của learner.
 
 Nguồn chính: Biswas et al. (2005), Chase et al. (2009), Kobayashi (2019).
 
-## AlgoBo/TeachYou là nền tảng gần nhất
+## AlgoBo/TeachYou cung cấp nền tảng gần nhất
 
-Jin et al. dùng pipeline Reflect–Respond để lưu knowledge state ngoài model. AlgoBo luân
-phiên giữa help-receiver và questioner mode; ở questioner mode, agent hỏi `why` hoặc `how`
-để kéo learner sang knowledge-building.
+Jin et al. dùng Reflect–Respond để lưu knowledge state ngoài model. AlgoBo luân
+phiên giữa help-receiver và questioner mode. Khi chuyển sang questioner mode, agent
+hỏi `why/how` để learner giải thích sâu hơn.
 
-Paper cho thấy condition TeachYou có knowledge-building density cao hơn trong problem-solving
-phase (`d = 0.71`). Con số này không phải learning gain. Condition cũng thay đổi cả
-Mode-shifting và Teaching Helper, nên không thể quy toàn bộ khác biệt cho question
-policy.
+Paper cho thấy condition TeachYou có knowledge-building density cao hơn trong
+problem-solving phase (`d = 0.71`). Con số này không phải learning gain. Condition
+cũng thay đổi cả Mode-shifting và Teaching Helper, nên không thể quy toàn bộ khác
+biệt cho riêng tương tác hỏi ngược.
 
-Mentee kế thừa external knowledge state, apprentice persona và active questioning. Study mới
-tách riêng cách chọn follow-up question, giữ các scaffold khác giống nhau.
+Mentee kế thừa external knowledge state, apprentice persona và reciprocal
+response. Điểm cần làm rõ hơn AlgoBo là trace đầy đủ từ state tới AI response,
+learner uptake và state revision tiếp theo.
 
-Paper cũng chỉ ra một vấn đề kỹ thuật đáng chú ý: LLM đôi khi ưu tiên kiến
-thức đúng phổ biến hơn misconception vừa được learner dạy. Prompt alone chưa
-đủ. Vì vậy state update và response đều cần provenance, fidelity test và expert
-evaluation.
+Paper cũng báo LLM đôi khi ưu tiên kiến thức đúng phổ biến hơn misconception
+learner vừa dạy. Prompt alone chưa đủ. State update và response đều cần
+provenance, fidelity test và expert evaluation.
 
-## Knowledge-building là process outcome
+## Vì sao learner uptake quan trọng?
 
-Roscoe và Chi phân biệt knowledge-telling với knowledge-building. Nhắc lại định nghĩa
-hoặc thủ tục thuộc knowledge-telling; giải thích cơ chế, tạo kết nối, tự sửa
-và suy ra hệ quả thuộc knowledge-building.
+Roscoe và Chi phân biệt knowledge-telling với knowledge-building. Nhắc lại định
+nghĩa hoặc thủ tục thuộc knowledge-telling; giải thích cơ chế, tạo kết nối, tự
+sửa và suy ra hệ quả thuộc knowledge-building.
 
-Câu hỏi `why/how` là một cách hợp lý để khơi gợi các hành vi này. Nhưng
-transcript dài hơn hoặc nhiều câu hỏi hơn chưa chứng minh learner đã học. Pilot có
-thể dùng knowledge-building rate làm primary process outcome và đo transfer riêng.
+Deep reasoning questions có thể khơi gợi các hành vi này. Nhưng chỉ đếm câu hỏi
+của AI chưa cho biết learner có tham gia vào loop hay không. Cần quan sát
+learner uptake và xem lời giải thích mới có thay đổi knowledge state hoặc
+unresolved target không.
 
-## Câu hỏi thích nghi là khoảng trống hợp lý
+Knowledge-building rate là process metric phù hợp. Nó chưa thay cho learning gain
+hoặc independent transfer.
 
-AlgoBo dùng chu kỳ hỏi sau mỗi ba learner messages, một heuristic rút ra từ pilot.
-Hướng đó cho biết khi nào chuyển mode, nhưng chưa giải quyết đầy đủ câu
-hỏi: trong nhiều phần đang thiếu, AI nên hỏi phần nào và dùng clarification,
-elaboration, connection hay edge case?
+## Research gap hiện tại
 
-Khoảng trống team theo đuổi là:
+Literature đã có bằng chứng cho Learning-by-Teaching, external knowledge state
+và AI tutee chủ động hỏi. Corpus hiện chưa cho team một cách đã được kiểm chứng
+để:
 
-> Chưa rõ việc chọn follow-up question từ external knowledge state có tạo ra nhiều
-> knowledge-building hơn một policy đi theo lesson path cố định, khi model, persona,
-> question budget và các scaffold khác được giữ nguyên.
+- nối AI response với target trong knowledge state;
+- xác định learner turn nào là uptake của response;
+- cập nhật state từ uptake;
+- ghi target được giải quyết, giữ nguyên hay gán sai;
+- đánh giá fidelity của cả vòng thay vì chỉ một model response.
 
-Đây là extension của AlgoBo, không phải tuyên bố phát minh teachable agent, knowledge
-state hoặc active questioning.
+Khoảng trống cho feasibility study là:
+
+> Một AI apprentice có duy trì được reciprocal interaction loop có căn cứ trên
+> knowledge state, trong đó AI response dẫn tới learner uptake và state revision có
+> thể audit hay không?
+
+Đây là extension của AlgoBo, không phải tuyên bố phát minh teachable agent,
+knowledge state hoặc active questioning.
 
 ## Những paper khác giúp khóa thiết kế
 
-HypoCompass cho thấy một activity lập trình nên nhắm đúng một cognitive skill, như
-việc tạo giả thuyết lỗi, thay vì “debugging nói chung”. Mentee vì thế chọn
-một objective hẹp và viết teaching map theo workflow thực tế của task.
+HypoCompass cho thấy activity lập trình nên nhắm một cognitive skill hẹp, như
+việc tạo giả thuyết lỗi, thay vì “debugging nói chung”. Mentee vì thế chọn một
+objective và viết teaching map theo workflow của task.
 
-Các thí nghiệm recursive feedback của Okita và Schwartz cho thấy tutor có thể học từ
-việc quan sát pupil áp dụng điều đã được dạy. Cơ chế này vẫn đáng nghiên
-cứu, nhưng nó khác với question selection. Đưa cả enactment và adaptive questioning vào
-cùng study sẽ khiến intervention khó diễn giải.
+Các thí nghiệm recursive feedback của Okita và Schwartz cho thấy tutor có thể
+học từ việc quan sát pupil áp dụng điều đã được dạy. Cơ chế này đáng nghiên cứu,
+nhưng khác reciprocal dialogue loop. Đưa enactment vào cùng feasibility pilot
+sẽ khiến failure khó quy về một thành phần.
 
-MatlabTutee và các LLM teachable-agent gần đây cho thấy khả năng triển khai trong lớp
-CS. Novelty của Mentee vì thế không thể chỉ là “dùng LLM làm học trò”.
+MatlabTutee và các LLM teachable-agent gần đây cho thấy khả năng triển khai trong
+lớp CS. Novelty của Mentee không thể chỉ là “dùng LLM làm học trò”.
 
-Các phân tích interaction log cũng nhắc lại một điểm: constructive interaction có
-liên hệ với improvement, nhưng correlation không phải causal effect. Số lượt chat,
-word count và satisfaction chỉ là process hoặc UX metrics.
+Các phân tích interaction log cho thấy constructive interaction có liên hệ với
+improvement, nhưng correlation không phải causal effect. Số lượt chat, word count
+và satisfaction chỉ là process hoặc UX metrics.
 
 ## Claims literature chưa hỗ trợ
 
-- AI hỏi nhiều hơn chắc chắn làm learner học tốt hơn.
+- Mọi AI response đều tạo learner uptake.
+- Một response có vẻ hay chắc chắn giải quyết được knowledge gap.
 - Knowledge-building density tự động chuyển thành learning gain.
 - LLM-generated knowledge state là ground truth về hiểu biết của learner.
-- Một question taxonomy phù hợp với mọi domain.
+- Một response taxonomy phù hợp với mọi domain.
 - AI pass một task nghĩa là learner đã mastery.
-- Pilot nhỏ ở một lab có thể khái quát cho toàn bộ chương trình.
 
-## Contribution có thể bảo vệ
+## Contribution phù hợp với feasibility pilot
 
-Nếu technical evaluation và pilot đạt yêu cầu, contribution nên được mô tả ở
-mức:
+Nếu technical evaluation và pilot đạt gate, contribution nên được mô tả ở mức:
 
-1. Một pipeline external knowledge state cho teach-back tiếng Việt sau lab.
-2. Một state-aware policy chọn question target và strategy có provenance.
-3. Fidelity data về extraction, gap detection, grounding và answer leakage.
-4. Ước lượng ban đầu về tác động của policy lên knowledge-building; transfer là
-   exploratory cho đến khi study được power đầy đủ.
+1. Một reciprocal loop cho post-lab teach-back bằng tiếng Việt.
+2. External knowledge state và provenance xuyên suốt response, uptake và revision.
+3. Một annotation scheme cho target, action, learner uptake và target transition.
+4. Fidelity/feasibility data để chọn comparative research question tiếp theo.
 
-Trước manuscript, team vẫn cần systematic search có protocol, double screening, citation
-chaining và risk-of-bias assessment.
+Không ước lượng causal effect của policy từ single-condition pilot. Trước
+manuscript, team vẫn cần systematic search, double screening, citation chaining và
+risk-of-bias assessment.
 
 ### Changes
 
 | Pass | What changed | Examples |
 |-|-|-|
-| Structure | Bám theo quyết định nghiên cứu | AlgoBo → gap → contribution |
-| Inflation | Hạ claim về đúng mức evidence | `d = 0.71` là process outcome |
-| Vocabulary | Bỏ câu chữ quảng bá | Dùng “extension của AlgoBo” |
-| Rhythm/Style | Nối evidence với quyết định | Tách enactment khỏi study |
+| Structure | Tổ chức evidence quanh loop | Response → uptake → revision |
+| Inflation | Bỏ comparative causal claim | Feasibility contribution |
+| Vocabulary | Thêm learner uptake | Không chỉ đếm AI questions |
+| Rhythm/Style | Nối literature với quyết định | Một claim, một giới hạn |

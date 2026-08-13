@@ -1,26 +1,28 @@
-# PRD: phiên AI apprentice sau lab
+# PRD: phiên reciprocal AI apprentice sau lab
 
-Phiên bản: 0.4 Trạng thái: draft theo feedback ngày 13/08/2026
+Phiên bản: 0.5
+Trạng thái: draft theo feedback ngày 13/08/2026
 
 ## Mục tiêu
 
-Sau khi hoàn thành một lab, learner dạy lại một skill cho AI apprentice. Hệ thống theo
-dõi điều learner đã giải thích và đặt câu hỏi tiếp theo vào đúng phần còn
-thiếu. Phiên kết thúc bằng một task độc lập để đo learner, không đo AI.
+Sau khi hoàn thành lab, learner dạy lại một skill cho AI apprentice. Hệ thống
+ghi nhận điều learner đã giải thích, phản hồi vào phần chưa rõ, nhận câu trả lời
+mới và cập nhật knowledge state lần nữa.
 
-Alpha cần trả lời được một câu đơn giản: với cùng một lời dạy, hệ
-thống có lưu đúng knowledge state và hỏi một câu grounded hay không?
+Alpha cần trả lời được câu hỏi vận hành: hệ thống có dựng lại được một vòng
+`learner → AI → learner` với provenance đầy đủ hay không?
 
 ## Phạm vi alpha
 
-Alpha hỗ trợ một learning objective, text chat tiếng Việt và hai question policy. Course
-author viết spec dưới dạng file versioned. Domain reviewer duyệt teaching map, question
-boundaries và transfer rubric.
+Alpha hỗ trợ một learning objective và text chat tiếng Việt. Course author viết
+Conversation Spec dưới dạng file versioned. Domain reviewer duyệt teaching map,
+issue taxonomy, reciprocal actions và transfer rubric.
 
 Chưa có:
 
 - AI chạy lại bài lab;
 - runner chấm lời giải của AI;
+- comparative policy study đã freeze;
 - adaptive curriculum xuyên track;
 - authoring UI đa lĩnh vực;
 - voice, diagram hoặc role-play;
@@ -28,10 +30,10 @@ Chưa có:
 
 ## Actors
 
-- Learner hoàn thành lab, dạy AI, xác nhận knowledge state và làm transfer.
+- Learner hoàn thành lab, dạy AI, xác nhận state, phản hồi AI và làm transfer.
 - Course author viết objective, teaching map và lesson material.
 - Domain reviewer duyệt content validity và annotation guide.
-- Researcher quản lý condition, version, fidelity và export giả danh.
+- Researcher quản lý version, fidelity và export giả danh.
 - School lab gửi completion summary tối thiểu.
 
 ## Product flow
@@ -39,19 +41,20 @@ Chưa có:
 ```text
 lab_completed
 → create post-lab session
-→ show objective and apprentice role
 → learner teaching turn
 → extract and confirm claims
-→ detect candidate gaps
-→ select and ask one follow-up question
-→ update state from learner response
-→ repeat within budget
+→ detect unresolved issue
+→ select reciprocal action
+→ AI response
+→ learner uptake
+→ state revision and target transition
+→ repeat within interaction budget
 → lock apprentice
 → independent transfer
 ```
 
-Một lab tạo tối đa một phiên Mentee. Phiên có thể tập trung vào một hoặc hai
-skill, nhưng alpha chỉ dùng một skill để giữ construct rõ.
+Một lab tạo tối đa một Mentee session. Alpha chỉ dùng một objective để giữ
+construct rõ.
 
 ## Conversation Spec
 
@@ -83,22 +86,23 @@ knowledge_state:
   learner_confirmation: required
   preserve_source_span: true
 
-question_policy:
-  strategies:
-    - clarification
-    - elaboration
-    - connection
-    - edge_case
-  opportunities: 3
-  max_questions: 3
+reciprocal_policy:
+  actions:
+    - reflect_back
+    - clarify
+    - probe_reason
+    - connect
+    - check_conflict
+    - request_example
+  max_responses: 4
 
 transfer:
   blueprint: rag-retrieval-transfer-v1
   apprentice_disabled: true
 ```
 
-Spec validator phải từ chối component trùng ID, question strategy không được hỗ trợ,
-transfer không khóa apprentice hoặc evidence field giao với denylist.
+Spec validator từ chối component trùng ID, action không được hỗ trợ, transfer
+không khóa apprentice hoặc evidence field giao với denylist.
 
 ## Functional requirements
 
@@ -107,62 +111,64 @@ transfer không khóa apprentice hoặc evidence field giao với denylist.
 - Nhận event `lab_completed` theo cơ chế idempotent.
 - Chỉ nhận evidence nằm trong allowlist của spec.
 - Không tự đọc source code, secret, raw log hoặc PII.
-- Ghi rõ lab, objective và spec version cho mỗi session.
+- Ghi lab, objective và spec version cho mỗi session.
 
-### Teaching
+### Teaching và state update
 
 - Giải thích rõ learner đang dạy, không làm quiz với AI tutor.
-- Nhận text tiếng Việt và giữ nguyên raw turn cho audit.
+- Giữ nguyên raw learner turn cho audit.
 - Hiện claim cùng source span để learner xác nhận, sửa hoặc xóa.
-- Không dùng unconfirmed state để chọn câu hỏi.
+- Không dùng unconfirmed state để tạo reciprocal response.
+- Tạo immutable revision sau mỗi confirmation.
 
-### State update
+### Issue detection
 
-- Trích xuất claim mà không thêm kiến thức learner chưa nói.
-- Tạo revision mới sau mỗi confirmation.
-- Giữ provenance từ claim về turn nguồn.
-- Ghi model, prompt và sampling configuration.
+- Map unresolved issue về component và claims liên quan.
+- Dùng issue taxonomy đã freeze trong spec.
+- Tách learner claims khỏi private reference material.
+- Giữ raw model output và expert override trong technical evaluation.
 
-### Gap detection
+### Reciprocal response
 
-- Map candidate gap về component và claim liên quan.
-- Dùng taxonomy issue type đã freeze trong spec.
-- Tách learner claim khỏi private reference material.
-- Cho phép expert override trong technical evaluation; override không âm thầm sửa
-  model output.
-
-### Question selection
-
-- Chọn tối đa một câu ở mỗi opportunity.
-- Lưu target, strategy, supporting claim và policy version.
+- Chọn tối đa một target và một action mỗi response.
+- Lưu target, action, supporting claims và policy version.
 - Không hỏi ngoài objective hoặc ngầm đưa reference answer.
-- Không lặp lại cùng target nếu learner đã trả lời và gap detector chưa xử lý
-  lượt mới.
 - Giữ vai học trò; không chấm điểm hoặc giảng bài.
+- Cho phép `reflect_back` hoặc không phản hồi khi không có target hợp lệ.
+
+### Learner uptake
+
+- Liên kết learner turn tiếp theo với response gần nhất.
+- Cho phép learner bỏ qua response.
+- Cập nhật state từ uptake turn bằng cùng confirmation flow.
+- Ghi before/after revision và target transition.
+- Không tự gán `resolved` chỉ vì learner trả lời dài.
 
 ### Transfer
 
-- Khóa apprentice, câu hỏi và feedback trước khi learner submit.
+- Khóa apprentice và feedback trước khi learner submit.
 - Dùng task chưa xuất hiện trong teaching session.
 - Chấm theo rule hoặc rubric đã được reviewer duyệt trước pilot.
-- Không dùng transcript condition để người chấm suy ra nhóm.
+- Không dùng condition/transcript để người chấm suy ra participant.
 
 ## Data model tối thiểu
 
 ```text
 conversation_specs   (id, version, status, content_hash)
-sessions             (id, participant_id, spec_id, condition, status)
+sessions             (id, participant_id, spec_id, status)
 turns                (id, session_id, sequence, role, text, created_at)
 knowledge_states     (id, session_id, revision, parent_id, confirmed_at)
 claims               (id, state_id, component_id, content, source_turn_id)
-gap_candidates       (id, state_id, component_id, issue_type, claim_ids)
-question_events      (id, session_id, opportunity, policy, target_id, strategy)
+issues               (id, state_id, component_id, issue_type, claim_ids)
+responses            (id, session_id, target_id, action, text, policy_version)
+uptake_events         (id, response_id, turn_id, before_state_id, after_state_id)
+target_transitions    (id, uptake_id, before_status, after_status, verdict)
 transfer_attempts    (id, session_id, blueprint_version, score)
 fidelity_events      (id, session_id, type, severity, evidence)
 ```
 
-Danh tính thật và participant ID phải nằm ở hai nơi khác nhau. Research export chỉ
-dùng pseudonym.
+Danh tính thật và participant ID nằm ở hai nơi khác nhau. Research export chỉ dùng
+pseudonym.
 
 ## API tối thiểu
 
@@ -173,45 +179,47 @@ GET  /api/v1/sessions/{id}
 POST /api/v1/sessions/{id}/turns
 POST /api/v1/sessions/{id}/knowledge-state/extract
 POST /api/v1/sessions/{id}/knowledge-state/confirm
-POST /api/v1/sessions/{id}/gaps/detect
-POST /api/v1/sessions/{id}/questions/select
+POST /api/v1/sessions/{id}/issues/detect
+POST /api/v1/sessions/{id}/responses/select
+POST /api/v1/sessions/{id}/uptake
 POST /api/v1/sessions/{id}/complete
 POST /api/v1/transfers/{id}/submissions
 GET  /api/v1/research/export
 ```
 
-Internal orchestration có thể gộp extract, detect và select trong một request từ UI. Các
-event vẫn phải tách để audit được pipeline.
+UI có thể gọi một orchestration endpoint. Event log vẫn tách các stage để audit.
 
 ## Acceptance criteria
 
 Alpha hoàn thành khi:
 
 - một session chạy từ `lab_completed` đến transfer;
-- learner sửa được extracted claim trước khi hệ thống hỏi tiếp;
-- mọi câu hỏi map được về một gap và ít nhất một component;
-- prompt-injection test không làm agent đưa đáp án hoặc đổi vai;
-- cùng một session có thể dựng lại từ event log và version references;
+- learner sửa được claim trước khi AI phản hồi;
+- mọi AI response map về target/action đã lưu;
+- uptake turn tạo state revision và target transition;
+- learner có thể bỏ qua response mà session không lỗi;
+- prompt injection không làm agent đưa đáp án hoặc đổi vai;
+- event log dựng lại được toàn bộ reciprocal loop;
 - research export không chứa direct identifier.
 
-Technical evaluation phải đạt threshold được protocol định trước. Không đặt con
-số threshold theo cảm tính trong PRD; team sẽ freeze nó sau vòng expert annotation đầu
-tiên.
+Technical và feasibility thresholds được protocol định trước. Không đặt số theo
+cảm tính trong PRD.
 
 ## Milestones
 
 1. Freeze objective, teaching map và annotation guide.
-2. Xây session, turn storage và knowledge-state confirmation.
-3. Thêm gap detector và question-selection record.
-4. Implement fixed và state-aware policy trên cùng question schedule.
-5. Chạy adversarial/fidelity suite và expert evaluation.
-6. Chạy usability pilot, sửa flow rồi freeze comparative protocol.
+2. Xây turn storage, state revisions và confirmation.
+3. Thêm issue detector và reciprocal response record.
+4. Thêm uptake tracking và target transition.
+5. Chạy fidelity suite và expert evaluation.
+6. Chạy usability/feasibility pilot.
+7. Chọn comparative research question từ pilot evidence.
 
 ### Changes
 
 | Pass | What changed | Examples |
 |-|-|-|
-| Structure | Thu gọn PRD | Một phiên post-lab rồi transfer |
-| Inflation | Bỏ scope đa domain ở alpha | Text, một objective, hai policy |
-| Vocabulary | Thay runner bằng question pipeline | Gap detection và question selection |
-| Hedging/Filler | Gắn quyết định với gate | Freeze sau expert annotation |
+| Structure | Hoàn thiện nửa sau của product flow | Uptake và transition |
+| Inflation | Bỏ comparative study khỏi alpha | Chọn RQ sau pilot |
+| Vocabulary | Thay question endpoint | Reciprocal response endpoint |
+| Hedging/Filler | Thêm acceptance criteria cụ thể | Event log dựng lại loop |

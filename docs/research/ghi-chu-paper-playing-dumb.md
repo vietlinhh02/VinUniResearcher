@@ -27,12 +27,12 @@ measure, kết quả định lượng, effect size và limitation do tác giả 
 
 ## 4. Liên quan đến nghiên cứu hiện tại
 
-Paper có relevance cao về bối cảnh lớp CS đại học, nhưng hiện chỉ hỗ trợ relevance đó ở mức metadata.
-Không hỗ trợ quyết định Active/Passive, outcome hay power analysis cho tới khi có full text.
+Paper có relevance cao về bối cảnh lớp CS đại học, nhưng hiện chỉ hỗ trợ relevance đó ở mức
+metadata. Không hỗ trợ thiết kế reciprocal loop, outcome hay power analysis cho tới khi có full
+text.
 
 ## 5. Việc cần làm tiếp
 
 Truy cập DOI qua thư viện có quyền ACM hoặc liên hệ tác giả để lấy published PDF, rồi bổ sung
 method, sample, results và limitations từ paper gốc. Không thay thế khoảng trống này bằng blog,
 ResearchGate summary hoặc citation của paper khác.
-

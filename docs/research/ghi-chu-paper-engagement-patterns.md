@@ -51,8 +51,9 @@ Ngày đối chiếu paper gốc: 25/07/2026
 ## 6. Liên quan đến nghiên cứu hiện tại
 
 Paper hỗ trợ hai quyết định: mã chất lượng interaction thay vì đếm chat, và đo engagement chỉ là
-secondary/descriptive. Nó không hỗ trợ claim causal cho active question policy. `Suy luận`: rubric
-pilot nên báo off-task và completion/fidelity riêng, không gộp chúng thành learning gain.
+secondary/descriptive. Nó không chứng minh một response policy cụ thể gây learning gain.
+`Suy luận`: pilot nên báo learner uptake, off-task và completion/fidelity riêng, không gộp chúng
+thành learning gain.
 
 ## 7. Tóm tắt evidence matrix
 
@@ -60,4 +61,3 @@ pilot nên báo off-task và completion/fidelity riêng, không gộp chúng th�
 - Design: mixed-method log analysis theo pre/post outcome group.
 - Main evidence: Improved group constructive `62.78%`; Declined group passive `36.0%`.
 - Limitation: observational and post-hoc grouping.
-

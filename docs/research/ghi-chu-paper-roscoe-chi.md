@@ -252,9 +252,10 @@ với tổng số lượt thoại.
 "what" (sự thật). Nó cần đặt câu hỏi "why" (tại sao làm thế),
 "how" (bước này liên kết với nguyên lý nào), "what if" (điều gì xảy ra nếu điều kiện
 bị đảo ngược) để ép người học ra khỏi trạng thái knowledge-telling.
-11.3. **Fixed policy cần tránh điều gì?** Fixed policy không được biến thành
-passive tutee chỉ biết gật đầu. Nó vẫn hỏi ở cùng opportunity với State-aware,
-nhưng target đi theo lesson path thay vì candidate-gap ranking.
+11.3. **Phản hồi của AI cần tránh điều gì?** AI không được chỉ gật đầu hoặc lặp
+lại lời learner. Nó phải phản hồi một vấn đề cụ thể từ state, chờ learner làm rõ,
+rồi ghi nhận state đã thay đổi thế nào. Câu hỏi đào sâu là một loại phản hồi,
+không phải toàn bộ reciprocal loop.
 11.4. **Có thể dùng nguyên taxonomy của E10 cho transcript tiếng Việt không? Vì
 sao?** Không. E10 tổng hợp nhiều nghiên cứu với các coding scheme khác nhau và chủ
 yếu dành cho tương tác giữa người-người (với nhiều nhiễu xã hội, giao tiếp phi ngôn

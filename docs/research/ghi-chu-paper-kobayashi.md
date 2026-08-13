@@ -45,14 +45,14 @@ Ngày đối chiếu paper gốc: 25/07/2026
 - Heterogeneity cao; hiệu quả không đồng nhất giữa population, implementation và outcome.
 - Đây là bằng chứng hiệu quả của hoạt động chuẩn bị/dạy tổng thể, không cô lập việc hỏi đáp,
   persona, feedback hay một design AI cụ thể.
-- Không có bối cảnh tiếng Việt, algorithm teaching, LLM hay state-aware questioning.
+- Không có bối cảnh tiếng Việt, algorithm teaching, LLM hay reciprocal knowledge-state loop.
 
 ## 6. Liên quan đến nghiên cứu hiện tại
 
 Paper hỗ trợ việc yêu cầu participant **thực sự dạy** thay vì chỉ đọc và chuẩn bị. Kết quả
-moderator hỗ trợ giữ AI ở vai đối thoại có thể tương tác. Nó không đủ để kết luận state-aware
-questioning làm tăng learning gain. `Suy luận`: H1 nên giữ knowledge-building là process outcome;
-learning gain vẫn là secondary/exploratory outcome đo riêng.
+moderator hỗ trợ giữ AI ở vai đối thoại có thể tương tác. Nó không cho biết AI nên phản hồi thế
+nào hoặc learner có uptake sau phản hồi hay không. `Suy luận`: pilot nên giữ knowledge-building
+là process outcome; learning gain vẫn là secondary/exploratory outcome đo riêng.
 
 ## 7. Tóm tắt evidence matrix
 

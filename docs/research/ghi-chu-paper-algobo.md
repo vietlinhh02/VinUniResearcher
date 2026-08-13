@@ -282,8 +282,8 @@ tiếng Việt hoặc bối cảnh sinh viên Việt Nam.
 
 Không nên mặc định dùng Teaching Helper khóa nút gửi. Paper ghi nhận
 gợi ý có lúc lặp lại, không liên quan ngữ cảnh hoặc khó áp dụng.
-Thành phần này sẽ tạo thêm một biến can thiệp ngoài cách chọn
-question target, nên cả Fixed và State-aware đều không dùng nó.
+Thành phần này sẽ tạo thêm một biến can thiệp ngoài vòng đối thoại
+giữa learner và AI. Vì vậy, pilot đầu tiên không dùng Teaching Helper.
 
 9.3. Paper hỗ trợ lựa chọn primary outcome nào?
 
@@ -294,8 +294,8 @@ learning outcome.
 
 9.4. Khoảng trống nào paper chưa giải quyết?
 
-- Tác động của việc chọn target từ knowledge state so với đi theo
-  lesson path cố định.
+- AI có khép được vòng tương tác từ lời dạy, phản hồi ngược, learner
+  uptake đến lần cập nhật state tiếp theo hay không.
 - Mối liên hệ giữa knowledge-building trong hội thoại và learning
   gain trực tiếp.
 - Tính khả dụng của LLM teachable agent cho sinh viên Việt Nam dạy
@@ -303,13 +303,15 @@ learning outcome.
 - Fidelity khi knowledge state tiếp nhận lời dạy sai hoặc khi AI suy
   ra kiến thức ngoài state.
 
-9.5. Paper này ảnh hưởng đến thiết kế Fixed và State-aware thế nào?
+9.5. Paper này ảnh hưởng đến thiết kế pilot thế nào?
 
-Hai condition của nghiên cứu hiện tại nên cùng dùng interface,
-materials, timing, persona, feedback, knowledge state và question
-budget. Fixed đi theo lesson path đã viết trước. State-aware chọn
-target và strategy từ gap trong confirmed state. Cách này kiểm tra
-adaptivity thay vì chỉ so sánh có hỏi với không hỏi.
+Pilot đầu tiên nên dùng một policy đối thoại ổn định và theo dõi toàn
+bộ vòng: learner dạy, AI cập nhật state, AI phản hồi một điểm chưa rõ,
+learner trả lời và state được cập nhật lại. Sau khi chứng minh vòng này
+chạy đúng và người học thực sự tiếp tục tương tác, nghiên cứu mới chọn
+comparator. Khi đó có thể so sánh one-way với reciprocal để kiểm tra
+giá trị của việc khép vòng, hoặc Fixed với State-aware để kiểm tra cách
+chọn target bên trong một vòng đã ổn định.
 
 ## 10. Tóm tắt sau khi đọc
 
@@ -332,11 +334,12 @@ discussion phase.
 gain trực tiếp; phạm vi hẹp và cỡ mẫu nhỏ.
 
 10.7. Điều paper hỗ trợ cho nghiên cứu hiện tại: Thiết kế knowledge
-state, cơ chế hỏi chủ động và taxonomy đánh giá chất lượng hội
-thoại.
+state, cơ chế phản hồi chủ động và taxonomy đánh giá chất lượng hội
+thoại trong một vòng tương tác hai chiều.
 
-10.8. Điều còn chưa chắc: Tác động của state-aware selection,
-learning gain trực tiếp và khả năng chuyển sang bối cảnh tiếng Việt.
+10.8. Điều còn chưa chắc: AI có khép vòng đúng theo state hay không,
+learner có tiếp tục làm rõ reasoning hay không, learning gain trực tiếp
+và khả năng chuyển sang bối cảnh tiếng Việt.
 
 ## 11. Tự kiểm tra
 

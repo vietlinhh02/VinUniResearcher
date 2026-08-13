@@ -1,11 +1,12 @@
 # Mentee
 
-Mentee là prototype Learning-by-Teaching bằng tiếng Việt. Sau khi hoàn thành lab, sinh
-viên dạy lại một skill cho AI apprentice. Hệ thống lưu lời dạy thành external
-knowledge state và dùng state đó để chọn follow-up question.
+Mentee là prototype Learning-by-Teaching bằng tiếng Việt. Sau khi hoàn thành lab,
+sinh viên dạy lại một skill cho AI apprentice. Hệ thống lưu lời dạy thành external
+knowledge state, phản hồi lại sinh viên rồi cập nhật state từ câu trả lời mới.
 
-Research hiện so sánh state-aware question policy với fixed policy. AI không chạy lại
-toàn bộ bài lab trong study đầu tiên; independent transfer được dùng để đo learner.
+Research hiện tập trung vào reciprocal interaction loop giữa learner và AI. Study
+đầu tiên đánh giá fidelity và feasibility của loop; comparative condition chưa
+được chốt.
 
 Repository kết hợp ba phần đang được xây dựng song song:
 

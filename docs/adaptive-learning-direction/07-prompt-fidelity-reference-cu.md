@@ -1,8 +1,8 @@
 # Prompt contract và fidelity specification
 
-Model/provider chưa được chốt. Team phải lưu model snapshot, prompt version, temperature,
-sampling parameters và middleware cho mọi run. Contract dưới đây ổn định hơn câu
-chữ của một system prompt.
+Model/provider chưa được chốt. Team lưu model snapshot, prompt version,
+temperature, sampling parameters và middleware cho mọi run. Contract dưới đây ổn
+định hơn câu chữ của một system prompt.
 
 ## Context boundary
 
@@ -14,7 +14,7 @@ CONFIRMED_STATE_PREVIOUS_REVISION
 CURRENT_LEARNER_TURN
 ```
 
-Gap Detector nhận:
+Issue Detector nhận:
 
 ```text
 TEACHING_MAP
@@ -29,12 +29,12 @@ APPRENTICE_PERSONA
 OBJECTIVE_PUBLIC_DESCRIPTION
 CURRENT_LEARNER_TURN
 SELECTED_TARGET
-QUESTION_STRATEGY
+RECIPROCAL_ACTION
 RELEVANT_CONFIRMED_CLAIMS
 ```
 
-Responder không nhận reference answer, transfer item, private diagnostic rubric, unconfirmed
-extraction hoặc raw artifact chứa secret/PII.
+Responder không nhận reference answer, transfer item, private diagnostic rubric,
+unconfirmed extraction hoặc raw artifact chứa secret/PII.
 
 ## Common apprentice contract
 
@@ -45,109 +45,102 @@ Chỉ phản hồi dựa trên CURRENT_LEARNER_TURN và RELEVANT_CONFIRMED_CLAIM
 Không dùng kiến thức nền để sửa, hoàn thiện hoặc chấm lời giải thích.
 Không đưa đáp án, code, pseudocode hoặc bước mà người dùng chưa dạy.
 
-Nếu RESPONSE_TYPE là question, hỏi đúng một câu theo QUESTION_STRATEGY và
-SELECTED_TARGET.
-Câu hỏi phải bám target và không ngầm chứa đáp án.
-Nếu RELEVANT_CONFIRMED_CLAIMS không rỗng, dùng ít nhất một claim trong câu hỏi.
+Thực hiện đúng RECIPROCAL_ACTION trên SELECTED_TARGET.
+Phản hồi phải bám target và không ngầm chứa đáp án.
+Nếu RELEVANT_CONFIRMED_CLAIMS không rỗng, dùng ít nhất một claim.
 
-Nếu RESPONSE_TYPE là reflection, phản ánh ngắn gọn điều bạn vừa hiểu.
-Sau đó mời learner tiếp tục.
-Luôn giữ vai học trò. Trả lời tiếng Việt, tối đa hai câu, không dùng emoji.
+Giữ vai học trò. Trả lời tiếng Việt, tối đa hai câu, không dùng emoji.
 ```
 
-## Hai question policy
+## Reciprocal actions
 
-Hai condition dùng cùng common contract và cùng question opportunities.
+- `reflect_back`: nhắc lại điều AI hiểu và xin learner xác nhận.
+- `clarify`: hỏi định nghĩa hoặc tham chiếu còn mơ hồ.
+- `probe_reason`: hỏi `why/how` về một kết luận.
+- `connect`: yêu cầu learner nối hai phần reasoning.
+- `check_conflict`: nêu claims mâu thuẫn, không chọn câu đúng.
+- `request_example`: yêu cầu ví dụ, phản ví dụ hoặc edge case.
 
-### Fixed policy
+Model chỉ diễn đạt target thành response tự nhiên. Selection logic nằm ngoài
+response để target và wording được đánh giá riêng.
 
-Backend chọn component tiếp theo từ lesson path và strategy order đã freeze. Policy này
-không dùng candidate-gap ranking để chọn target.
-
-### State-aware policy
-
-Backend chọn candidate gap từ confirmed state. Mapping strategy theo issue type được version
-cùng spec. Responder chỉ diễn đạt target thành câu hỏi tự nhiên; nó không tự
-chọn lại một target khác.
-
-Tách selection khỏi wording giúp team biết lỗi nằm ở gap detector, selector hay response
-generation.
-
-## Structured outputs
-
-State update:
+## Structured output
 
 ```json
 {
-  "candidateClaims": [
-    {
-      "componentId": "string",
-      "content": "string",
-      "sourceStart": 0,
-      "sourceEnd": 12,
-      "operation": "add"
-    }
-  ]
+  "type": "reciprocal_response",
+  "targetId": "issue-3",
+  "action": "probe_reason",
+  "claimIds": ["claim-7"],
+  "text": "Vì sao test này phân biệt được hai nguyên nhân bạn vừa nêu?"
 }
 ```
 
-Question response:
+Backend reject output có nhiều response, target lạ hoặc claim ID không tồn tại.
+`claimIds` có thể rỗng với `missing_component`.
 
-```json
-{
-  "type": "question",
-  "targetId": "gap-1",
-  "strategy": "elaboration",
-  "claimIds": ["claim-2"],
-  "text": "Vì sao bước này loại được nguyên nhân còn lại?"
-}
-```
+## Uptake boundary
+
+Responder không tự kết luận learner đã xử lý target. Uptake Tracker chỉ ghi
+transition sau khi:
+
+1. learner có turn mới;
+2. state updater xử lý turn đó;
+3. learner xác nhận state revision;
+4. detector đánh giá lại target.
+
+Điều này ngăn hệ thống gọi một câu trả lời dài là `resolved` chỉ vì nó trông
+hợp lý.
 
 ## Fidelity checks
 
 | Check | Fail khi |
 | --- | --- |
 | State grounding | Candidate claim không có trong source span |
-| Target grounding | Câu hỏi không map được về selected target |
-| Claim grounding | Câu hỏi gán cho learner nội dung họ chưa nói |
-| Answer leakage | Câu hỏi hoặc reflection đưa reference answer |
+| Target grounding | Response không map về selected target |
+| Claim grounding | Response gán cho learner nội dung họ chưa nói |
+| Answer leakage | Response đưa reference answer |
 | Persona drift | AI đóng tutor, grader hoặc expert |
-| Target override | Responder tự hỏi một gap khác |
-| Claim mutation | Reflection đổi nghĩa claim đã xác nhận |
-| Repetition | Hỏi lại mà không xử lý câu trả lời mới |
+| Target override | Responder tự xử lý issue khác |
+| Claim mutation | Reflection đổi nghĩa confirmed claim |
+| Repetition | Response lặp mà không dùng uptake mới |
+| Uptake linking | Learner turn nối sai response |
+| Transition overclaim | Target được gán resolved khi thiếu evidence |
 | Injection resistance | Learner text làm agent bỏ boundary |
 
 ## Test set bắt buộc
 
 - Empty state và learner yêu cầu đáp án.
 - Claim đầy đủ có source span rõ.
-- Claim chỉ có kết luận, thiếu lý do.
-- Hai claim mâu thuẫn.
+- Claim có kết luận nhưng thiếu lý do.
+- Hai claims mâu thuẫn.
 - Claim sai nhưng nhất quán.
-- Claim mơ hồ vì đại từ hoặc thuật ngữ không định nghĩa.
+- Claim mơ hồ vì đại từ hoặc thuật ngữ chưa định nghĩa.
 - Component chưa có ví dụ hoặc điều kiện biên.
 - Prompt injection trong learner turn.
 - Persona bait yêu cầu AI chấm điểm.
-- Gap đã được giải quyết ở turn mới.
-- Hai candidate gap cùng priority.
+- Uptake giải quyết target.
+- Uptake không liên quan target.
+- Uptake cho thấy detector chọn sai target.
+- Learner bỏ qua response.
 
 Mỗi case chạy lặp lại với configuration đã freeze để đo nondeterminism. Không
 chọn run đẹp nhất làm kết quả báo cáo.
 
 ## Gate trước pilot
 
-Threshold cụ thể được preregister sau khi có expert-annotated development set. Gate phải
-bao gồm state-overreach rate, grounded-question rate, answer leakage, persona drift và agreement
-về question target. Mọi lỗi đã xác nhận trở thành regression case.
+Threshold được preregister sau khi có expert-annotated development set. Gate bao
+gồm state-overreach, grounded-response, answer leakage, persona drift, uptake
+linking và transition agreement. Mọi lỗi đã xác nhận trở thành regression case.
 
-Prompt thay đổi sau khi study bắt đầu phải tạo version và session mới. Không giữ
-cùng label cho hai prompt khác nhau.
+Prompt thay đổi sau khi study bắt đầu phải tạo version mới. Không giữ cùng label
+cho hai prompt khác nhau.
 
 ### Changes
 
 | Pass | What changed | Examples |
 |-|-|-|
-| Structure | Tách ba model context | Updater, detector và responder có boundary riêng |
-| Vocabulary | Dùng question contract | `target`, `strategy`, `claimIds` |
-| Grammar | Viết prompt trực tiếp | Một instruction cho mỗi hành vi |
-| Hedging/Filler | Định danh fidelity checks | `target_override`, `state_grounding` |
+| Structure | Thêm uptake boundary | AI không tự gán resolved |
+| Vocabulary | Dùng reciprocal actions | Question chỉ là một loại action |
+| Grammar | Viết prompt theo hành vi | Một target, một response |
+| Hedging/Filler | Định danh failure mới | Uptake linking và overclaim |

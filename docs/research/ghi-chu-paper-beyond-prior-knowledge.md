@@ -52,8 +52,9 @@ Ngày đối chiếu paper gốc: 25/07/2026
 
 E19 là bằng chứng mạnh cho việc dùng knowledge-building như **process outcome** và vẫn đo
 pre/post tách riêng. Nó không chứng minh follow-up questions gây learning gain. `Suy luận`:
-pilot hiện tại có thể dùng %KBR/knowledge-building rate làm primary outcome, nhưng phải randomize
-question policy và chấm transcript mù condition để có causal test.
+pilot hiện tại có thể dùng %KBR/knowledge-building rate cùng uptake rate và closed-loop rate để
+kiểm tra tính khả thi. Vì chưa có comparator, kết quả không được diễn giải như một causal test.
+Nếu nghiên cứu sau này so sánh hai policy, transcript cần được chấm mù condition.
 
 ## 7. Tóm tắt evidence matrix
 
@@ -67,4 +68,3 @@ question policy và chấm transcript mù condition để có causal test.
 - [x] Phân biệt KBR process measure với learning outcome.
 - [x] Không trình bày path coefficient là causal effect của follow-up question.
 - [x] Ghi rõ classifier accuracy và cỡ mẫu.
-

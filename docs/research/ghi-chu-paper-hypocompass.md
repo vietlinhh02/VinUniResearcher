@@ -52,9 +52,10 @@ Ngày đối chiếu paper gốc: 25/07/2026
 ## 6. Liên quan đến nghiên cứu hiện tại
 
 Paper chứng minh tính khả thi của việc dùng LLM học trò để tập trung người học vào debugging
-hypothesis. Nó hỗ trợ tách code-completion khỏi skill muốn đo, nhưng không so sánh Fixed với
-State-aware và không có bằng chứng tiếng Việt. `Suy luận`: nếu pilot dùng task lập trình, mọi
-scaffold ngoài cách chọn question target phải được giữ nguyên.
+hypothesis. Nó hỗ trợ tách code-completion khỏi skill muốn đo, nhưng không kiểm tra một vòng
+AI phản hồi rồi learner tiếp tục làm rõ reasoning, và không có bằng chứng tiếng Việt. `Suy luận`:
+nếu pilot dùng task lập trình, AI không nên tự hoàn thành code thay cho learner vì điều đó tạo
+thêm một cơ chế ngoài reciprocal loop cần đánh giá.
 
 ## 7. Tóm tắt evidence matrix
 

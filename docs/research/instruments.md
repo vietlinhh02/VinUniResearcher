@@ -1,12 +1,12 @@
-# Instruments cho pilot state-aware questioning
+# Instruments cho feasibility pilot
 
-Đây là bộ khung. Domain reviewer phải thay ví dụ bằng objective thật, viết hai form
-tương đương và pilot ceiling/floor trước khi thu dữ liệu chính.
+Đây là bộ khung. Domain reviewer thay ví dụ bằng objective thật, viết transfer item
+và pilot ceiling/floor trước khi thu dữ liệu.
 
 ## Screening
 
 - Learner đã hoàn thành prerequisite hoặc lab nào?
-- Learner tự đánh giá mức hiểu từng objective từ 1–5?
+- Learner tự đánh giá mức hiểu objective từ 1–5?
 - Learner có từng làm task tương đương trong sáu tháng gần đây không?
 - Learner có consent cho transcript, extracted state và model output không?
 
@@ -14,8 +14,8 @@ Không lưu tên, email hoặc mã sinh viên trong cùng dataset với transcri
 
 ## Pre-test và transfer blueprint
 
-Mỗi objective có hai form tương đương. Không lặp nguyên item hoặc private rubric
-giữa pre-test, teaching session và transfer.
+Không lặp nguyên item hoặc private rubric giữa pre-test, teaching session và
+transfer.
 
 | Construct | Dạng item | Điểm gợi ý |
 | --- | --- | ---: |
@@ -38,9 +38,23 @@ Expert annotation unit là một learner turn. Mỗi claim gồm:
 - relation với claim trước nếu có;
 - trạng thái `new`, `revision`, `confirmation` hoặc `retraction`.
 
-Gap annotation gồm issue type, component, claim IDs và question target được khuyến nghị.
-Experts không cần viết đúng một câu hỏi giống nhau; target và strategy mới là
-đơn vị so sánh chính.
+Issue annotation gồm issue type, component, claim IDs, response target và action
+được khuyến nghị. Experts không cần viết cùng một câu response; target/action mới
+là đơn vị so sánh chính.
+
+## Reciprocal-loop annotation
+
+Mỗi response tạo một loop candidate. Rater gán:
+
+- response có grounded vào target/evidence không;
+- learner turn kế tiếp có phải uptake không;
+- uptake có giải quyết đúng target không;
+- confirmed state thay đổi ở claim nào;
+- target transition là `resolved`, `partially_resolved`, `unchanged`, `reframed`
+  hay `skipped`.
+
+Rater không dùng độ dài câu trả lời để suy ra `resolved`. `Skipped` được giữ
+trong denominator nhưng không được tính là closed loop.
 
 ## Transcript coding rubric
 
@@ -54,74 +68,65 @@ Một learner utterance có nội dung học thuật nhận một nhãn cao nh�
 | `KB-SENSEMAKING` | Tự sửa hoặc suy ra | “Giữ mid có thể gây lặp.” |
 | `OFF-TASK` | Không liên quan objective | “Hôm nay mình hơi mệt.” |
 
-Nếu một utterance vừa nhắc lại vừa có suy luận mới, chọn nhãn knowledge-building
-cao nhất được evidence hỗ trợ. Annotation manual phải có ví dụ khó và negative
-examples, không chỉ có case đẹp.
+Nếu utterance vừa nhắc lại vừa có suy luận mới, chọn nhãn knowledge-building cao
+nhất được evidence hỗ trợ. Manual phải có case khó và negative examples.
 
 Rater procedure:
 
-1. Hai rater cùng chấm một training set ngoài dữ liệu chính.
+1. Hai rater chấm một training set ngoài dữ liệu chính.
 2. Sửa manual trước khi freeze.
-3. Chấm độc lập transcript đã ẩn condition và participant.
+3. Chấm độc lập transcript đã ẩn participant.
 4. Tính Krippendorff's alpha và giữ raw labels.
 5. Adjudication tạo final label nhưng không thay reliability report.
 
-## Question-quality rubric
-
-Mỗi AI question được chấm riêng:
+## Reciprocal-response rubric
 
 | Dimension | Pass khi |
 | --- | --- |
 | Grounded | Bám selected target và evidence hiện có |
-| Target match | Nội dung hỏi đúng selected gap |
-| Relevant | Gap nằm trong objective và teaching map |
-| Open enough | Learner cần giải thích, không chỉ xác nhận đáp án gợi sẵn |
+| Target match | Nội dung xử lý đúng selected issue |
+| Relevant | Target nằm trong objective và teaching map |
+| Open enough | Để learner tự giải thích, không xác nhận đáp án gợi sẵn |
 | No leakage | Không chứa reference answer hoặc expected value |
 | Apprentice voice | Nghe như học trò cần hiểu, không phải grader |
 
-Rater có thể đánh dấu `repetitive` nếu câu hỏi lặp ý đã được learner trả
-lời.
+Rater đánh dấu `repetitive` nếu response lặp ý đã được learner xử lý.
 
-## Post-condition survey
+## Post-session survey
 
 Thang 1 “hoàn toàn không đồng ý” đến 7 “hoàn toàn đồng ý”:
 
 - Knowledge state phản ánh đúng điều tôi muốn nói.
-- Câu hỏi của AI bám vào lời giải thích của tôi.
-- Câu hỏi khiến tôi phải giải thích thêm lý do hoặc mối liên hệ.
+- Phản hồi của AI bám vào lời giải thích của tôi.
+- Tôi hiểu AI muốn mình làm rõ điều gì.
+- Phản hồi khiến tôi sửa hoặc bổ sung lời giải thích.
 - AI đã vô tình cho tôi biết đáp án.
-- AI hỏi lặp hoặc ngắt mạch trình bày của tôi.
+- AI phản hồi lặp hoặc ngắt mạch trình bày của tôi.
 - Tôi muốn dùng hoạt động này sau một lab khác.
 
 Mental effort dùng thang 1 rất thấp đến 9 rất cao.
 
 ## Interview
 
-- Câu hỏi nào làm bạn nhận ra mình chưa giải thích rõ?
-- Có câu nào hỏi sai trọng tâm không?
-- Bạn đã sửa knowledge state ở chỗ nào và vì sao?
+- Phản hồi nào làm bạn nhận ra mình chưa giải thích rõ?
+- Có response nào sai trọng tâm không?
+- Bạn đã sửa knowledge state ở đâu và vì sao?
 - Có lúc nào AI tỏ ra biết sẵn đáp án?
+- Sau phản hồi của AI, bạn thay đổi lời giải thích như thế nào?
 - Nếu được bỏ một bước khỏi flow, bạn sẽ bỏ bước nào?
 
 ## Transcript schema
 
 ```json
 {
-  "schemaVersion": 2,
+  "schemaVersion": 3,
   "participantId": "P001",
-  "sequence": "S1",
-  "condition": "state-aware",
   "objectiveId": "objective-a",
-  "messages": [
-    {
-      "turn": 1,
-      "role": "learner_tutor",
-      "text": "...",
-      "timestamp": "ISO-8601"
-    }
-  ],
+  "messages": [],
   "knowledgeStateRevisions": [],
-  "questionEvents": []
+  "reciprocalResponses": [],
+  "uptakeEvents": [],
+  "targetTransitions": []
 }
 ```
 
@@ -131,7 +136,7 @@ Không tự thêm direct identifier, clipboard hoặc raw artifact vào schema.
 
 | Pass | What changed | Examples |
 |-|-|-|
-| Structure | Thêm annotation cho pipeline | Claim, gap và question-quality rubric |
-| Vocabulary | Bỏ hai thuật toán cố định | Reviewer chọn objective |
-| Rhythm/Style | Viết item như người chấm sẽ dùng | Pass criteria ngắn, cụ thể |
-| Soul | Thêm negative examples | “Nếu được bỏ một bước…” |
+| Structure | Thêm reciprocal-loop annotation | Response → uptake → transition |
+| Vocabulary | Đánh giá response, không chỉ question | Sáu reciprocal actions |
+| Rhythm/Style | Viết item theo trải nghiệm | “AI muốn mình làm rõ điều gì?” |
+| Soul | Cho phép target bị gán sai | Nhãn `reframed` |
