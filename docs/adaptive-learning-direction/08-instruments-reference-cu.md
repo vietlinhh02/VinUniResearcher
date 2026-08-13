@@ -1,133 +1,147 @@
-# Instrumentation, usability và transfer assessment
+# Instrumentation và assessment
 
-## 1. Mục tiêu đo
+Mentee cần ba loại bằng chứng khác nhau: pipeline có fidelity hay không, learner tương
+tác ra sao và learner có làm được task mới hay không. Trộn ba nhóm này vào một
+score sẽ che mất nguyên nhân khi kết quả xấu.
 
-Product telemetry trả lời hệ thống có dùng được và đáng tin không. Research
-assessment trả lời learner có tự áp dụng skill trong task mới không. Hai loại dữ
-liệu phải tách trong dashboard và claim.
-
-## 2. Event schema
+## Event schema
 
 ```json
 {
-  "schemaVersion": 1,
+  "schemaVersion": 2,
   "eventId": "evt-...",
-  "eventType": "knowledge_state_confirmed",
+  "eventType": "question_generated",
   "participantId": "P001",
   "sessionId": "S001",
-  "spec": {"id": "rag-retrieval-analysis", "version": 1},
+  "spec": {"id": "rag-retrieval-reasoning", "version": 1},
   "objectiveId": "rag.retrieval.failure_analysis",
-  "condition": "product",
+  "condition": "state-aware",
   "timestamp": "ISO-8601",
+  "versions": {
+    "model": "provider/model-snapshot",
+    "prompt": "question-responder-v1",
+    "policy": "state-aware-v1"
+  },
   "payload": {}
 }
 ```
 
 Event bắt buộc:
 
-- `checkpoint_received`
-- `teaching_started`
-- `teaching_input_submitted`
-- `knowledge_state_extracted`
-- `knowledge_state_confirmed`
-- `enactment_started/completed`
-- `runner_verdict_created`
-- `feedback_shown`
-- `repair_submitted`
-- `session_completed/abandoned`
-- `transfer_started/submitted/scored`
-- `fidelity_violation_detected`
+- `lab_completion_received`;
+- `session_started`;
+- `learner_turn_submitted`;
+- `knowledge_state_extracted`;
+- `knowledge_state_confirmed`;
+- `gap_candidates_created`;
+- `question_target_selected`;
+- `question_generated`;
+- `fidelity_violation_detected`;
+- `session_completed` hoặc `session_abandoned`;
+- `transfer_started`, `transfer_submitted`, `transfer_scored`.
 
-## 3. Product metrics
+## Technical evaluation
 
-| Metric | Mục đích |
+Hai domain experts gán nhãn trên một development set không thuộc dữ liệu study.
+Annotation gồm:
+
+- claim và source span;
+- knowledge component;
+- gap issue type;
+- target nên hỏi tiếp;
+- strategy phù hợp;
+- câu hỏi có grounded, relevant và answer-leaking hay không.
+
+Team báo agreement giữa experts trước, sau đó mới báo model-versus-adjudicated label.
+Adjudication tạo nhãn dùng để tính metric nhưng không thay thế reliability report.
+
+Metrics kỹ thuật:
+
+| Metric | Câu hỏi nó trả lời |
 | --- | --- |
-| Session completion | Flow có hoàn thành được không |
-| Time per stage | Chỗ nào gây friction |
-| Claim confirmation edit rate | Extraction có đúng không |
-| Unsupported action rate | Knowledge boundary có hoạt động không |
-| Failure attribution rate | Runner feedback có map được về lời dạy không |
-| Spec authoring time | Engine có mở rộng thực tế không |
-| Runner determinism | Cùng input/version có cùng verdict không |
-| Cost/latency | Khả năng vận hành |
+| Claim precision/recall | Updater có lấy đúng điều learner nói không? |
+| Source-span validity | Claim có provenance thật không? |
+| Gap agreement | Detector có tìm cùng issue với expert không? |
+| Target agreement | Selector có chọn phần đáng hỏi không? |
+| Grounded-question rate | Câu hỏi có bám target và available evidence không? |
+| Leakage/drift rate | Agent có đưa đáp án hoặc đổi vai không? |
 
-## 4. Transfer assessment blueprint
+## Product metrics
 
-Mỗi objective cần item mới nhưng tương đương:
+- Session completion và abandonment point.
+- Thời gian ở mỗi state.
+- Tỷ lệ candidate claim bị learner sửa hoặc xóa.
+- Số gap mới, gap được giải quyết và gap bị lặp.
+- Question latency và cost.
+- Tỷ lệ learner bỏ qua hoặc không hiểu câu hỏi.
 
-- cùng construct/learning objective;
-- khác surface context, identifier, data và distractor;
-- không dùng lại enactment ground truth/assertion;
-- AI và prior feedback bị khóa;
-- có scoring rule trước khi thu dữ liệu;
-- được domain reviewer duyệt và pilot ceiling/floor.
+Không dùng số turn hoặc số từ làm đại diện cho học tập.
 
-Output tùy task:
+## Transcript outcome
 
-- executable code/config chấm bằng hidden tests;
-- tool/action sequence chấm bằng simulator assertions;
-- diagnosis/evaluation/design chấm bằng rule checks và blind rubric;
-- explanation mở chỉ dùng LLM judge sau khi calibrate với rater người.
+Primary process outcome của comparative pilot:
 
-## 5. Rubric khung
+```text
+knowledge_building_rate
+= learner utterances coded KB-ELABORATION hoặc KB-SENSEMAKING
+  / learner utterances có nội dung học thuật
+```
 
-Không dùng một rubric nội dung chung cho mọi lab. Mỗi rubric có thể map vào năm
-dimension khung:
+Coder chấm transcript đã ẩn condition và, nếu cần, ẩn agent turn để giảm khả
+năng đoán nhóm. Rubric chi tiết nằm trong `../research/instruments.md`.
 
-| Dimension | Câu hỏi |
-| --- | --- |
-| Problem framing | Learner xác định đúng failure/constraint không? |
-| Hypothesis/decision quality | Có lựa chọn hợp lý và loại trừ distractor không? |
-| Evidence use | Evidence có liên quan và được nối đúng không? |
-| Execution correctness | Action/code/config có chạy đúng không? |
-| Trade-off/validation | Có kiểm tra giới hạn và hệ quả không? |
+Ngoài tỷ lệ tổng, team nên báo knowledge-building ngay sau question opportunity. Phân
+tích này cho biết câu hỏi có khơi gợi reasoning hay chỉ làm hội thoại dài hơn.
 
-Chỉ giữ dimension liên quan objective; không cộng điểm cho nội dung ngoài phạm vi.
+## Independent transfer
 
-## 6. Feasibility instruments
+Transfer item đo cùng objective nhưng dùng surface context và dữ liệu khác. AI, question
+prompt và feedback đều bị khóa. Item cần scoring rule viết trước, domain review và
+pilot ceiling/floor.
 
-### Sau session
+Tùy objective, output có thể là code, diagnosis, evaluation plan hoặc explanation. Rule/test
+được ưu tiên khi construct cho phép. Với reasoning mở, hai rater chấm theo rubric; LLM
+judge chỉ được dùng sau calibration và phải báo disagreement.
 
-Thang Likert và câu mở:
+Transfer là learning outcome. Trong feasibility pilot nhỏ, nó vẫn có thể là exploratory
+vì study chưa đủ power để ước lượng effect ổn định.
 
-- Schema giúp tôi diễn đạt cách giải quyết task.
-- Knowledge state phản ánh đúng điều tôi đã dạy.
-- Tôi hiểu vì sao enactment thất bại.
-- Feedback giúp tôi sửa reasoning mà không đưa đáp án.
-- Apprentice đã dùng kiến thức mà tôi không dạy.
-- Phần nào của flow gây mất thời gian hoặc khó hiểu?
+## Survey sau condition
 
-### Interview
+Thang 1–7:
 
-- Bạn sửa lời dạy dựa trên evidence nào?
-- Schema thiếu hoặc thừa bước nào so với cách làm thực tế?
-- AI có hành động nào không thể truy về lời bạn dạy?
-- Feedback nào vô tình tiết lộ đáp án?
-- Bạn có thể dùng flow này cho loại lab nào khác?
+- Knowledge state phản ánh đúng điều tôi muốn dạy.
+- Câu hỏi của AI bám vào phần tôi vừa giải thích.
+- Câu hỏi khiến tôi phải giải thích thêm lý do hoặc mối liên hệ.
+- AI đã vô tình gợi cho tôi đáp án.
+- AI hỏi lặp hoặc làm gián đoạn cách tôi đang trình bày.
+- Tôi muốn dùng hoạt động này sau một lab khác.
 
-## 7. Research outcomes
+Mental effort dùng một item 1–9. Satisfaction được báo riêng, không gộp vào learning
+score.
 
-- Primary: independent transfer score, điều chỉnh baseline nếu thiết kế cho phép.
-- Secondary: delayed transfer, explanation score, mental effort.
-- Process: repair count/type, claim changes, grounded-action rate.
-- UX: usability và perceived fidelity.
+## Interview
 
-Satisfaction, number of turns, word count và agent pass không thay learning outcome.
+- Câu hỏi nào khiến bạn nhận ra mình chưa giải thích rõ?
+- Có câu hỏi nào bám sai ý bạn vừa nói không?
+- Bạn có sửa knowledge state không? Vì sao?
+- Lúc nào AI tỏ ra giống giáo viên hơn là học trò?
+- Ba câu hỏi trong phiên là quá ít, vừa đủ hay quá nhiều?
 
-## 8. Rater procedure
+## Privacy
 
-Nếu có rubric mở:
+Research export dùng pseudonym và không chứa tên, email hoặc mã sinh viên. Identity
+mapping lưu riêng nếu thực sự cần. Consent phải nói rõ transcript, extracted state và
+model outputs nào được lưu, ai được truy cập và ngày xóa dữ liệu.
 
-1. Domain experts viết manual và anchor examples ngoài dataset chính.
-2. Rater luyện trên sample riêng; sửa manual trước freeze.
-3. Chấm độc lập, ẩn condition và participant identity.
-4. Báo inter-rater reliability cùng raw labels.
-5. Adjudication tạo final score nhưng không thay thế reliability report.
+Không tự ingest clipboard, API key, raw repository hoặc PII. Kết quả study không được
+ảnh hưởng điểm học phần.
 
-## 9. Privacy và research export
+### Changes
 
-- Export dùng pseudonym.
-- Identity mapping lưu tách biệt.
-- Không tự ingest clipboard, API key, raw repository hoặc PII.
-- Text/artifact chỉ thu đúng phần protocol và consent cho phép.
-- Retention, deletion và access policy phải được định nghĩa trước pilot.
+| Pass | What changed | Examples |
+|-|-|-|
+| Structure | Tách fidelity, process và learning outcome | Ba nhóm metric riêng |
+| Vocabulary | Bỏ runner metrics | Target agreement và grounded-question rate |
+| Rhythm/Style | Viết survey tự nhiên hơn | “Câu hỏi bám vào lời tôi.” |
+| Hedging/Filler | Nêu rõ giới hạn pilot | Transfer là exploratory khi chưa đủ power |

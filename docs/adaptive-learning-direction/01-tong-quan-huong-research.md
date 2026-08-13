@@ -1,154 +1,114 @@
-# Chiến lược product và research song song
+# Product và research cùng dùng một vòng hội thoại
 
-Trạng thái: định hướng build hiện hành; chưa phải protocol nghiên cứu đã freeze.
+Mentee trước hết cần chạy được một phiên teach-back đáng tin. Research được
+cài vào phiên đó bằng versioning, event log và hai question policy. Team không cần xây
+một platform đa lĩnh vực trước khi kiểm tra cơ chế chính.
 
-## 1. Ưu tiên
-
-Mentee dành phần lớn nguồn lực cho sản phẩm. Research đóng vai trò tạo guardrail
-và kiểm tra cơ chế, không biến prototype thành một survey tool.
-
-Phân bổ định hướng:
-
-- Khoảng 70–80%: engine, authoring spec, runner, UX repair và tích hợp lab.
-- Khoảng 20–30%: fidelity harness, assessment, event schema và pilot protocol.
-
-Tỷ lệ là nguyên tắc quản trị, không phải cam kết lịch cứng.
-
-## 2. Kiến trúc sản phẩm
+## Kiến trúc tối thiểu
 
 ```text
 School lab
-  -> Evidence Adapter
-  -> Lab Teaching Spec
-  -> Teaching Session
-      -> learner input
-      -> confirmed Knowledge State
-      -> constrained Apprentice
-      -> Enactment Runner
-      -> Repair Loop
-  -> Transfer Assessment
-  -> Event/Fidelity Store
+  → Lab Completion Adapter
+  → Conversation Spec
+  → Teaching Session
+      → learner turn
+      → state update và learner confirmation
+      → gap detection
+      → question selection
+      → apprentice response
+  → Independent Transfer
+  → Research Export
 ```
 
-### Evidence Adapter
+### Lab Completion Adapter
 
-Nhận dữ liệu tối thiểu: lab/checkpoint ID, objective ID, validator verdict và
-artifact reference hoặc summary đã lọc. Adapter không mặc định tải toàn bộ repo,
-clipboard, raw logs hoặc credentials.
+Adapter nhận `lab_id`, `objective_id`, trạng thái hoàn thành và những evidence đã
+được allowlist. Nó không mặc định đọc toàn bộ repository, raw log, clipboard hoặc
+credential của learner.
 
-### Lab Teaching Spec
+### Conversation Spec
 
-Là plugin contract của nội dung, gồm:
+Mỗi activity cần một spec ngắn, do course author và domain reviewer duyệt. Spec chứa:
 
-- objective và prerequisite;
-- Teaching Schema;
-- misconception/distractor;
-- knowledge-state mapping;
-- scenario variants;
-- enactment output schema;
-- runner assertions;
-- feedback policy;
-- transfer blueprint.
+- objective hẹp của phiên;
+- teaching map gồm các knowledge component cần thảo luận;
+- loại gap có thể phát hiện;
+- question strategy được phép dùng;
+- giới hạn số câu hỏi và thời gian;
+- transfer blueprint và scoring rubric.
+
+Spec không chứa một kịch bản hội thoại cứng. Learner vẫn giải thích bằng lời
+của mình.
 
 ### Teaching Session
 
-Learner giải thích bằng ngôn ngữ tự nhiên theo cấu trúc công việc. Backend trích
-claim có provenance và yêu cầu learner xác nhận. AI chỉ nhận state đã xác nhận.
+Sau mỗi lượt có nội dung học thuật, state updater trích xuất claim cùng source span.
+Learner có thể xác nhận, sửa hoặc xóa claim. Gap detector làm việc trên state đã
+xác nhận; question selector không được lén thêm kiến thức chuẩn vào state.
 
-### Enactment Runner
+### Independent Transfer
 
-Runner ưu tiên kiểm tra deterministic: JSON schema, rule checks, tests, fixture và
-ground truth. LLM judge chỉ dùng cho phần không thể chấm deterministic, phải có
-rubric và validation với rater người.
+Transfer đo learner, không đo AI. Apprentice, câu hỏi và feedback bị khóa khi learner làm
+task mới. Transfer score là learning outcome; các chỉ số trong hội thoại được dùng
+để kiểm tra cơ chế và giải thích kết quả.
 
-## 3. Nguyên tắc tổng quát hóa
+## Hai lớp đánh giá
 
-Engine không biết `trace`, `retrieval`, `prompt` hay `PII` là gì. Các khái niệm
-domain nằm trong spec. Engine chỉ biết các primitive:
+Trước user study, team cần một technical evaluation trên transcript được chuyên gia
+gán nhãn:
 
-```text
-objective
-schema field
-claim
-source/provenance
-scenario input
-action slot
-assertion
-verdict
-feedback hint
-repair
-transfer item
-```
+- claim extraction có giữ đúng ý learner không;
+- gap detection có tìm đúng target không;
+- câu hỏi có grounded, relevant và không leak đáp án không;
+- persona có giữ ổn định không.
 
-Một lab mới không được yêu cầu viết flow/backend riêng. Nếu cần primitive mới,
-team phải chứng minh primitive đó dùng cho ít nhất ba trường hợp hoặc thực sự là
-yêu cầu nền tảng không thể biểu diễn bằng contract hiện có.
+Sau khi đạt fidelity gate mới chạy pilot với learner. Primary outcome của pilot là
+knowledge-building rate. Transfer, mental effort và trải nghiệm là secondary hoặc
+exploratory tùy power analysis.
 
-## 4. Research được cài vào sản phẩm như thế nào
+## Lộ trình
 
-Ngay từ bản đầu, hệ thống lưu:
+### Alpha: một objective, một phiên hoàn chỉnh
 
-- phiên bản spec, prompt, model và runner;
-- knowledge state trước/sau learner confirmation;
-- agent action và claim nguồn;
-- assertion verdict và feedback đã hiện;
-- repair diff, thời gian và attempt;
-- fidelity event;
-- condition nếu session thuộc study.
+Chọn một lab có reviewer và learning objective rõ. Xây state updater, confirmation UI, gap
+detector, hai question policy và event log. Chưa cần nhiều domain.
 
-Nhờ vậy có thể chạy feasibility và efficacy sau này mà không viết lại engine.
+### Technical evaluation
 
-## 5. Các giai đoạn
+Tạo bộ transcript bao gồm lời dạy đúng, thiếu, mơ hồ, mâu thuẫn và prompt
+injection. Hai chuyên gia gán claim, gap và question target. Kết quả này quyết định
+model/prompt nào đủ điều kiện vào pilot.
 
-### Build alpha
+### Usability pilot
 
-- Một vertical slice hoạt động end-to-end.
-- Author spec bằng file versioned.
-- Structured enactment và deterministic runner.
-- Knowledge-state confirmation và repair.
-- Không cần learner model xuyên track.
+Kiểm tra learner có hiểu vai dạy, có sửa được knowledge state và có thấy câu
+hỏi quá dày hoặc lặp hay không. Pilot này không dùng để claim learning gain.
 
-### Generalization beta
+### Comparative pilot
 
-- Ít nhất ba spec thuộc các họ task khác nhau.
-- Không fork UI/backend theo từng lab.
-- Fidelity regression suite chạy được cho mọi spec.
-- Có author preview và scenario validation.
+So sánh fixed policy với state-aware policy trong cùng question budget. Protocol, model
+snapshot, prompt, lesson material, rubric và analysis plan phải freeze trước khi thu dữ
+liệu chính.
 
-### Product pilot
+### Mở rộng
 
-- Tích hợp với một module thực tế.
-- Usability, latency, authoring cost và failure attribution đạt gate.
-- Transfer task được expert review và pilot độ khó.
+Chỉ thêm lab thứ hai khi activity đầu tiên chạy ổn và question taxonomy không còn
+thay đổi liên tục. Learner model xuyên track hoặc enactment là nghiên cứu sau.
 
-### Efficacy study
+## Metrics
 
-- So sánh `verified enactment–repair` với `reflective teach-back`.
-- Freeze protocol, model, prompt, spec, scenario bank và rubric.
-- Có ethics/IRB approval hoặc quyết định tương đương.
+Product cần theo dõi completion, thời gian mỗi bước, tỷ lệ learner sửa extracted
+claim, latency và chi phí. Research cần thêm agreement với expert annotation,
+grounded-question rate, answer leakage, knowledge-building rate và independent transfer.
 
-### Adaptive track
+Satisfaction vẫn đáng đo vì nó ảnh hưởng khả năng sử dụng. Nhưng satisfaction
+không thay cho learning outcome.
 
-Chỉ sau khi evidence ở cấp session đáng tin cậy mới thêm learner model, review
-scheduler và prerequisite policy xuyên nhiều lab.
+### Changes
 
-## 6. Success metrics
-
-### Product
-
-- Tỷ lệ learner hoàn thành flow.
-- Thời gian author một spec mới.
-- Tỷ lệ scenario/runner pass validation.
-- Tỷ lệ failure map được về claim hoặc schema field.
-- Latency và cost mỗi enactment.
-- Tỷ lệ learner xác nhận extraction đúng.
-
-### Learning/research
-
-- Primary: independent transfer score.
-- Secondary: delayed transfer, explanation quality, mental effort.
-- Process: repair count, grounded action rate, knowledge-state change.
-- Fidelity: leakage, persona drift, unsupported action, feedback leakage.
-
-Không dùng số lượt chat, độ dài câu trả lời, satisfaction hoặc AI pass làm learning
-outcome.
+| Pass | What changed | Examples |
+|-|-|-|
+| Structure | Thu gọn roadmap | Một objective trước nhiều domain |
+| Inflation | Bỏ tham vọng platform sớm | Không claim “engine tổng quát” |
+| Grammar | Dùng câu chủ động | “Team cần…” thay cho mô tả bị động dài |
+| Rhythm/Style | Giảm danh sách lặp | Giải thích từng lớp đánh giá |

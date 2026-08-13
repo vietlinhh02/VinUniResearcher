@@ -45,14 +45,14 @@ Ngày đối chiếu paper gốc: 25/07/2026
 - Heterogeneity cao; hiệu quả không đồng nhất giữa population, implementation và outcome.
 - Đây là bằng chứng hiệu quả của hoạt động chuẩn bị/dạy tổng thể, không cô lập việc hỏi đáp,
   persona, feedback hay một design AI cụ thể.
-- Không có bối cảnh tiếng Việt, algorithm teaching, LLM, hay Active/Passive tutee.
+- Không có bối cảnh tiếng Việt, algorithm teaching, LLM hay state-aware questioning.
 
 ## 6. Liên quan đến nghiên cứu hiện tại
 
-Paper hỗ trợ việc yêu cầu participant **thực sự dạy** thay vì chỉ đọc và chuẩn bị. Kết quả moderator
-hỗ trợ giữ AI ở vai đối thoại có thể tương tác. Nó không đủ để kết luận active questioning trong
-pilot hiện tại sẽ làm tăng learning gain. `Suy luận`: H1 của pilot nên giữ knowledge-building là
-process outcome; learning gain vẫn là secondary/exploratory outcome đo riêng.
+Paper hỗ trợ việc yêu cầu participant **thực sự dạy** thay vì chỉ đọc và chuẩn bị. Kết quả
+moderator hỗ trợ giữ AI ở vai đối thoại có thể tương tác. Nó không đủ để kết luận state-aware
+questioning làm tăng learning gain. `Suy luận`: H1 nên giữ knowledge-building là process outcome;
+learning gain vẫn là secondary/exploratory outcome đo riêng.
 
 ## 7. Tóm tắt evidence matrix
 
@@ -66,4 +66,3 @@ process outcome; learning gain vẫn là secondary/exploratory outcome đo riên
 - [x] Gán đúng mỗi effect size cho contrast của nó.
 - [x] Không coi hai effect size là contrast trực tiếp.
 - [x] Không dùng E03 làm evidence trực tiếp cho active questioning hoặc tiếng Việt.
-

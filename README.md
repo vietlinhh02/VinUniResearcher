@@ -1,9 +1,11 @@
 # Mentee
 
-Nghiên cứu và prototype **Learning-by-Teaching (LbT)** bằng tiếng Việt: sinh viên
-đóng vai giáo viên, còn AI đóng vai học trò.
-Mô hình này khuyến khích giải thích và phát hiện lỗ hổng kiến thức.
-Nhờ đó, người học có cơ hội học sâu hơn.
+Mentee là prototype Learning-by-Teaching bằng tiếng Việt. Sau khi hoàn thành lab, sinh
+viên dạy lại một skill cho AI apprentice. Hệ thống lưu lời dạy thành external
+knowledge state và dùng state đó để chọn follow-up question.
+
+Research hiện so sánh state-aware question policy với fixed policy. AI không chạy lại
+toàn bộ bài lab trong study đầu tiên; independent transfer được dùng để đo learner.
 
 Repository kết hợp ba phần đang được xây dựng song song:
 
@@ -66,7 +68,7 @@ Mở `http://localhost:3000`. Xem thêm hướng dẫn dành cho frontend tại
 | `GET` | `/healthz` | Kiểm tra trạng thái service và PostgreSQL. |
 | `POST` | `/api/v1/users` | Tạo người dùng với `email` và `name`. |
 | `GET` | `/api/v1/users/{id}` | Lấy người dùng theo ID. |
-| `POST` | `/api/v1/auth/register` | Đăng ký với `email`, `name`, `password` (≥ 8 ký tự); set cookie phiên. |
+| `POST` | `/api/v1/auth/register` | Đăng ký; mật khẩu ≥ 8 ký tự; tạo cookie phiên. |
 | `POST` | `/api/v1/auth/login` | Đăng nhập với `email`, `password`; set cookie phiên. |
 | `POST` | `/api/v1/auth/logout` | Đăng xuất, xóa phiên hiện tại. |
 | `GET` | `/api/v1/auth/me` | Lấy người dùng hiện tại từ cookie phiên. |

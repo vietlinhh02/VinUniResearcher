@@ -1,199 +1,217 @@
-# PRD — Mentee engine đa lab AI thực chiến
+# PRD: phiên AI apprentice sau lab
 
-Phiên bản: 0.3. Trạng thái: product-first draft.
+Phiên bản: 0.4 Trạng thái: draft theo feedback ngày 13/08/2026
 
-## 1. Mục tiêu
+## Mục tiêu
 
-Xây một engine Learning-by-Teaching có kiểm chứng, tích hợp được với nhiều lab
-thông qua spec thay vì code riêng cho từng nội dung.
+Sau khi hoàn thành một lab, learner dạy lại một skill cho AI apprentice. Hệ thống theo
+dõi điều learner đã giải thích và đặt câu hỏi tiếp theo vào đúng phần còn
+thiếu. Phiên kết thúc bằng một task độc lập để đo learner, không đo AI.
 
-### Product outcomes
+Alpha cần trả lời được một câu đơn giản: với cùng một lời dạy, hệ
+thống có lưu đúng knowledge state và hỏi một câu grounded hay không?
 
-1. Course author có thể khai báo một checkpoint mới bằng spec versioned.
-2. Learner dạy apprentice theo reasoning schema phù hợp với task.
-3. Apprentice chỉ enact từ confirmed knowledge state.
-4. Runner kiểm chứng action/result và trả feedback không leak.
-5. Hệ thống lưu đủ evidence cho vận hành và research sau này.
+## Phạm vi alpha
 
-### Non-goals của alpha/beta
+Alpha hỗ trợ một learning objective, text chat tiếng Việt và hai question policy. Course
+author viết spec dưới dạng file versioned. Domain reviewer duyệt teaching map, question
+boundaries và transfer rubric.
 
-- Không thay lesson, IDE, sandbox, autograder hoặc submission.
-- Không tự sinh curriculum hoặc ground truth live.
-- Không cá nhân hóa toàn bộ track.
-- Không chẩn đoán mastery bằng LLM.
-- Không hỗ trợ mọi dạng lab ngay trong bản đầu.
+Chưa có:
 
-## 2. Actors
+- AI chạy lại bài lab;
+- runner chấm lời giải của AI;
+- adaptive curriculum xuyên track;
+- authoring UI đa lĩnh vực;
+- voice, diagram hoặc role-play;
+- kết luận mastery tự động.
 
-- Learner: hoàn thành lab, dạy apprentice, repair và làm transfer.
-- Course author: viết objectives, schema, scenario và assertions.
-- Domain reviewer: duyệt content validity và ground truth.
-- Operator/researcher: quản lý version, fidelity và export giả danh.
-- School lab: gửi evidence summary và nhận completion status.
+## Actors
 
-## 3. Lab Teaching Spec
+- Learner hoàn thành lab, dạy AI, xác nhận knowledge state và làm transfer.
+- Course author viết objective, teaching map và lesson material.
+- Domain reviewer duyệt content validity và annotation guide.
+- Researcher quản lý condition, version, fidelity và export giả danh.
+- School lab gửi completion summary tối thiểu.
 
-```yaml
-id: rag-retrieval-analysis-v1
-objective:
-  id: rag.retrieval.failure_analysis
-  description: Diagnose retrieval failures using evaluation evidence
-evidence_input:
-  allowed: [checkpoint_verdict, eval_summary, artifact_reference]
-teaching_schema:
-  family: rag_evaluation
-  fields:
-    - failure_slice
-    - hypothesized_source
-    - intervention
-    - evaluation_plan
-    - tradeoff
-knowledge_mapping:
-  require_learner_confirmation: true
-enactment:
-  scenario_bank: rag-retrieval-scenarios-v1
-  output_schema: rag-action-v1
-  max_repairs: 2
-runner:
-  assertions:
-    - action_is_grounded
-    - evaluation_matches_failure_slice
-    - decision_uses_quality_and_latency
-feedback:
-  reveal: [failed_assertion_category, implicated_claim]
-  hide: [expected_action, expected_value, transfer_answer]
-transfer:
-  blueprint: rag-transfer-v1
+## Product flow
+
+```text
+lab_completed
+→ create post-lab session
+→ show objective and apprentice role
+→ learner teaching turn
+→ extract and confirm claims
+→ detect candidate gaps
+→ select and ask one follow-up question
+→ update state from learner response
+→ repeat within budget
+→ lock apprentice
+→ independent transfer
 ```
 
-Spec validator phải fail fast khi field được chấm không có assertion, scenario
-không có ground truth, hoặc feedback cho phép lộ expected answer.
+Một lab tạo tối đa một phiên Mentee. Phiên có thể tập trung vào một hoặc hai
+skill, nhưng alpha chỉ dùng một skill để giữ construct rõ.
 
-## 4. Functional requirements
+## Conversation Spec
+
+```yaml
+id: rag-retrieval-reasoning-v1
+version: 1
+status: draft
+
+objective:
+  id: rag.retrieval.failure_analysis
+  description: Explain how evidence distinguishes retrieval failure causes
+
+entry:
+  event: lab_completed
+  allowed_evidence:
+    - completion_status
+    - evaluation_summary
+    - artifact_reference
+
+teaching_map:
+  components:
+    - observed_failure
+    - candidate_cause
+    - discriminating_test
+    - evidence
+    - conclusion
+
+knowledge_state:
+  learner_confirmation: required
+  preserve_source_span: true
+
+question_policy:
+  strategies:
+    - clarification
+    - elaboration
+    - connection
+    - edge_case
+  opportunities: 3
+  max_questions: 3
+
+transfer:
+  blueprint: rag-retrieval-transfer-v1
+  apprentice_disabled: true
+```
+
+Spec validator phải từ chối component trùng ID, question strategy không được hỗ trợ,
+transfer không khóa apprentice hoặc evidence field giao với denylist.
+
+## Functional requirements
 
 ### Integration
 
-- Nhận signed checkpoint event hoặc import thủ công.
-- Allowlist evidence fields theo spec.
-- Idempotent khi nhận lại cùng checkpoint event.
-- Không lưu secret/raw PII.
-
-### Authoring
-
-- Validate schema, scenario, assertions và transfer separation.
-- Preview learner flow và runner result.
-- Spec có `draft`, `reviewed`, `frozen`, `retired`.
-- Không sửa in-place spec đã dùng trong study/session; tạo version mới.
+- Nhận event `lab_completed` theo cơ chế idempotent.
+- Chỉ nhận evidence nằm trong allowlist của spec.
+- Không tự đọc source code, secret, raw log hoặc PII.
+- Ghi rõ lab, objective và spec version cho mỗi session.
 
 ### Teaching
 
-- Render field và guidance từ spec.
-- Cho phép natural-language input, không ép câu template chung.
-- Hiện extracted claims cạnh source text để learner xác nhận.
-- Không enact khi state chưa được xác nhận.
+- Giải thích rõ learner đang dạy, không làm quiz với AI tutor.
+- Nhận text tiếng Việt và giữ nguyên raw turn cho audit.
+- Hiện claim cùng source span để learner xác nhận, sửa hoặc xóa.
+- Không dùng unconfirmed state để chọn câu hỏi.
 
-### Apprentice
+### State update
 
-- Nhận objective, scenario public context và confirmed knowledge state.
-- Trả JSON theo output schema.
-- Mỗi action/kết luận trỏ tới claim nguồn.
-- Trả `unknown` thay vì dùng kiến thức ngoài state.
+- Trích xuất claim mà không thêm kiến thức learner chưa nói.
+- Tạo revision mới sau mỗi confirmation.
+- Giữ provenance từ claim về turn nguồn.
+- Ghi model, prompt và sampling configuration.
 
-### Runner
+### Gap detection
 
-- Validate JSON schema trước semantic assertions.
-- Ưu tiên deterministic checks.
-- Tách public scenario context khỏi private ground truth.
-- Trả verdict có mã lỗi ổn định và trace tối thiểu.
-- Không thực thi code không tin cậy ngoài sandbox hiện có.
+- Map candidate gap về component và claim liên quan.
+- Dùng taxonomy issue type đã freeze trong spec.
+- Tách learner claim khỏi private reference material.
+- Cho phép expert override trong technical evaluation; override không âm thầm sửa
+  model output.
 
-### Repair
+### Question selection
 
-- Feedback map về assertion và claim/schema field.
-- Lưu diff knowledge state giữa các attempt.
-- Không đưa expected action/value.
-- Dừng đúng giới hạn attempt của spec.
+- Chọn tối đa một câu ở mỗi opportunity.
+- Lưu target, strategy, supporting claim và policy version.
+- Không hỏi ngoài objective hoặc ngầm đưa reference answer.
+- Không lặp lại cùng target nếu learner đã trả lời và gap detector chưa xử lý
+  lượt mới.
+- Giữ vai học trò; không chấm điểm hoặc giảng bài.
 
 ### Transfer
 
-- Khóa apprentice và feedback đến khi submit.
-- Không tái sử dụng scenario hoặc private assertion của enactment.
-- Hỗ trợ auto-score và blind rubric.
+- Khóa apprentice, câu hỏi và feedback trước khi learner submit.
+- Dùng task chưa xuất hiện trong teaching session.
+- Chấm theo rule hoặc rubric đã được reviewer duyệt trước pilot.
+- Không dùng transcript condition để người chấm suy ra nhóm.
 
-## 5. Data model tối thiểu
+## Data model tối thiểu
 
 ```text
-lab_specs              (id, version, status, spec_json, content_hash)
-objectives             (id, description, domain, schema_family)
-scenario_sets          (id, version, status)
-scenarios              (id, set_id, public_input, private_ground_truth)
-participants           (id, pseudonym, cohort, condition)
-checkpoint_events      (id, participant_id, spec_id, evidence_summary)
-teaching_sessions      (id, participant_id, spec_id, scenario_id, status)
-teaching_inputs        (id, session_id, schema_field, text, turn)
-knowledge_claims       (id, session_id, field, content, source_turn, confirmed)
-enactment_attempts     (id, session_id, round, output_json, model_snapshot)
-runner_verdicts        (id, attempt_id, assertion_id, verdict, trace_code)
-repairs                (id, session_id, round, before_hash, after_hash)
-transfer_submissions   (id, participant_id, assessment_id, answer, score)
-fidelity_events        (id, attempt_id, check_id, verdict, metadata)
+conversation_specs   (id, version, status, content_hash)
+sessions             (id, participant_id, spec_id, condition, status)
+turns                (id, session_id, sequence, role, text, created_at)
+knowledge_states     (id, session_id, revision, parent_id, confirmed_at)
+claims               (id, state_id, component_id, content, source_turn_id)
+gap_candidates       (id, state_id, component_id, issue_type, claim_ids)
+question_events      (id, session_id, opportunity, policy, target_id, strategy)
+transfer_attempts    (id, session_id, blueprint_version, score)
+fidelity_events      (id, session_id, type, severity, evidence)
 ```
 
-Danh tính thật và pseudonym mapping nằm ngoài research export.
+Danh tính thật và participant ID phải nằm ở hai nơi khác nhau. Research export chỉ
+dùng pseudonym.
 
-## 6. API tối thiểu
+## API tối thiểu
 
 ```text
-POST /api/v1/checkpoints
+POST /api/v1/lab-completions
+POST /api/v1/sessions
 GET  /api/v1/sessions/{id}
-POST /api/v1/sessions/{id}/teaching-inputs
+POST /api/v1/sessions/{id}/turns
 POST /api/v1/sessions/{id}/knowledge-state/extract
 POST /api/v1/sessions/{id}/knowledge-state/confirm
-POST /api/v1/sessions/{id}/enactments
-POST /api/v1/sessions/{id}/repairs
+POST /api/v1/sessions/{id}/gaps/detect
+POST /api/v1/sessions/{id}/questions/select
+POST /api/v1/sessions/{id}/complete
 POST /api/v1/transfers/{id}/submissions
-
-POST /api/v1/authoring/specs/validate
-POST /api/v1/authoring/specs
-POST /api/v1/authoring/specs/{id}/freeze
-POST /api/v1/authoring/scenarios/validate
-GET  /api/v1/operations/fidelity
 GET  /api/v1/research/export
 ```
 
-## 7. Vertical slices
+Internal orchestration có thể gộp extract, detect và select trong một request từ UI. Các
+event vẫn phải tách để audit được pipeline.
 
-Không chốt domain theo tài liệu. Team chọn spec đầu dựa trên fixture, reviewer và
-runner sẵn có. Beta phải có ít nhất ba họ task khác nhau:
+## Acceptance criteria
 
-| Slice | Điều cần chứng minh |
-| --- | --- |
-| Structured code/tool task | Runner chấm hành vi executable hoặc tool sequence |
-| Evaluation/decision task | Runner chấm evidence, metric và trade-off |
-| Diagnosis/safety/design task | Runner chấm reasoning chain có ground truth |
+Alpha hoàn thành khi:
 
-## 8. Acceptance criteria
+- một session chạy từ `lab_completed` đến transfer;
+- learner sửa được extracted claim trước khi hệ thống hỏi tiếp;
+- mọi câu hỏi map được về một gap và ít nhất một component;
+- prompt-injection test không làm agent đưa đáp án hoặc đổi vai;
+- cùng một session có thể dựng lại từ event log và version references;
+- research export không chứa direct identifier.
 
-### Alpha
+Technical evaluation phải đạt threshold được protocol định trước. Không đặt con
+số threshold theo cảm tính trong PRD; team sẽ freeze nó sau vòng expert annotation đầu
+tiên.
 
-- Một session chạy được từ checkpoint đến repair.
-- 100% evaluated action có claim provenance hoặc bị đánh dấu unsupported.
-- Runner result tái lập trên cùng input/spec version.
-- Learner có thể sửa extraction trước enactment.
-- Không có answer/ground-truth field trong apprentice context.
+## Milestones
 
-### Beta
+1. Freeze objective, teaching map và annotation guide.
+2. Xây session, turn storage và knowledge-state confirmation.
+3. Thêm gap detector và question-selection record.
+4. Implement fixed và state-aware policy trên cùng question schedule.
+5. Chạy adversarial/fidelity suite và expert evaluation.
+6. Chạy usability pilot, sửa flow rồi freeze comparative protocol.
 
-- Ba spec khác họ task chạy trên cùng engine và UI primitives.
-- Spec validator bắt được invalid mapping và transfer overlap.
-- Fidelity suite bao phủ leakage, unsupported action, persona drift và injection.
-- Export tái dựng được toàn bộ session từ versioned event.
+### Changes
 
-## 9. Milestones
-
-1. Foundation: spec schema, validator, storage và event model.
-2. Session core: teaching UI/API, extraction và confirmation.
-3. Verified enactment: structured output, runner và repair.
-4. Generalization: thêm hai schema family và author preview.
-5. Assessment: independent transfer và blind export.
-6. Pilot: usability/fidelity, rồi mới comparison research.
+| Pass | What changed | Examples |
+|-|-|-|
+| Structure | Thu gọn PRD | Một phiên post-lab rồi transfer |
+| Inflation | Bỏ scope đa domain ở alpha | Text, một objective, hai policy |
+| Vocabulary | Thay runner bằng question pipeline | Gap detection và question selection |
+| Hedging/Filler | Gắn quyết định với gate | Freeze sau expert annotation |

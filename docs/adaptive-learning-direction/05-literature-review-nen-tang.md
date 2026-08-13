@@ -1,146 +1,112 @@
-# Literature synthesis và quyết định cho Mentee product-first
+# Literature synthesis cho hướng state-aware questioning
 
-Corpus chi tiết nằm trong `06-evidence-matrix.csv`. Đây là synthesis phục vụ quyết
-định build, không phải systematic review hoàn chỉnh.
+Corpus chi tiết nằm trong `06-evidence-matrix.csv`. Đây là bản tổng hợp để ra
+quyết định thiết kế, chưa phải systematic review.
 
-## 1. Learning-by-Teaching có cơ sở, nhưng không bảo đảm mọi chatbot đều hiệu quả
+## Learning-by-Teaching cho biết điều gì?
 
-Betty's Brain, protégé effect và meta-analysis của Kobayashi cho thấy chuẩn bị để
-dạy và thực sự dạy có thể hỗ trợ nỗ lực, tổ chức kiến thức và learning outcome.
-Tuy nhiên phần lớn bằng chứng có trước LLM hoặc nằm ngoài lab AI thực chiến.
+Betty's Brain, nghiên cứu về protégé effect và meta-analysis của Kobayashi cho thấy
+việc chuẩn bị để dạy và thực sự dạy có thể làm learner đầu tư nhiều
+effort hơn, tổ chức lại kiến thức và cải thiện một số learning outcome. Phần
+lớn bằng chứng này có trước LLM hoặc nằm ngoài applied-AI labs.
 
-Quyết định:
-
-- Giữ vai learner-as-teacher.
-- Không claim efficacy chỉ từ literature.
-- Đo task transfer của learner trong chính domain mục tiêu.
+Vì vậy Mentee giữ vai learner-as-teacher, nhưng không lấy literature làm bằng chứng
+rằng prototype hiện tại chắc chắn hiệu quả. Learning outcome vẫn phải được đo
+bằng task của learner.
 
 Nguồn chính: Biswas et al. (2005), Chase et al. (2009), Kobayashi (2019).
 
-## 2. AI apprentice cần knowledge boundary có thể kiểm tra
+## AlgoBo/TeachYou là nền tảng gần nhất
 
-TeachYou/AlgoBo dùng knowledge state ngoài model với pipeline Reflect–Respond.
-Technical evaluation cho thấy hành vi agent thay đổi theo seed state, nhưng paper
-cũng báo variance, prompt sensitivity, repetitive questions và xu hướng ưu tiên
-kiến thức đúng phổ biến hơn misconception learner vừa dạy.
+Jin et al. dùng pipeline Reflect–Respond để lưu knowledge state ngoài model. AlgoBo luân
+phiên giữa help-receiver và questioner mode; ở questioner mode, agent hỏi `why` hoặc `how`
+để kéo learner sang knowledge-building.
 
-Quyết định:
+Paper cho thấy condition TeachYou có knowledge-building density cao hơn trong problem-solving
+phase (`d = 0.71`). Con số này không phải learning gain. Condition cũng thay đổi cả
+Mode-shifting và Teaching Helper, nên không thể quy toàn bộ khác biệt cho question
+policy.
 
-- State lưu ngoài model.
-- Learner xác nhận claims trước enactment.
-- Mỗi action dẫn claim nguồn.
-- Có fidelity regression; prompt instruction một mình không đủ.
+Mentee kế thừa external knowledge state, apprentice persona và active questioning. Study mới
+tách riêng cách chọn follow-up question, giữ các scaffold khác giống nhau.
 
-Nguồn chính: Jin et al. (CHI 2024).
+Paper cũng chỉ ra một vấn đề kỹ thuật đáng chú ý: LLM đôi khi ưu tiên kiến
+thức đúng phổ biến hơn misconception vừa được learner dạy. Prompt alone chưa
+đủ. Vì vậy state update và response đều cần provenance, fidelity test và expert
+evaluation.
 
-## 3. `why/how` hỗ trợ knowledge-building, không phải bằng chứng learning gain
+## Knowledge-building là process outcome
 
-TeachYou thấy condition có Mode-shifting và Teaching Helper tạo knowledge-building
-density cao hơn (`d = 0.71`). Hai component thay đổi cùng lúc và study không đo
-pre/post learning gain trực tiếp.
+Roscoe và Chi phân biệt knowledge-telling với knowledge-building. Nhắc lại định nghĩa
+hoặc thủ tục thuộc knowledge-telling; giải thích cơ chế, tạo kết nối, tự sửa
+và suy ra hệ quả thuộc knowledge-building.
 
-Quyết định:
+Câu hỏi `why/how` là một cách hợp lý để khơi gợi các hành vi này. Nhưng
+transcript dài hơn hoặc nhiều câu hỏi hơn chưa chứng minh learner đã học. Pilot có
+thể dùng knowledge-building rate làm primary process outcome và đo transfer riêng.
 
-- Apprentice chỉ hỏi câu làm rõ bám claim/schema field thiếu.
-- Không ép tần suất cố định cho mọi task.
-- Không dùng số câu hỏi hoặc số lượt chat làm outcome.
+## Câu hỏi thích nghi là khoảng trống hợp lý
 
-## 4. Recursive feedback là cơ sở trực tiếp cho verified enactment
+AlgoBo dùng chu kỳ hỏi sau mỗi ba learner messages, một heuristic rút ra từ pilot.
+Hướng đó cho biết khi nào chuyển mode, nhưng chưa giải quyết đầy đủ câu
+hỏi: trong nhiều phần đang thiếu, AI nên hỏi phần nào và dùng clarification,
+elaboration, connection hay edge case?
 
-Okita và Schwartz định nghĩa recursive feedback là việc tutor quan sát pupil dùng
-điều đã được dạy. Trong các thí nghiệm của họ, recursive feedback hỗ trợ transfer
-tốt hơn các control thiếu cơ chế này.
+Khoảng trống team theo đuổi là:
 
-Quyết định:
+> Chưa rõ việc chọn follow-up question từ external knowledge state có tạo ra nhiều
+> knowledge-building hơn một policy đi theo lesson path cố định, khi model, persona,
+> question budget và các scaffold khác được giữ nguyên.
 
-- AI phải thực hiện hành vi quan sát được, không chỉ nhắc lại lời learner.
-- Runner evidence phải cho learner thấy hậu quả của lời dạy.
-- Comparator research phù hợp là reflective teach-back không có verified
-  enactment–repair.
+Đây là extension của AlgoBo, không phải tuyên bố phát minh teachable agent, knowledge
+state hoặc active questioning.
 
-Nguồn chính: Okita & Schwartz (2013).
+## Những paper khác giúp khóa thiết kế
 
-## 5. Applied programming cần nhắm một cognitive skill đủ hẹp
+HypoCompass cho thấy một activity lập trình nên nhắm đúng một cognitive skill, như
+việc tạo giả thuyết lỗi, thay vì “debugging nói chung”. Mentee vì thế chọn
+một objective hẹp và viết teaching map theo workflow thực tế của task.
 
-HypoCompass không dạy “debugging nói chung”. Nó tập trung vào comprehensive và
-accurate hypothesis construction, dùng cognitive debugging model, test cases và
-immediate feedback. Các subtask không thuộc objective được giao cho agent. Study
-19 người có pre/post improvement nhưng không có control group, nên chỉ hỗ trợ
-feasibility chứ chưa kết luận nhân quả.
+Các thí nghiệm recursive feedback của Okita và Schwartz cho thấy tutor có thể học từ
+việc quan sát pupil áp dụng điều đã được dạy. Cơ chế này vẫn đáng nghiên
+cứu, nhưng nó khác với question selection. Đưa cả enactment và adaptive questioning vào
+cùng study sẽ khiến intervention khó diễn giải.
 
-Quyết định:
+MatlabTutee và các LLM teachable-agent gần đây cho thấy khả năng triển khai trong lớp
+CS. Novelty của Mentee vì thế không thể chỉ là “dùng LLM làm học trò”.
 
-- Mỗi session chỉ nhắm một objective hẹp.
-- Teaching Schema phải xuất phát từ cognitive workflow của task.
-- Runner và transfer phải align đúng objective.
-- Offload phần không thuộc objective khi việc đó giảm extraneous load.
+Các phân tích interaction log cũng nhắc lại một điểm: constructive interaction có
+liên hệ với improvement, nhưng correlation không phải causal effect. Số lượt chat,
+word count và satisfaction chỉ là process hoặc UX metrics.
 
-Nguồn chính: Ma et al. (AIED 2024).
+## Claims literature chưa hỗ trợ
 
-## 6. LLM tutee trong lớp CS khả thi nhưng không còn là novelty
+- AI hỏi nhiều hơn chắc chắn làm learner học tốt hơn.
+- Knowledge-building density tự động chuyển thành learning gain.
+- LLM-generated knowledge state là ground truth về hiểu biết của learner.
+- Một question taxonomy phù hợp với mọi domain.
+- AI pass một task nghĩa là learner đã mastery.
+- Pilot nhỏ ở một lab có thể khái quát cho toàn bộ chương trình.
 
-MatlabTutee được phát triển và triển khai qua nhiều thí nghiệm trong lớp CS đại
-học. Vì vậy Mentee không tuyên bố là LLM teachable agent đầu tiên. Khác biệt cần
-kiểm tra nằm ở artifact grounding, structured enactment, verification và repair.
+## Contribution có thể bảo vệ
 
-Nguồn chính: Rogers et al. (CHI 2025).
+Nếu technical evaluation và pilot đạt yêu cầu, contribution nên được mô tả ở
+mức:
 
-## 7. Chất lượng interaction quan trọng hơn engagement thô
+1. Một pipeline external knowledge state cho teach-back tiếng Việt sau lab.
+2. Một state-aware policy chọn question target và strategy có provenance.
+3. Fidelity data về extraction, gap detection, grounding và answer leakage.
+4. Ước lượng ban đầu về tác động của policy lên knowledge-building; transfer là
+   exploratory cho đến khi study được power đầy đủ.
 
-Các nghiên cứu về conversational/teachable agents cho thấy satisfaction, độ dài
-hội thoại hoặc cảm giác hữu ích không ổn định với learning gain. Phân tích log cho
-thấy constructive interaction liên quan tới improvement, nhưng quan sát tương quan
-không chứng minh nhân quả.
+Trước manuscript, team vẫn cần systematic search có protocol, double screening, citation
+chaining và risk-of-bias assessment.
 
-Quyết định:
+### Changes
 
-- Process metrics dùng để giải thích cơ chế và debug sản phẩm.
-- Independent transfer là learning outcome chính.
-- Tránh quiz dễ gây ceiling effect.
-
-Nguồn chính: Love et al. (2025), Liu et al. (2025), Shahriar et al. (2026),
-Arun et al. (2025 preprint).
-
-## 8. Scaffold phải có nhưng nên fade
-
-Người học có thể không biết “dạy như thế nào”; free-form hoàn toàn gây blank-page
-problem. Nhưng một sentence frame chung như `Khi–thì–vì` không phản ánh đầy đủ
-debugging, evaluation, safety hoặc system design.
-
-Quyết định:
-
-- Dùng schema family theo task.
-- Guidance/examples thuộc author spec.
-- Có thể giảm guidance theo proficiency về sau.
-- Chưa claim adaptive fading trước khi learner model được validate.
-
-## 9. Những gì literature chưa hỗ trợ
-
-- Không có bằng chứng để coi AI pass là mastery.
-- Không có cơ sở dùng một learner-state machine chung cho mọi skill AI thực chiến.
-- Chưa có bằng chứng rằng scheduler xuyên track tạo learning gain trong thiết kế này.
-- Chưa có paper xác nhận schema `Khi–thì–vì` cho mọi applied-AI task.
-- Chưa có bằng chứng nhân quả trực tiếp cho tổ hợp artifact-grounded knowledge
-  state + verified enactment + repair trong nhiều lab AI thực chiến.
-
-## 10. Research gap và contribution an toàn
-
-> Mentee đóng góp một engine spec-driven cho nhiều applied-AI labs, trong đó LLM
-> apprentice enact confirmed learner reasoning trên task biến thể có verification;
-> research đánh giá fidelity, usability và liệu repair từ verified recursive
-> feedback có cải thiện independent transfer so với reflective teach-back.
-
-Đây là extension và kiểm tra cơ chế. Không tuyên bố phát minh Learning-by-Teaching,
-teachable agent, knowledge state hoặc automated testing.
-
-## 11. Nguồn cần đọc trước khi freeze study
-
-1. Jin et al. 2024 — TeachYou/AlgoBo.
-2. Okita & Schwartz 2013 — recursive feedback.
-3. Ma et al. 2024 — HypoCompass.
-4. Rogers et al. 2025 — MatlabTutee.
-5. Kobayashi 2019 — meta-analysis Learning-by-Teaching.
-6. Roscoe & Chi 2007 — knowledge-telling vs knowledge-building.
-
-Trước manuscript cần systematic search có protocol, double screening, citation
-chaining và risk-of-bias assessment; evidence matrix hiện tại chỉ là rapid review.
+| Pass | What changed | Examples |
+|-|-|-|
+| Structure | Bám theo quyết định nghiên cứu | AlgoBo → gap → contribution |
+| Inflation | Hạ claim về đúng mức evidence | `d = 0.71` là process outcome |
+| Vocabulary | Bỏ câu chữ quảng bá | Dùng “extension của AlgoBo” |
+| Rhythm/Style | Nối evidence với quyết định | Tách enactment khỏi study |

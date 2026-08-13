@@ -1,141 +1,199 @@
-# Protocol pilot: AI học trò hỏi ngược khi học thuật toán
+# Protocol draft: state-aware follow-up questions trong post-lab teach-back
 
-Phiên bản: 0.1 — phải đóng băng và preregister trước khi thu dữ liệu chính.
+Phiên bản: 0.2 Trạng thái: design draft, chưa được preregister
 
-## 1. Mục tiêu
+Protocol chỉ được freeze sau khi team chọn một cặp objective tương đương, có
+domain reviewer, lesson material và transfer item đã pilot. Không thu dữ liệu chính từ
+bản draft này.
 
-Ước lượng tác động của việc AI học trò chủ động hỏi làm rõ, hỏi lý do và đưa edge case lên độ sâu
-lời giải thích của sinh viên khi dạy thuật toán bằng tiếng Việt.
+## Mục tiêu
 
-Đây là feasibility/exploratory pilot. Cỡ mẫu 20–40 không được dùng để tuyên bố hiệu quả giáo dục
-tổng quát hoặc thay thế một confirmatory study đã được power analysis.
+Study ước lượng tác động của cách chọn follow-up question trong một phiên learner
+dạy AI apprentice bằng tiếng Việt. Cả hai condition đều dùng external knowledge state
+và đều hỏi cùng số lần. Một condition đi theo policy cố định; condition còn
+lại chọn câu hỏi từ reasoning gap trong state hiện tại.
 
-## 2. Câu hỏi và giả thuyết
+Đây là feasibility pilot. Mẫu 20–40 người không đủ để tuyên bố hiệu quả
+giáo dục tổng quát.
 
-- RQ1: Active tutee có làm tăng tỷ lệ knowledge-building utterances so với passive tutee không?
-- RQ2: Active tutee có tạo learning gain lớn hơn không?
-- RQ3: Active tutee ảnh hưởng thế nào đến effort, cognitive load và trải nghiệm?
-- RQ4: Agent giữ vai học trò tốt đến đâu ở mỗi điều kiện?
+## Research questions
 
-Giả thuyết chính H1: tỷ lệ knowledge-building utterances trong active condition cao hơn passive
-condition. RQ2–RQ4 là exploratory; không điều chỉnh câu chuyện nghiên cứu sau khi xem kết quả.
+- RQ1: State updater và gap detector khớp với expert annotation đến đâu?
+- RQ2: State-aware policy tạo câu hỏi grounded và relevant hơn fixed policy không?
+- RQ3: State-aware policy có làm tăng knowledge-building rate không?
+- RQ4: Hai policy ảnh hưởng thế nào đến mental effort, frustration và trải nghiệm?
+- RQ5: Independent transfer có khác nhau không? RQ này là exploratory trong pilot.
 
-## 3. Thiết kế
+Giả thuyết chính của user study:
 
-Within-subject, hai phiên, counterbalanced theo topic, condition và order.
+> Knowledge-building rate trong state-aware condition cao hơn fixed condition.
+
+RQ1–RQ2 thuộc technical evaluation và phải hoàn thành trước recruitment.
+
+## Thiết kế
+
+Within-subject, hai phiên, counterbalanced theo objective, condition và order. Hai objective
+phải cùng độ khó dự kiến nhưng không dùng chung đáp án hoặc surface context.
 
 | Sequence | Phiên 1 | Phiên 2 |
-|---|---|---|
-| S1 | Binary Search — Active | Selection Sort — Passive |
-| S2 | Binary Search — Passive | Selection Sort — Active |
-| S3 | Selection Sort — Active | Binary Search — Passive |
-| S4 | Selection Sort — Passive | Binary Search — Active |
+| --- | --- | --- |
+| S1 | Objective A, State-aware | Objective B, Fixed |
+| S2 | Objective A, Fixed | Objective B, State-aware |
+| S3 | Objective B, State-aware | Objective A, Fixed |
+| S4 | Objective B, Fixed | Objective A, State-aware |
 
-Phân sequence theo vòng lặp S1–S4 sau khi xáo trộn danh sách participant ID. Mỗi sequence lệch
-không quá một người. Người chấm transcript không được biết condition.
+Team phân sequence theo vòng lặp S1–S4 sau khi xáo trộn participant ID. Mỗi sequence
+lệch không quá một người. Transcript rater không biết condition.
 
-## 4. Người tham gia
+Nếu course chỉ cung cấp một objective đủ tốt, team phải chuyển sang thiết kế
+between-subject và làm power analysis lại. Không dùng hai biến thể quá giống nhau trong
+within-subject vì learner có thể mang lời giải từ phiên đầu sang phiên sau.
 
-### Inclusion
+## Người tham gia
 
-- Từ 18 tuổi và đồng ý tham gia.
-- Sinh viên đã học biến, điều kiện và vòng lặp.
-- Đọc và viết tiếng Việt đủ để giải thích thuật toán.
-- Chưa tự đánh giá là thành thạo cả Binary Search và Selection Sort.
+Inclusion:
 
-### Exclusion và attrition
+- từ 18 tuổi và có consent;
+- đã hoàn thành lab hoặc prerequisite tương ứng;
+- chưa đạt ceiling ở screening cho cả hai objective;
+- có thể giải thích task bằng tiếng Việt.
 
-- Không hoàn thành cả hai phiên: không vào paired primary analysis nhưng vẫn báo cáo attrition.
-- Transcript mất trên 25% lượt vì lỗi kỹ thuật: không vào transcript analysis.
-- Không loại người chỉ vì điểm thấp, giải thích sai hoặc không thích AI.
-- Mọi exclusion phải ghi lý do trước khi mở condition trong dữ liệu chấm.
+Exclusion được viết trước khi mở condition label:
 
-## 5. Intervention
+- không hoàn thành cả hai phiên không vào paired primary analysis;
+- transcript mất trên 25% learner turns không vào transcript analysis;
+- lỗi pipeline làm sai condition hoặc question budget được báo là fidelity failure;
+- không loại người chỉ vì điểm thấp, giải thích sai hoặc không thích AI.
 
-Cả hai condition có cùng persona, giao diện, thời gian, lesson path và knowledge-state format.
+## Intervention
 
-### Passive tutee
+Cả hai condition dùng cùng:
 
-- Chỉ phản ánh điều đã nghe và yêu cầu người học tiếp tục.
-- Có thể hỏi định nghĩa khi đầu vào không thể diễn giải.
-- Không chủ động hỏi `why/how`, edge case hoặc phản ví dụ.
+- model snapshot và sampling configuration;
+- apprentice persona và response length;
+- lesson material, teaching map và knowledge-state format;
+- UI, timebox và ba question opportunities;
+- claim confirmation flow;
+- transfer assessment và survey.
 
-### Active tutee
+### Fixed policy
 
-- Phản ánh điều đã nghe như passive condition.
-- Sau mỗi 2–3 lượt, chọn đúng một chiến lược: clarification, elaboration, connection hoặc edge case.
-- Câu hỏi phải trỏ tới một claim cụ thể trong lượt hiện tại hoặc knowledge state.
-- Không đưa đáp án, pseudocode hoàn chỉnh hoặc tự sửa lời giảng.
+Ở mỗi question opportunity, backend chọn component tiếp theo trong lesson path và strategy
+order đã freeze. Câu hỏi vẫn phải bám vào learner turn hoặc claim liên quan, nhưng
+policy không dùng candidate-gap ranking để chọn target.
 
-## 6. Procedure
+### State-aware policy
 
-1. Consent, demographic tối thiểu và participant ID giả danh: 5 phút.
-2. Pre-test cho cả hai topic: 10 phút.
-3. Đọc learning sheet của topic phiên 1: 8 phút.
-4. Dạy AI: 12 phút hoặc tối thiểu 6 tutor turns.
-5. Post-test topic phiên 1 và survey condition: 8 phút.
+Ở cùng question opportunity, gap detector tạo candidate target từ confirmed state. Selector
+chọn target theo priority và map issue type sang clarification, elaboration, connection hoặc
+edge case. Apprentice Responder diễn đạt đúng một câu hỏi, không được tự chọn
+lại target.
+
+Nếu state-aware condition không có target hợp lệ, AI phản ánh ngắn gọn thay vì bịa
+một gap. Sự kiện đó vẫn được ghi và đưa vào fidelity analysis. Primary analysis
+cần báo cả intention-to-treat theo assigned condition và số opportunity thực sự tạo
+câu hỏi.
+
+## Procedure
+
+1. Consent, screening và participant ID giả danh: 5–8 phút.
+2. Pre-test cho hai objective: 10–15 phút.
+3. Đọc learning material của phiên 1: 8 phút.
+4. Dạy AI trong 12 phút, với question opportunities viết trước.
+5. Immediate transfer và post-condition survey: 8–10 phút.
 6. Nghỉ 3 phút.
-7. Lặp lại bước 3–5 cho topic và condition còn lại.
-8. Survey so sánh và phỏng vấn ngắn: 5–10 phút.
+7. Lặp lại bước 3–5 cho objective và condition còn lại.
+8. Survey so sánh và interview ngắn: 5–10 phút.
 
-Tổng thời gian dự kiến: 60–70 phút/người.
+Tổng thời gian dự kiến 60–75 phút. Timing cuối cùng được chốt sau usability
+pilot.
 
-## 7. Outcomes
+## Outcomes
 
-### Primary
+Primary:
 
-`knowledge_building_rate = số tutor utterances thuộc elaboration hoặc sense-making / tổng tutor
-utterances có nội dung học thuật`.
+```text
+knowledge_building_rate
+= số learner utterances KB-ELABORATION hoặc KB-SENSEMAKING
+  / tổng learner utterances có nội dung học thuật
+```
 
-Hai người chấm độc lập toàn bộ transcript sau khi xóa nhãn condition và lời AI nếu cần thiết để
-giảm nhận diện điều kiện. Báo cáo Krippendorff's alpha; không chỉ báo cáo phần trăm đồng thuận.
+Rater chấm transcript độc lập sau khi ẩn condition và participant identity. Báo
+Krippendorff's alpha cùng raw disagreement; không chỉ báo phần trăm đồng thuận.
 
-### Secondary
+Secondary và exploratory:
 
-- Gain score theo topic: post-test trừ pre-test.
-- Near-transfer correctness và explanation score.
-- Số từ/tutor turn và số tutor turns, chỉ là engagement proxy.
-- Mental effort một câu 1–9 sau mỗi phiên.
-- Perceived learning, frustration và willingness to reuse, mỗi mục 1–7.
+- knowledge-building ở lượt ngay sau question opportunity;
+- immediate independent-transfer score;
+- explanation quality;
+- mental effort 1–9;
+- perceived grounding, frustration và willingness to reuse;
+- claim edit rate và question response rate.
 
-### Fidelity
+Fidelity:
 
-- Answer leakage: AI đưa trực tiếp lời giải chưa được người học dạy.
-- Persona drift: AI chuyển sang vai giáo viên/chuyên gia.
-- Ungrounded question: câu hỏi không gắn với claim hoặc topic đang dạy.
-- Repetition: lặp lại cùng ý hỏi mà không dùng câu trả lời mới.
+- state overreach;
+- ungrounded question;
+- target mismatch;
+- answer leakage;
+- persona drift;
+- repetition;
+- condition hoặc question-budget violation.
 
-## 8. Analysis plan
+Số lượt chat, word count và AI satisfaction không phải learning outcome.
 
-1. Tính participant-level difference `Active - Passive` cho primary outcome.
-2. Báo cáo median, IQR, mean, SD, paired effect size và bootstrap 95% CI.
-3. Dùng exact paired permutation test làm kiểm định chính vì mẫu nhỏ và tỷ lệ bị chặn 0–1.
-4. Phân tích gain score tương tự nhưng ghi rõ exploratory.
-5. Mô tả kết quả riêng theo topic và order để phát hiện topic/carryover imbalance.
-6. Không đổi outcome, exclusion hoặc hướng kiểm định sau khi xem condition results.
-7. Không diễn giải `p > .05` thành “hai điều kiện tương đương”.
+## Analysis plan
 
-Sau pilot, dùng variance, within-person correlation, attrition và fidelity thu được để power
-analysis cho confirmatory study. Không lấy effect size quan sát đơn lẻ làm ước lượng chắc chắn;
-dùng sensitivity range và hiệu ứng tối thiểu có ý nghĩa giáo dục.
+1. Tính participant-level difference `State-aware - Fixed` cho primary outcome.
+2. Báo median, IQR, mean, SD, paired effect size và bootstrap 95% CI.
+3. Dùng exact paired permutation test làm kiểm định chính nếu mẫu nhỏ.
+4. Phân tích immediate post-question knowledge-building theo preregistered window.
+5. Phân tích transfer tương tự nhưng ghi rõ exploratory.
+6. Báo riêng theo objective và order để kiểm tra carryover hoặc imbalance.
+7. Không đổi outcome, exclusion hoặc hướng kiểm định sau khi xem condition result.
+8. Không diễn giải `p > .05` thành hai condition tương đương.
 
-## 9. Data management và ethics
+Pilot cung cấp variance, within-person correlation, attrition và fidelity để power analysis
+cho confirmatory study. Effect size quan sát từ mẫu nhỏ không được dùng như một
+ước lượng chắc chắn.
 
-- Xin phê duyệt ethics/IRB của đơn vị trước recruitment.
-- Consent nêu rõ nghiên cứu dùng AI, dữ liệu chat được lưu và quyền rút lui.
-- Participant ID không chứa mã sinh viên; bảng liên kết danh tính lưu riêng nếu thật sự cần.
-- Không thu tên, email, số điện thoại hoặc API key trong transcript.
-- Mã hóa storage, giới hạn người truy cập và đặt ngày xóa dữ liệu trước recruitment.
-- Không dùng kết quả ảnh hưởng điểm học phần.
-- Công bố model/provider/version, system prompt, temperature và thời điểm chạy.
+## Technical gate trước recruitment
 
-## 10. Stop/go gate
+- Hai experts hoàn tất annotation guide và development set.
+- Agreement đạt threshold đã viết trước cho claim, gap và question target.
+- State updater không thêm claim ngoài source span quá threshold.
+- Grounded-question rate và answer-leakage rate đạt gate preregistered.
+- 10/10 dry-run sessions export đủ event và không chứa direct identifier.
+- Pre/transfer items được ít nhất hai domain reviewers rà content validity.
+- Có ethics/IRB approval hoặc xác nhận tương đương của đơn vị.
 
-Chỉ chuyển từ usability pilot sang thu dữ liệu khi:
+Các threshold số học được chọn sau annotation round thử và trước evaluation set;
+không chọn sau khi nhìn model result trên test set.
 
-- 10/10 phiên thử export transcript hợp lệ.
-- Không có PII trong JSON export mặc định.
-- Answer leakage dưới 10% agent turns trong test script cố định.
-- Hai rater đạt alpha từ 0.67 ở vòng luyện tập và giải quyết được bất đồng rubric.
-- Pre/post-test được ít nhất hai giảng viên rà soát content validity.
-- Có phê duyệt ethics hoặc văn bản xác nhận không cần review theo quy định của đơn vị.
+## Data management
+
+Consent nêu rõ transcript, extracted state, model output và survey nào được lưu.
+Participant ID không chứa mã sinh viên. Identity mapping, nếu cần, nằm ở storage
+riêng. Không thu API key, clipboard, raw repository hoặc direct identifier trong research
+export.
+
+Model/provider/version, prompt, policy, temperature và ngày chạy được công bố cùng
+study. Kết quả không ảnh hưởng điểm học phần.
+
+## Việc phải chốt trước preregistration
+
+1. Objective A/B và bằng chứng chúng có độ khó phù hợp.
+2. Question opportunities cụ thể theo số learner turns hay thời gian.
+3. Annotation window cho immediate post-question outcome.
+4. Fidelity thresholds và quy tắc xử lý failed session.
+5. Sample size từ power/sensitivity analysis.
+6. Retention, deletion và access policy theo quy trình VinUni.
+
+### Changes
+
+| Pass | What changed | Examples |
+|-|-|-|
+| Structure | Đặt technical evaluation trước user study | RQ1–RQ2 là gate |
+| Vocabulary | Thay active/passive bằng policy contrast rõ | Fixed vs state-aware |
+| Inflation | Giới hạn claim của pilot | Transfer ghi là exploratory |
+| Rhythm/Style | Cắt các câu thủ tục dài | Một quyết định cho mỗi đoạn |

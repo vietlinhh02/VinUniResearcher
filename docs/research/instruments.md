@@ -1,106 +1,137 @@
-# Instruments cho pilot
+# Instruments cho pilot state-aware questioning
 
-Các câu hỏi dưới đây là bản nháp. Cần hai giảng viên thuật toán rà soát, pilot độ khó và kiểm tra
-ceiling/floor effect trước khi dùng.
+Đây là bộ khung. Domain reviewer phải thay ví dụ bằng objective thật, viết hai form
+tương đương và pilot ceiling/floor trước khi thu dữ liệu chính.
 
-## 1. Screening tối thiểu
+## Screening
 
-- Bạn đã học lập trình trong bao lâu?
-- Bạn tự đánh giá mức hiểu Binary Search từ 1–5?
-- Bạn tự đánh giá mức hiểu Selection Sort từ 1–5?
-- Bạn có đồng ý để lưu transcript đã giả danh cho mục đích nghiên cứu không?
+- Learner đã hoàn thành prerequisite hoặc lab nào?
+- Learner tự đánh giá mức hiểu từng objective từ 1–5?
+- Learner có từng làm task tương đương trong sáu tháng gần đây không?
+- Learner có consent cho transcript, extracted state và model output không?
 
-Không thu tên, email hoặc mã sinh viên trong cùng dataset với transcript.
+Không lưu tên, email hoặc mã sinh viên trong cùng dataset với transcript.
 
-## 2. Blueprint pre/post-test
+## Pre-test và transfer blueprint
 
-Mỗi topic cần hai form tương đương, đổi form theo thứ tự. Không lặp nguyên câu giữa pre và post.
+Mỗi objective có hai form tương đương. Không lặp nguyên item hoặc private rubric
+giữa pre-test, teaching session và transfer.
 
-| Construct | Số câu | Dạng | Điểm |
-|---|---:|---|---:|
-| Preconditions/invariant | 1 | giải thích ngắn | 0–2 |
-| Trace execution | 1 | bảng trạng thái | 0–2 |
-| Boundary/edge case | 1 | dự đoán và giải thích | 0–2 |
-| Complexity | 1 | chọn + giải thích | 0–2 |
-| Near transfer | 1 | sửa thuật toán/pseudocode | 0–3 |
+| Construct | Dạng item | Điểm gợi ý |
+| --- | --- | ---: |
+| Problem framing | Xác định signal, constraint hoặc failure | 0–2 |
+| Mechanism/justification | Giải thích vì sao một bước hoạt động | 0–2 |
+| Evidence use | Nối observation với conclusion | 0–2 |
+| Boundary/edge case | Dự đoán và giải thích trường hợp biên | 0–2 |
+| Near transfer | Áp dụng reasoning vào context mới | 0–3 |
 
-Ví dụ Binary Search, không dùng đồng thời ở pre và post:
+Chỉ giữ dimension liên quan objective. Không cộng điểm cho kiến thức ngoài phạm vi
+chỉ vì câu trả lời dài.
 
-- Vì sao dữ liệu phải được sắp xếp? Trả lời phải nối tính có thứ tự với việc loại bỏ một nửa.
-- Với mảng rỗng hoặc một phần tử, điều kiện dừng nào tránh truy cập sai?
-- Khi `a[mid] < target`, tại sao có thể bỏ nửa trái?
-- Viết invariant của đoạn tìm kiếm còn lại.
+## Knowledge-state annotation
 
-Ví dụ Selection Sort:
+Expert annotation unit là một learner turn. Mỗi claim gồm:
 
-- Sau vòng lặp ngoài thứ `i`, phần nào của mảng đã có tính chất gì?
-- Vì sao chỉ cần một lần swap ở cuối mỗi vòng ngoài?
-- Thuật toán thay đổi thế nào với mảng rỗng, một phần tử hoặc nhiều phần tử bằng nhau?
-- So sánh số phép so sánh trong best và worst case.
+- source span;
+- normalized content;
+- teaching component;
+- relation với claim trước nếu có;
+- trạng thái `new`, `revision`, `confirmation` hoặc `retraction`.
 
-## 3. Transcript coding rubric
+Gap annotation gồm issue type, component, claim IDs và question target được khuyến nghị.
+Experts không cần viết đúng một câu hỏi giống nhau; target và strategy mới là
+đơn vị so sánh chính.
 
-Đơn vị chấm là một tutor utterance có nội dung học thuật. Một utterance chỉ nhận một nhãn cao nhất.
+## Transcript coding rubric
 
-| Nhãn | Định nghĩa hành vi | Ví dụ rút gọn |
-|---|---|---|
-| KT-COMPREHENSION | Nhắc lại định nghĩa hoặc bước đã học | “Binary Search lấy phần tử giữa.” |
-| KT-HINT | Bảo AI sửa/thử một bước nhưng không giải thích | “Giờ tăng low lên.” |
-| KB-ELABORATION | Thêm lý do, ví dụ hoặc điều kiện | “Tăng low vì mọi vị trí bên trái đều nhỏ hơn target.” |
-| KB-SENSEMAKING | Tự sửa lỗi, tạo kết nối hoặc suy ra hệ quả | “Nếu dùng low = mid thì có thể lặp vô hạn, nên phải mid + 1.” |
-| OFF-TASK | Không liên quan nội dung học | “Hôm nay mệt quá.” |
+Một learner utterance có nội dung học thuật nhận một nhãn cao nhất.
 
-Quy tắc ưu tiên: nếu một utterance vừa nhắc lại vừa có suy luận mới, chọn KB-SENSEMAKING; nếu có
-lý do mới nhưng không tự sửa/kết nối, chọn KB-ELABORATION.
+| Nhãn | Định nghĩa | Ví dụ rút gọn |
+| --- | --- | --- |
+| `KT-COMPREHENSION` | Nhắc lại kiến thức | “Bước này lấy phần tử giữa.” |
+| `KT-HINT` | Ra lệnh, không giải thích | “Giờ tăng biến low.” |
+| `KB-ELABORATION` | Thêm lý do hoặc ví dụ | “Bên trái đã bị loại.” |
+| `KB-SENSEMAKING` | Tự sửa hoặc suy ra | “Giữ mid có thể gây lặp.” |
+| `OFF-TASK` | Không liên quan objective | “Hôm nay mình hơi mệt.” |
 
-Rater training:
+Nếu một utterance vừa nhắc lại vừa có suy luận mới, chọn nhãn knowledge-building
+cao nhất được evidence hỗ trợ. Annotation manual phải có ví dụ khó và negative
+examples, không chỉ có case đẹp.
 
-1. Cùng chấm 20 utterances ngoài dataset chính.
-2. Thảo luận bất đồng và cập nhật manual trước khi đóng băng.
-3. Chấm độc lập transcript đã ẩn condition.
-4. Tính Krippendorff's alpha và giữ nhãn gốc của cả hai rater.
-5. Adjudication tạo nhãn cuối nhưng không thay thế báo cáo reliability.
+Rater procedure:
 
-## 4. Post-condition survey
+1. Hai rater cùng chấm một training set ngoài dữ liệu chính.
+2. Sửa manual trước khi freeze.
+3. Chấm độc lập transcript đã ẩn condition và participant.
+4. Tính Krippendorff's alpha và giữ raw labels.
+5. Adjudication tạo final label nhưng không thay reliability report.
+
+## Question-quality rubric
+
+Mỗi AI question được chấm riêng:
+
+| Dimension | Pass khi |
+| --- | --- |
+| Grounded | Bám selected target và evidence hiện có |
+| Target match | Nội dung hỏi đúng selected gap |
+| Relevant | Gap nằm trong objective và teaching map |
+| Open enough | Learner cần giải thích, không chỉ xác nhận đáp án gợi sẵn |
+| No leakage | Không chứa reference answer hoặc expected value |
+| Apprentice voice | Nghe như học trò cần hiểu, không phải grader |
+
+Rater có thể đánh dấu `repetitive` nếu câu hỏi lặp ý đã được learner trả
+lời.
+
+## Post-condition survey
 
 Thang 1 “hoàn toàn không đồng ý” đến 7 “hoàn toàn đồng ý”:
 
-- Việc giải thích giúp tôi nhận ra phần mình chưa hiểu.
-- Phản hồi của AI bám sát điều tôi vừa giảng.
-- Tôi phải suy nghĩ lại trước khi trả lời AI.
-- AI đã vô tình đưa cho tôi đáp án.
-- Tôi cảm thấy khó chịu vì AI hỏi quá nhiều.
-- Tôi muốn dùng cách học này cho một thuật toán khác.
+- Knowledge state phản ánh đúng điều tôi muốn nói.
+- Câu hỏi của AI bám vào lời giải thích của tôi.
+- Câu hỏi khiến tôi phải giải thích thêm lý do hoặc mối liên hệ.
+- AI đã vô tình cho tôi biết đáp án.
+- AI hỏi lặp hoặc ngắt mạch trình bày của tôi.
+- Tôi muốn dùng hoạt động này sau một lab khác.
 
-Mental effort: “Bạn đã phải đầu tư bao nhiêu nỗ lực tinh thần?” từ 1 rất thấp đến 9 rất cao.
+Mental effort dùng thang 1 rất thấp đến 9 rất cao.
 
-## 5. Interview prompts
+## Interview
 
-- Lúc nào câu hỏi của AI khiến bạn thay đổi cách giải thích?
-- Có lúc nào AI tỏ ra biết nhiều hơn vai học trò không?
-- Câu hỏi nào hữu ích và câu hỏi nào chỉ làm gián đoạn?
-- Bạn cần thêm thông tin hoặc cấu trúc gì để biết nên dạy tiếp phần nào?
+- Câu hỏi nào làm bạn nhận ra mình chưa giải thích rõ?
+- Có câu nào hỏi sai trọng tâm không?
+- Bạn đã sửa knowledge state ở chỗ nào và vì sao?
+- Có lúc nào AI tỏ ra biết sẵn đáp án?
+- Nếu được bỏ một bước khỏi flow, bạn sẽ bỏ bước nào?
 
-## 6. Transcript schema
+## Transcript schema
 
 ```json
 {
-  "schemaVersion": 1,
+  "schemaVersion": 2,
   "participantId": "P001",
   "sequence": "S1",
-  "condition": "active",
-  "topic": "binary-search",
-  "startedAt": "ISO-8601",
-  "endedAt": "ISO-8601",
+  "condition": "state-aware",
+  "objectiveId": "objective-a",
   "messages": [
     {
       "turn": 1,
-      "role": "tutor",
+      "role": "learner_tutor",
       "text": "...",
       "timestamp": "ISO-8601"
     }
-  ]
+  ],
+  "knowledgeStateRevisions": [],
+  "questionEvents": []
 }
 ```
 
-Không thêm tên, email, mã sinh viên hoặc nội dung clipboard tự động vào schema.
+Không tự thêm direct identifier, clipboard hoặc raw artifact vào schema.
+
+### Changes
+
+| Pass | What changed | Examples |
+|-|-|-|
+| Structure | Thêm annotation cho pipeline | Claim, gap và question-quality rubric |
+| Vocabulary | Bỏ hai thuật toán cố định | Reviewer chọn objective |
+| Rhythm/Style | Viết item như người chấm sẽ dùng | Pass criteria ngắn, cụ thể |
+| Soul | Thêm negative examples | “Nếu được bỏ một bước…” |

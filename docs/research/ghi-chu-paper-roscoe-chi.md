@@ -32,12 +32,11 @@ suy đoán.
   TeachYou là `8.4 ± 7.1%`, so với `3.5 ± 6.6%` ở Baseline, với `p = 0.03` và
   Cohen's `d = 0.71`. Paper không đo learning gain trực tiếp bằng pre-test/post-test.
 
-* [x] E05 chưa tách được tác động riêng của active questioning.
+* [x] E05 chưa tách được tác động riêng của question policy.
 
   **Trả lời:** Đúng. Do Mode-shifting và Teaching Helper được thay đổi cùng lúc,
-  chênh lệch quan sát được không thể quy riêng cho active questioning. Muốn đo tác
-  động này, nghiên cứu hiện tại phải giữ các thành phần khác cố định và chỉ thay đổi
-  question policy.
+  chênh lệch quan sát được không thể quy riêng cho question policy. Nghiên cứu hiện
+  tại giữ các thành phần khác cố định và chỉ thay cách chọn question target.
 
 Nguồn dùng để đối chiếu:
 [ghi chú E05](ghi-chu-paper-algobo.md).
@@ -161,8 +160,8 @@ lời (trang 12, 21).
 thách thức lớn và là giới hạn quan trọng. Nếu gia sư không thể hoặc không muốn đánh
 giá chất lượng lời giải thích của chính mình (thiếu self-monitoring), quá trình xây
 dựng kiến thức mang tính phản ánh sẽ bị ngăn cản (trang 13, 31).
-7.6. **Cơ chế nào liên quan trực tiếp nhất đến active questioning trong nghiên cứu
-hiện tại?** Việc trả lời các câu hỏi mang tính lập luận sâu (deep reasoning questions)
+7.6. **Cơ chế nào liên quan trực tiếp nhất đến question strategy?** Việc trả lời
+các câu hỏi mang tính lập luận sâu (deep reasoning questions)
 từ người được dạy buộc gia sư phải đối mặt với kiến thức đứt gãy của mình, từ đó thúc
 đẩy hoạt động tự giám sát (self-monitoring) và xây dựng kiến thức (trang 21-22, 26).
 
@@ -249,14 +248,13 @@ khoa mà tutor vừa đọc 2 phút trước, nó hoàn toàn là *Knowledge-tel
 11.1. **E10 hỗ trợ chọn primary outcome nào?** Phân tích tỉ lệ/mật độ các lượt hội
 thoại được xếp loại là knowledge-building (bao gồm Elaboration và Sense-making) so
 với tổng số lượt thoại.
-11.2. **E10 hỗ trợ thiết kế câu hỏi của Active tutee như thế nào?** Active tutee
-(LLM) không nên chỉ hỏi "what" (sự thật). Nó cần đặt câu hỏi "why" (tại sao làm thế),
+11.2. **E10 hỗ trợ question strategy như thế nào?** AI tutee không nên chỉ hỏi
+"what" (sự thật). Nó cần đặt câu hỏi "why" (tại sao làm thế),
 "how" (bước này liên kết với nguyên lý nào), "what if" (điều gì xảy ra nếu điều kiện
 bị đảo ngược) để ép người học ra khỏi trạng thái knowledge-telling.
-11.3. **Hành vi nào của Passive tutee cần tránh để không vô tình kích hoạt
-knowledge-building?** Passive tutee chỉ nên gật đầu, đồng ý ("ok, tớ hiểu rồi") hoặc
-hỏi những câu xác nhận thông tin bề mặt (verification questions) như "vậy kết quả là
-5 đúng không?". Không được hỏi vặn hay thể hiện sự bối rối kéo dài.
+11.3. **Fixed policy cần tránh điều gì?** Fixed policy không được biến thành
+passive tutee chỉ biết gật đầu. Nó vẫn hỏi ở cùng opportunity với State-aware,
+nhưng target đi theo lesson path thay vì candidate-gap ranking.
 11.4. **Có thể dùng nguyên taxonomy của E10 cho transcript tiếng Việt không? Vì
 sao?** Không. E10 tổng hợp nhiều nghiên cứu với các coding scheme khác nhau và chủ
 yếu dành cho tương tác giữa người-người (với nhiều nhiễu xã hội, giao tiếp phi ngôn

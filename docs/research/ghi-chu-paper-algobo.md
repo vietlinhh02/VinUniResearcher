@@ -282,8 +282,8 @@ tiếng Việt hoặc bối cảnh sinh viên Việt Nam.
 
 Không nên mặc định dùng Teaching Helper khóa nút gửi. Paper ghi nhận
 gợi ý có lúc lặp lại, không liên quan ngữ cảnh hoặc khó áp dụng.
-Thành phần này cũng sẽ tạo thêm khác biệt ngoài question policy giữa
-Active và Passive.
+Thành phần này sẽ tạo thêm một biến can thiệp ngoài cách chọn
+question target, nên cả Fixed và State-aware đều không dùng nó.
 
 9.3. Paper hỗ trợ lựa chọn primary outcome nào?
 
@@ -294,8 +294,8 @@ learning outcome.
 
 9.4. Khoảng trống nào paper chưa giải quyết?
 
-- Tác động riêng của chính sách hỏi chủ động khi các thành phần khác
-  được giữ cố định.
+- Tác động của việc chọn target từ knowledge state so với đi theo
+  lesson path cố định.
 - Mối liên hệ giữa knowledge-building trong hội thoại và learning
   gain trực tiếp.
 - Tính khả dụng của LLM teachable agent cho sinh viên Việt Nam dạy
@@ -303,14 +303,13 @@ learning outcome.
 - Fidelity khi knowledge state tiếp nhận lời dạy sai hoặc khi AI suy
   ra kiến thức ngoài state.
 
-9.5. Paper này ảnh hưởng đến thiết kế Active và Passive như thế nào?
+9.5. Paper này ảnh hưởng đến thiết kế Fixed và State-aware thế nào?
 
 Hai condition của nghiên cứu hiện tại nên cùng dùng interface,
-materials, timing, persona, feedback và cơ chế knowledge state. Chỉ
-Active được phép hỏi đào sâu theo question policy; Passive không chủ
-động hỏi `why`, edge case hoặc phản ví dụ. Cách này hẹp hơn
-comparison của paper và cho phép ước lượng tác động riêng của active
-questioning.
+materials, timing, persona, feedback, knowledge state và question
+budget. Fixed đi theo lesson path đã viết trước. State-aware chọn
+target và strategy từ gap trong confirmed state. Cách này kiểm tra
+adaptivity thay vì chỉ so sánh có hỏi với không hỏi.
 
 ## 10. Tóm tắt sau khi đọc
 
@@ -336,7 +335,7 @@ gain trực tiếp; phạm vi hẹp và cỡ mẫu nhỏ.
 state, cơ chế hỏi chủ động và taxonomy đánh giá chất lượng hội
 thoại.
 
-10.8. Điều còn chưa chắc: Tác động riêng của active questioning,
+10.8. Điều còn chưa chắc: Tác động của state-aware selection,
 learning gain trực tiếp và khả năng chuyển sang bối cảnh tiếng Việt.
 
 ## 11. Tự kiểm tra

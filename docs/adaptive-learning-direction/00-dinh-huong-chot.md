@@ -1,85 +1,100 @@
-# Định hướng chốt: build engine đa lab trước, research chạy song song
+# Quyết định nghiên cứu: tập trung vào câu hỏi tiếp theo của AI apprentice
 
-## Bài toán
+## Vấn đề cần giải quyết
 
-Pass test và nộp artifact chỉ chứng minh sản phẩm hiện tại đáp ứng một số assertion.
-Nó chưa chứng minh người học hiểu quyết định kỹ thuật, biết dùng evidence để bảo vệ
-quyết định, hoặc có thể áp dụng kỹ năng đó trong tình huống mới.
+Một sinh viên có thể hoàn thành lab bằng starter code, hướng dẫn từng bước
+hoặc code do AI sinh. Bài nộp pass test không cho biết sinh viên có hiểu lý do đằng
+sau giải pháp hay không.
 
-Mentee thêm một vòng Learning-by-Teaching sau checkpoint của lab. Người học dạy
-một AI apprentice cách reasoning; AI chỉ dùng phần đã được dạy để xử lý một task
-biến thể; runner cho thấy lời dạy có vận hành được hay không; người học sửa lời dạy
-trước khi tự làm transfer task.
+Mentee tạo một phiên teach-back sau lab. Sinh viên đóng vai người dạy, còn AI là
+một học viên mới. Câu hỏi nghiên cứu không phải là AI có giải lại được
+bài lab hay không. Điều team cần hiểu là AI nên hỏi gì sau mỗi lời giải thích
+để làm lộ ra phần reasoning còn thiếu.
 
-## Product thesis
+Đây là bài toán đủ rộng để nghiên cứu ngoài một course cụ thể: duy trì một
+mô hình kiến thức có thể kiểm tra, phát hiện mục tiêu hội thoại chưa được
+làm rõ và chọn câu hỏi tiếp theo mà không biến AI thành tutor đưa đáp án.
 
-> Một engine chung có thể biến learning objective, artifact và evidence của nhiều
-> lab AI thực chiến thành hoạt động dạy ngược có kiểm chứng, miễn là mỗi lab cung
-> cấp một spec rõ về reasoning schema, task biến thể và ground-truth assertions.
+## Phần kế thừa từ AlgoBo/TeachYou
 
-Mentee không phải chatbot tutor, IDE, sandbox hay autograder mới. Nó là lớp nằm
-sau hoặc giữa các checkpoint của hệ thống lab hiện có.
+Team giữ lại:
 
-## Flow chuẩn
+- AI luôn ở vai học trò;
+- knowledge state được lưu ngoài LLM;
+- phản hồi chỉ dựa trên lời learner đã dạy;
+- AI có thể hỏi `why`, `how`, yêu cầu ví dụ hoặc đưa edge case;
+- transcript được dùng để đo knowledge-building.
+
+Team không sao chép nguyên bản chu kỳ hỏi sau mỗi ba lượt. Đó là một heuristic
+của AlgoBo. Mentee nghiên cứu cách chọn mục tiêu và loại câu hỏi từ knowledge
+state hiện tại.
+
+Teaching Helper cũng chưa nằm trong intervention đầu tiên. Nếu vừa thay question policy
+vừa thêm feedback về cách dạy, kết quả sẽ không cho biết thành phần nào tạo
+ra khác biệt.
+
+## Flow chốt
 
 ```text
-1. Learner hoàn thành checkpoint và tạo artifact
-2. Lab gửi objective + evidence summary an toàn sang Mentee
-3. Mentee chọn một skill đủ hẹp để luyện
-4. UI render Teaching Schema từ Lab Teaching Spec
-5. Learner diễn đạt reasoning bằng ngôn ngữ của mình
-6. Hệ thống trích xuất knowledge state; learner xác nhận hoặc sửa
-7. AI apprentice enact trên scenario isomorphic/near-transfer
-8. Deterministic runner kiểm tra structured action/result
-9. UI trả failure evidence tối thiểu, không leak đáp án
-10. Learner repair knowledge state; AI thử lại trong giới hạn
-11. Hệ thống lưu provenance và process evidence
-12. Cuối module/track, learner tự làm task mới khi AI bị khóa
-13. Transfer score là learning outcome chính
+1. Learner hoàn thành toàn bộ lab
+2. Lab gửi objective và completion summary tối thiểu
+3. Learner giải thích một skill hẹp cho AI apprentice
+4. State updater trích xuất claim và đoạn nguồn
+5. Learner xác nhận hoặc sửa cách hệ thống hiểu lời mình
+6. Gap detector tìm phần thiếu, mơ hồ, thiếu lý do hoặc mâu thuẫn
+7. Question selector chọn một target và một strategy
+8. AI hỏi đúng một câu, không gợi đáp án
+9. Learner trả lời; knowledge state được cập nhật
+10. Vòng lặp dừng khi hết question budget hoặc không còn target theo rubric
+11. Learner làm independent transfer khi AI và hint bị khóa
 ```
 
-## Nhiều loại skill, nhiều Teaching Schema
+“Không còn target” chỉ có nghĩa rubric của phiên chưa tìm thấy điểm cần hỏi
+tiếp. Nó không có nghĩa learner đã hiểu 100% hoặc đã mastery.
 
-Engine không ép mọi kỹ năng vào `Khi–thì–vì`.
+## Research question
 
-| Họ task | Reasoning schema điển hình |
+> Trong một phiên post-lab Learning-by-Teaching, câu hỏi được chọn từ knowledge
+> state hiện tại có khơi gợi nhiều knowledge-building hơn câu hỏi chọn theo policy
+> cố định hay không?
+
+Các câu hỏi phụ:
+
+1. State updater và gap detector khớp với annotation của chuyên gia đến đâu?
+2. Câu hỏi được tạo có bám đúng claim và đúng reasoning gap không?
+3. State-aware questioning ảnh hưởng thế nào đến cognitive load và trải nghiệm?
+4. Independent transfer có thay đổi không? Đây là outcome exploratory trong pilot.
+
+## So sánh trong study đầu tiên
+
+Hai condition dùng cùng model, persona, giao diện, tài liệu, thời lượng, knowledge state
+format và số cơ hội hỏi.
+
+| Condition | Cách chọn câu hỏi |
 | --- | --- |
-| Code debugging | Failure → hypotheses → discriminating test → result → fix |
-| RAG | Failure slice → cause → intervention → eval → latency/cost → decision |
-| Prompt/evaluation | Objective → change → expected behavior → eval evidence → decision |
-| Agent workflow | State → tool/action → observation → guardrail → recovery |
-| Safety/PII | Data class → risk → control → verification → residual risk |
-| Incident investigation | Signal → hypotheses → action → evidence → conclusion → prevention |
-| System design | Requirement → decision → alternative → trade-off → validation |
+| Fixed policy | Đi theo lesson path và strategy order đã viết trước |
+| State-aware policy | Chọn target và strategy từ gap đang có trong knowledge state |
 
-Đây là schema family, không phải form cứng. Course author chọn hoặc mở rộng schema
-theo learning objective; mọi field được chấm phải map tới runner assertion.
+Giữ cùng số cơ hội hỏi giúp team không nhầm tác động của “hỏi nhiều
+hơn” với tác động của “chọn câu hỏi tốt hơn”.
 
-## Phạm vi build đầu tiên
+## Chưa làm trong study đầu tiên
 
-Build một vertical slice hoàn chỉnh và chứng minh engine tổng quát bằng ít nhất ba
-spec thuộc ba họ task khác nhau, ví dụ:
+- Không cho AI chạy lại toàn bộ lab rồi dùng kết quả đó để suy ra hiểu biết.
+- Không dùng AI pass, số lượt chat hoặc độ dài câu trả lời làm learning outcome.
+- Không xây learner model xuyên nhiều lab.
+- Không tự sinh curriculum hoặc reference answer trong live session.
+- Không tuyên bố hiệu quả giáo dục tổng quát từ feasibility pilot.
 
-1. Code debugging hoặc tool-calling agent.
-2. RAG/prompt evaluation.
-3. Observability, safety hoặc system design.
+AI enactment có thể trở thành một intervention riêng sau khi team kiểm soát được
+model capability và xác định được nó trả lời câu hỏi nghiên cứu nào. Hiện
+tại nó không nằm trong core loop.
 
-Chọn lab cụ thể theo dữ liệu và reviewer sẵn có; không mặc định Observability.
+### Changes
 
-## Research question song song
-
-> So với reflective teach-back có cùng objective, schema, scenario, persona và
-> thời lượng, verified enactment–repair có cải thiện independent transfer của
-> người học trong lab AI thực chiến không?
-
-Study không được chặn build. Kiến trúc chỉ cần bảo đảm có condition flag, version,
-event log, fidelity checks và assessment isolation ngay từ đầu.
-
-## Không làm ở giai đoạn đầu
-
-- Không xây adaptive curriculum tự do do LLM điều khiển.
-- Không suy ra `mastered` từ AI pass hoặc số lượt chat.
-- Không cho LLM tự tạo ground truth dùng live.
-- Không ingest source, log, secret, API key hoặc PII nếu evidence summary là đủ.
-- Không xây learner-state scheduler xuyên track trước khi vertical slice ổn định.
-- Không claim efficacy trước pilot, assessment review và ethics approval.
+| Pass | What changed | Examples |
+|-|-|-|
+| Structure | Chốt một cơ chế | Knowledge state → gap → question |
+| Vocabulary | Nêu vấn đề cụ thể | “AI nên hỏi gì tiếp theo?” |
+| Hedging/Filler | Bỏ các claim rộng chưa có dữ liệu | Không coi AI pass là mastery |
+| Rhythm/Style | Thay đổi nhịp câu | “Đó là một heuristic của AlgoBo.” |

@@ -52,9 +52,9 @@ Ngày đối chiếu paper gốc: 25/07/2026
 ## 6. Liên quan đến nghiên cứu hiện tại
 
 Paper chứng minh tính khả thi của việc dùng LLM học trò để tập trung người học vào debugging
-hypothesis. Nó hỗ trợ tách code-completion khỏi skill muốn đo, nhưng không cung cấp comparator
-Active/Passive hay bằng chứng tiếng Việt. `Suy luận`: nếu pilot hiện tại dùng task lập trình,
-phải khóa mọi scaffold khác ngoài question policy.
+hypothesis. Nó hỗ trợ tách code-completion khỏi skill muốn đo, nhưng không so sánh Fixed với
+State-aware và không có bằng chứng tiếng Việt. `Suy luận`: nếu pilot dùng task lập trình, mọi
+scaffold ngoài cách chọn question target phải được giữ nguyên.
 
 ## 7. Tóm tắt evidence matrix
 
@@ -68,4 +68,3 @@ phải khóa mọi scaffold khác ngoài question policy.
 - [x] Phân biệt material-generation efficiency với learning outcome.
 - [x] Không biến kết quả pre/post thành kết luận nhân quả.
 - [x] Không gọi HypoCompass là comparison Active/Passive.
-

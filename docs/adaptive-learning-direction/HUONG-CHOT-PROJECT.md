@@ -1,115 +1,89 @@
 # Hướng chốt của project Mentee
 
-## 1. Mentee là gì?
+Phiên bản này thay thế hướng `AI enact + runner` trong study đầu tiên. Mentee vẫn là
+một AI apprentice theo tinh thần AlgoBo/TeachYou, nhưng research tập trung vào knowledge
+state và cách AI chọn câu hỏi tiếp theo.
 
-Mentee là một hoạt động học tập diễn ra **sau khi người học hoàn thành toàn bộ một
-bài lab AI thực chiến**.
+## Mentee là gì?
 
-Mentee không thay thế:
+Mentee là một hoạt động Learning-by-Teaching sau khi learner hoàn thành toàn bộ một
+bài lab. Learner đóng vai người dạy. AI đóng vai một học viên mới, lắng nghe, ghi
+nhận điều đã được dạy và hỏi lại khi có phần chưa rõ.
 
-- lesson hoặc slide;
-- IDE và môi trường chạy code;
-- sandbox;
-- test và autograder;
-- hệ thống nộp bài của trường.
+Mentee không thay lesson, IDE, sandbox, test, autograder hoặc hệ thống nộp bài. Những
+công cụ đó xác nhận artifact chạy được. Mentee kiểm tra một vấn đề khác:
+learner có giải thích được reasoning đằng sau artifact hay không?
 
-Người học vẫn học, làm lab, chạy test và nộp artifact trên hệ thống hiện tại. Chỉ
-khi toàn bộ lab đã hoàn thành, hệ thống mới chuyển người học sang một phiên Mentee.
-
-Mục tiêu của phiên này là kiểm tra và củng cố một điều mà việc pass test chưa chứng
-minh được:
-
-> Người học có thực sự hiểu cách giải quyết vấn đề và có thể áp dụng reasoning đó
-> vào một tình huống mới hay không?
-
-## 2. Vấn đề project giải quyết
-
-Một người học có thể hoàn thành lab bằng cách làm theo hướng dẫn, dùng starter
-code, hỏi AI, thử nhiều lần hoặc sửa theo error message. Artifact cuối cùng có thể
-pass test nhưng người học vẫn chưa chắc hiểu:
+Một người có thể pass lab bằng cách làm theo hướng dẫn, thử nhiều lần hoặc
+dùng code do AI sinh. Vì vậy product cuối cùng không đủ để suy ra người đó
+hiểu:
 
 - tại sao giải pháp hoạt động;
-- giải pháp đúng trong điều kiện nào;
 - evidence nào hỗ trợ quyết định;
-- phương án khác và trade-off là gì;
-- cách xử lý khi bối cảnh thay đổi;
-- cách tự giải một task tương tự mà không có hướng dẫn hoặc AI hỗ trợ.
+- điều kiện và giới hạn của một quy tắc;
+- cách nối kết quả quan sát với bước xử lý tiếp theo;
+- cách áp dụng reasoning vào một task mới.
 
-Mentee yêu cầu người học dạy lại reasoning cho một AI apprentice. Sau đó người học
-quan sát AI áp dụng chính lời dạy đó vào một task biến thể được runner kiểm chứng.
-Nếu AI thất bại vì lời dạy thiếu hoặc sai, người học phải sửa reasoning.
+## Research problem
 
-## 3. Flow sản phẩm đã chốt
+Use case của team là các lab AI Thực Chiến. Bài toán nghiên cứu rộng hơn use case:
 
-```text
-1. Người học hoàn thành toàn bộ lab
-2. Người học chạy test và nộp artifact
-3. Hệ thống phát sự kiện lab_completed
-4. Mentee nhận learning objectives và Lab Completion Summary
-5. Mentee chọn một hoặc một vài skill trọng tâm của lab
-6. Người học dạy AI apprentice theo Teaching Schema phù hợp
-7. Hệ thống tạo knowledge state và cho người học xác nhận
-8. AI áp dụng lời dạy vào một task biến thể
-9. Runner kiểm chứng hành động hoặc kết quả của AI
-10. Hệ thống trả failure evidence nhưng không đưa đáp án
-11. Người học sửa lời dạy và AI thử lại
-12. Hệ thống lưu evidence của phiên Mentee
-13. Cuối module hoặc track, người học tự làm transfer task không có AI
-```
+> Làm thế nào AI apprentice cập nhật knowledge state từ lời learner và chọn
+> follow-up question phù hợp để làm rõ reasoning gap?
 
-Một lab tương ứng với tối đa một phiên Mentee:
+AI Thực Chiến cung cấp learner, objective, artifact context và môi trường pilot.
+Contribution không phải một chatbot riêng cho course đó. Contribution nằm ở pipeline có
+thể kiểm tra: learner claim, gap, question target và phản hồi tiếp theo được nối
+với nhau bằng provenance.
 
-```text
-1 completed lab
-→ 1 post-lab Mentee session
-```
+## Quan hệ với AlgoBo/TeachYou
 
-Phiên đó có thể bao gồm một hoặc một vài skill liên quan, nhưng Mentee không tạo
-các phiên riêng và không chen vào sau từng checkpoint.
+Mentee kế thừa ba cơ chế:
 
-## 4. Vai trò của checkpoint
+1. Reflect–Respond: knowledge state nằm ngoài LLM và giới hạn điều AI thể hiện là
+   đã học.
+2. Apprentice persona: AI không chuyển sang vai tutor giải bài.
+3. Active questioning: AI hỏi `why/how`, yêu cầu làm rõ, tạo kết nối hoặc kiểm tra
+   edge case.
 
-Checkpoint vẫn hữu ích, nhưng chỉ là nguồn evidence bên trong lab.
+Mentee thay đổi phần question policy. AlgoBo chuyển sang questioner mode theo chu kỳ
+heuristic. Mentee dùng knowledge state để quyết định phần nào đáng hỏi và nên
+hỏi theo strategy nào.
+
+Teaching Helper chưa nằm trong comparative study. Thay cả question policy lẫn feedback về
+cách dạy trong cùng condition sẽ tạo confound giống hạn chế mà team đã nhận ra
+khi đọc paper.
+
+## Flow sản phẩm
 
 ```text
-Các checkpoint trong lab
-├── test result
-├── validator result
-├── lỗi người học từng gặp
-├── evaluation result
-└── artifact metadata
-        ↓
-Lab Completion Summary
-        ↓
-Một phiên Mentee sau toàn bộ lab
+1. Learner hoàn thành và nộp toàn bộ lab
+2. School lab phát sự kiện lab_completed
+3. Mentee nhận objective và completion summary đã lọc
+4. Learner dạy lại một skill hẹp cho AI apprentice
+5. State updater trích xuất claim và source span
+6. Learner xác nhận, sửa hoặc xóa claim
+7. Gap detector tìm phần thiếu, mơ hồ hoặc mâu thuẫn
+8. Question selector chọn một target và một strategy
+9. AI hỏi đúng một follow-up question
+10. Learner làm rõ; hệ thống tạo knowledge-state revision mới
+11. Vòng lặp tiếp tục trong question budget và timebox
+12. Apprentice bị khóa; learner làm independent transfer
 ```
 
-Checkpoint không kích hoạt Mentee. Trigger duy nhất của flow post-lab là:
+Một lab tạo tối đa một Mentee session. Alpha tập trung vào đúng một objective trong
+phiên đó.
 
-```text
-lab_status = completed
-```
+## Lab completion summary
 
-Không dùng:
-
-```text
-checkpoint_status = passed
-```
-
-## 5. Lab Completion Summary
-
-Sau khi lab hoàn thành, hệ thống trường gửi cho Mentee một bản tóm tắt an toàn.
-Ví dụ:
+Lab chỉ gửi dữ liệu cần cho phiên:
 
 ```json
 {
   "labId": "rag-evaluation",
   "labVersion": 3,
   "status": "completed",
-  "learningObjectives": [
-    "diagnose_retrieval_failure",
-    "evaluate_quality_latency_tradeoff"
-  ],
+  "objectiveIds": ["diagnose_retrieval_failure"],
   "evidenceSummary": {
     "testsPassed": true,
     "evaluationCompleted": true,
@@ -118,461 +92,251 @@ Ví dụ:
 }
 ```
 
-Summary có thể tổng hợp kết quả từ nhiều checkpoint, nhưng không tự động gửi:
+`artifactReference` không có nghĩa Mentee được tự tải toàn bộ artifact. Spec phải
+allowlist field cần đọc. API key, secret, clipboard, raw log có PII và source code không
+liên quan đều nằm ngoài payload mặc định.
 
-- API key hoặc secret;
-- clipboard;
-- raw log chứa PII;
-- toàn bộ source code nếu không cần thiết;
-- dữ liệu ngoài phạm vi đã được consent.
+Checkpoint bên trong lab chỉ là evidence. Trigger duy nhất của phiên post-lab là
+`lab_status = completed`.
 
-## 6. Chọn skill để người học dạy lại
+## Chọn skill cho phiên
 
-Một lab có thể có nhiều learning objective. Mentee không nên bắt người học dạy lại
-toàn bộ nội dung của lab.
+Skill phù hợp cần reasoning, có thể mô tả bằng teaching map và có transfer task
+độc lập. Không chọn objective chỉ vì nó dễ chấm bằng test.
 
-Mỗi phiên chỉ chọn một hoặc một vài skill:
+Ví dụ trong lab RAG, “cấu hình pipeline chạy được” có thể đã được
+autograder kiểm tra. “Phân tích retrieval failure từ evaluation evidence” phù hợp hơn
+với Mentee vì learner phải giải thích giả thuyết, test phân biệt và trade-off.
 
-- quan trọng đối với mục tiêu của bài;
-- cần reasoning thay vì chỉ ghi nhớ cú pháp;
-- có thể áp dụng vào một task biến thể;
-- có ground truth hoặc rubric đủ rõ;
-- có thể kiểm chứng bằng runner.
+Course author chọn skill trước. LLM không tự quyết định curriculum trong alpha.
 
-Ví dụ trong một lab RAG, các objective có thể là:
+## Teaching map
 
-1. Xây retrieval pipeline.
-2. Phân tích retrieval failure.
-3. Đánh giá trade-off giữa quality, latency và cost.
+Teaching map chia objective thành các knowledge component. Nó giúp learner biết phạm vi
+cần dạy và giúp researcher gán claim/gap nhất quán.
 
-Mentee có thể chọn objective 2 hoặc 3 vì chúng thể hiện khả năng reasoning và
-transfer rõ hơn việc chỉ cấu hình pipeline cho chạy được.
-
-Ở giai đoạn đầu, course author định nghĩa skill bắt buộc và skill tùy chọn. LLM
-không được tự do quyết định curriculum.
-
-## 7. Teaching Schema
-
-Teaching Schema là cấu trúc giúp người học diễn đạt reasoning theo đúng loại công
-việc. Mentee không dùng một form chung như `Khi–thì–vì` cho mọi lab.
-
-### Debugging
+Debugging:
 
 ```text
-Lỗi quan sát được
-→ các nguyên nhân có thể xảy ra
-→ test giúp phân biệt các nguyên nhân
-→ kết quả test
-→ kết luận
-→ cách sửa và regression test
+Observed failure
+→ candidate causes
+→ discriminating test
+→ observed evidence
+→ conclusion
+→ fix and regression check
 ```
 
-### RAG
+RAG evaluation:
 
 ```text
-Nhóm query bị lỗi
-→ nguyên nhân giả định
-→ thay đổi retrieval/generation
-→ cách đánh giá
-→ ảnh hưởng quality/latency/cost
-→ quyết định
+Failure slice
+→ hypothesized source
+→ intervention
+→ evaluation design
+→ quality/latency/cost trade-off
+→ decision
 ```
 
-### Prompt engineering và evaluation
+Agent workflow:
 
 ```text
-Behavior mục tiêu
-→ failure quan sát được
-→ prompt change
-→ ảnh hưởng dự kiến
-→ evaluation evidence
-→ regression risk
-```
-
-### Agent và tool calling
-
-```text
-Trạng thái hiện tại
-→ tool hoặc action
-→ observation dự kiến
+Current state
+→ tool or action
+→ expected observation
 → guardrail
-→ recovery hoặc termination condition
+→ recovery or termination condition
 ```
 
-### Safety và PII
+Teaching map là scaffold, không phải đáp án mẫu. Label không được tiết lộ quyết
+định đúng của transfer task.
 
-```text
-Loại dữ liệu
-→ nguy cơ
-→ biện pháp kiểm soát
-→ cách kiểm chứng
-→ residual risk và escalation
-```
+## Knowledge state
 
-### Observability và incident investigation
-
-```text
-Signal
-→ các hypothesis
-→ investigation action
-→ evidence chain
-→ kết luận
-→ remediation và prevention
-```
-
-### AI system design
-
-```text
-Requirement hoặc constraint
-→ design decision
-→ phương án bị loại
-→ trade-off
-→ validation evidence
-```
-
-Teaching Schema không chứa đáp án của scenario. Nó chỉ cho người học biết những
-phần reasoning nào cần được giải thích.
-
-## 8. Người học dạy AI apprentice
-
-Người học điền reasoning bằng ngôn ngữ của mình theo Teaching Schema.
-
-Ví dụ sau một lab RAG:
-
-```text
-Nhóm query bị lỗi:
-Query chứa product code có Recall@10 thấp.
-
-Nguyên nhân giả định:
-Dense retrieval có thể bỏ sót exact identifier.
-
-Thay đổi đề xuất:
-Kết hợp BM25 và dense retrieval, sau đó rerank top results.
-
-Cách đánh giá:
-Đánh giá riêng nhóm query có product code bằng Recall@10 và citation support.
-
-Trade-off:
-Hybrid retrieval có thể tăng recall nhưng tăng latency, nên phải đo p95 latency
-trước khi quyết định triển khai.
-```
-
-Người học đang dạy cách reasoning, không chỉ đưa một đáp án cho một input cụ thể.
-
-## 9. Knowledge state
-
-Mentee chuyển lời dạy thành các claim có cấu trúc:
+Knowledge state chỉ chứa claim có nguồn từ learner:
 
 ```json
 {
+  "revision": 4,
   "claims": [
     {
-      "id": "claim-1",
-      "field": "failure_slice",
-      "content": "Queries containing product codes have low retrieval recall",
-      "sourceTurn": 1,
-      "learnerConfirmed": true
-    },
-    {
-      "id": "claim-2",
-      "field": "hypothesized_cause",
-      "content": "Dense retrieval may miss exact identifiers",
-      "sourceTurn": 2,
+      "id": "claim-7",
+      "componentId": "hypothesized_source",
+      "content": "Dense retrieval có thể bỏ sót exact identifier",
+      "sourceTurn": 3,
+      "sourceText": "...",
       "learnerConfirmed": true
     }
   ]
 }
 ```
 
-Mentee phải hiển thị lại các claim để người học xác nhận, sửa hoặc xóa. Chỉ state
-đã được xác nhận mới được đưa cho AI apprentice.
+Learner nhìn thấy cách hệ thống hiểu lời mình trước khi state được dùng. Mọi
+edit tạo revision mới. LLM không được tự thêm kiến thức đúng chỉ vì nó biết
+câu trả lời.
 
-AI không được:
+Các status như `unaddressed`, `partial`, `articulated`, `ambiguous` và `contradictory` chỉ mô
+tả state của cuộc hội thoại. Không status nào đồng nghĩa với mastery.
 
-- tự thêm kiến thức chuẩn vào state;
-- sửa claim của người học;
-- dùng reference answer;
-- dùng kiến thức ngoài state để hoàn thiện task;
-- đọc private ground truth hoặc transfer answer.
+## Gap detection
 
-## 10. AI áp dụng lời dạy
-
-AI apprentice nhận một task biến thể có cùng learning objective với lab nhưng khác:
-
-- dữ liệu;
-- tên và identifier;
-- bối cảnh bề mặt;
-- distractor;
-- expected answer cụ thể.
-
-AI phải trả structured output để runner kiểm tra. Ví dụ:
+Gap detector so confirmed state với teaching map và diagnostic rubric. Nó tạo một danh sách
+candidate target:
 
 ```json
 {
-  "failureSlice": "queries containing policy identifiers",
-  "hypothesizedCause": "dense retrieval misses exact identifiers",
-  "proposedAction": "evaluate hybrid retrieval",
-  "evaluationMetrics": [
-    "recall_at_10",
-    "citation_support",
-    "p95_latency"
-  ],
-  "claimIds": ["claim-1", "claim-2"]
+  "targetId": "gap-4-1",
+  "componentId": "evaluation_design",
+  "issueType": "missing_justification",
+  "claimIds": ["claim-9"],
+  "priorityReason": "required_component_incomplete"
 }
 ```
 
-Mỗi action hoặc conclusion phải dẫn tới claim nguồn. Nếu knowledge state chưa đủ,
-AI phải trả `unknown` thay vì tự dùng kiến thức nền.
+Taxonomy ban đầu chỉ gồm missing component, missing justification, missing relationship,
+ambiguity, internal contradiction và missing boundary/example. Taxonomy sẽ được sửa từ
+annotation thực tế, không mở rộng vì muốn spec trông đầy đủ.
 
-## 11. Runner và failure evidence
+Private rubric có thể giúp detector nhận ra gap, nhưng reference answer không được đưa
+sang response generator. Đây là boundary chống answer leakage.
 
-Runner kiểm tra structured output dựa trên ground truth đã được course author và
-domain reviewer duyệt.
+## Question selection
 
-Runner có thể dùng:
+Question selector chọn đúng một candidate target và một trong bốn strategy:
 
-- JSON Schema;
-- unit test;
-- hidden assertion;
-- rule check;
-- fixture;
-- tool simulator;
-- rubric mù cho phần reasoning mở.
+- clarification cho claim mơ hồ hoặc mâu thuẫn;
+- elaboration khi learner có kết luận nhưng chưa giải thích vì sao;
+- connection khi hai phần reasoning chưa được nối;
+- edge case khi quy tắc chưa có điều kiện hoặc ví dụ biên.
 
-Runner ưu tiên deterministic verification. LLM judge chỉ được dùng khi không thể
-chấm bằng rule/test và phải được calibrate với người chấm thật.
-
-Khi AI sai, Mentee chỉ ra phần reasoning thiếu hoặc không vận hành được.
-
-Feedback phù hợp:
-
-> AI đã đề xuất thay đổi retrieval nhưng lời dạy hiện chưa cung cấp cách đánh giá
-> ảnh hưởng tới latency. Hãy xem lại phần trade-off.
-
-Feedback không phù hợp:
-
-> Hãy thêm p95 latency và yêu cầu nó nhỏ hơn 500 ms.
-
-Feedback thứ hai tiết lộ expected metric/value và làm mất cơ hội để người học tự
-sửa reasoning.
-
-## 12. Repair
-
-Sau failure evidence, người học bổ sung hoặc sửa lời dạy. Mentee cập nhật knowledge
-state, yêu cầu người học xác nhận rồi cho AI thử lại.
-
-Hệ thống lưu:
-
-- knowledge state trước repair;
-- runner failure;
-- feedback đã hiển thị;
-- reasoning người học sửa;
-- knowledge state sau repair;
-- kết quả attempt tiếp theo;
-- số lần thử và thời gian.
-
-AI pass chỉ có nghĩa là lời dạy đủ để AI xử lý scenario đó. Nó không có nghĩa người
-học đã mastery.
-
-## 13. Transfer assessment
-
-Cuối module, một nhóm lab liên quan hoặc toàn track, người học nhận task mới và AI
-bị khóa hoàn toàn.
-
-Transfer task phải:
-
-- đo cùng learning objective;
-- khác dữ liệu và bối cảnh bề mặt;
-- không dùng lại enactment scenario;
-- không dùng lại private assertion hoặc ground truth;
-- có scoring rule được viết trước;
-- được domain reviewer duyệt;
-- được pilot để tránh quá dễ hoặc quá khó.
-
-Kết quả transfer là learning outcome chính. Số lượt chat, số lần repair, mức hài
-lòng và việc AI pass chỉ là process/UX metrics.
-
-## 14. Lab Teaching Spec
-
-Mỗi lab tích hợp với engine qua một `Lab Teaching Spec`. Đây là hợp đồng giữa nội
-dung lab và Mentee.
-
-Spec khai báo:
-
-- trigger `lab_completed`;
-- lab ID và version;
-- learning objectives;
-- evidence được phép nhận từ Lab Completion Summary;
-- quy tắc chọn skill;
-- Teaching Schema;
-- cách chuyển lời dạy thành knowledge state;
-- scenario bank;
-- output schema của apprentice;
-- runner assertions;
-- feedback policy;
-- transfer blueprint.
-
-Ví dụ:
-
-```yaml
-id: rag-evaluation-lab-teaching
-version: 1
-
-trigger:
-  event: lab_completed
-
-lab:
-  id: rag-evaluation
-  version: 3
-
-evidence_input:
-  source: lab_completion_summary
-  includes:
-    - checkpoint_results
-    - validator_results
-    - evaluation_summary
-    - artifact_reference
-
-skill_selection:
-  required:
-    - diagnose_retrieval_failure
-  optional:
-    - evaluate_quality_latency_tradeoff
-  max_skills: 2
-
-session:
-  max_sessions_per_lab: 1
-
-enactment:
-  scenario_bank: rag-scenarios-v1
-  output_schema: rag-action-v1
-  max_repairs: 2
-```
-
-Checkpoint results có thể nằm trong evidence đầu vào, nhưng không phải trigger.
-
-## 15. Kiến trúc tổng quát cho nhiều lab
+Câu hỏi phải map về target và learner claim nếu claim đã tồn tại. Với
+`missing_component`, target có thể chỉ map về teaching component. Ví dụ:
 
 ```text
-School Lab
-  -> lab_completed event
-  -> Lab Completion Summary
-  -> Lab Teaching Spec
-  -> post-lab Teaching Session
-      -> Teaching Schema
-      -> confirmed Knowledge State
-      -> constrained AI Apprentice
-      -> structured Enactment
-      -> Runner
-      -> Failure Evidence
-      -> Repair
-  -> Independent Transfer Assessment
+Learner claim:
+“Mình sẽ chạy hybrid retrieval để kiểm tra.”
+
+Gap:
+Chưa nói kết quả nào sẽ phân biệt giả thuyết retrieval failure.
+
+Follow-up question:
+“Kết quả nào sẽ giúp bạn biết nguyên nhân nằm ở retrieval?”
 ```
 
-Engine không hard-code RAG, debugging, observability hoặc PII. Kiến thức riêng của
-domain nằm trong `Lab Teaching Spec`, scenario bank và runner assertions.
-
-## 16. Phạm vi build
-
-### Giai đoạn 1: Foundation
-
-Xây:
-
-- format và validator cho `Lab Teaching Spec`;
-- `lab_completed` integration contract;
-- Lab Completion Summary;
-- event model và storage;
-- knowledge-state extraction và confirmation.
-
-### Giai đoạn 2: Một vertical slice hoàn chỉnh
-
-Chọn một lab có objective rõ, fixture tốt, runner deterministic và reviewer sẵn
-có. Hoàn thành flow từ `lab_completed` đến repair.
-
-Không mặc định chọn Observability. Có thể chọn debugging, RAG, agent/tool calling
-hoặc lab khác nếu dễ kiểm chứng và tích hợp hơn.
-
-### Giai đoạn 3: Kiểm tra khả năng tổng quát
-
-Thêm ít nhất hai Lab Teaching Spec thuộc hai họ task khác. Ví dụ:
-
-1. Một executable/tool task.
-2. Một evaluation/decision task.
-3. Một diagnosis/safety/design task.
-
-Cả ba phải chạy trên cùng engine và UI primitives, không viết backend riêng cho
-từng lab.
-
-### Giai đoạn 4: Assessment và fidelity
-
-Xây:
-
-- transfer assessment;
-- answer-leakage test;
-- unsupported-action detection;
-- persona-drift test;
-- prompt-injection test;
-- runner determinism test;
-- pseudonymous research export.
-
-### Giai đoạn 5: Product pilot
-
-Đánh giá:
-
-- người học có hiểu Teaching Schema không;
-- extraction có phản ánh đúng lời dạy không;
-- AI có tuân thủ knowledge state không;
-- failure evidence có giúp repair mà không leak đáp án không;
-- course author mất bao lâu để viết một spec;
-- flow có quá dài hoặc gây gián đoạn không.
-
-### Giai đoạn 6: Research comparison
-
-Khi sản phẩm đã ổn định, so sánh:
-
-- `reflective teach-back`: AI phản ánh reasoning nhưng không có verified enactment;
-- `verified enactment–repair`: AI enact, runner kiểm chứng và learner repair.
-
-Hai condition phải giữ nguyên objective, schema, scenario exposure, persona, model,
-UI, thời lượng và transfer assessment.
-
-Research question:
-
-> Verified enactment–repair có giúp người học tự làm transfer task tốt hơn
-> reflective teach-back hay không?
-
-## 17. Adaptive learning xuyên track
-
-Adaptive scheduler chưa phải phần đầu tiên cần build.
-
-Ở giai đoạn đầu, hệ thống chỉ lưu evidence theo:
+Câu hỏi không phù hợp:
 
 ```text
-participant
-× lab
-× learning objective
-× post-lab Mentee session
+“Bạn nên đo Recall@10 trên nhóm product code đúng không?”
 ```
 
-Chỉ sau khi evidence cấp session đáng tin cậy mới xây:
+Câu thứ hai gợi metric và slice cần tìm. AI đã quay lại vai tutor.
 
-- learner model xuyên nhiều lab;
-- skill prerequisite graph;
-- review scheduler;
-- spaced review;
-- lựa chọn skill cần repair;
-- mở khóa skill phụ thuộc.
+## Điều kiện dừng
 
-Không cá nhân hóa learning track dựa trên evidence chưa được validate.
+Phiên dừng khi hết question budget, hết timebox, learner kết thúc hoặc gap detector
+không còn target theo rubric. Giao diện chỉ báo phiên đã hoàn tất. Nó không nói
+“knowledge state clear 100%”.
 
-## 18. Hướng chốt trong một đoạn
+Independent transfer mới cung cấp bằng chứng về việc learner tự áp dụng skill. Ngay
+cả transfer score cũng phải được diễn giải trong phạm vi objective và rubric đã
+đo.
 
-Mentee là một engine bổ sung sau các bài lab AI thực chiến. Sau khi người học hoàn
-thành và nộp toàn bộ lab, Mentee nhận learning objectives cùng evidence summary của
-lab. Người học dạy lại một hoặc vài kỹ năng trọng tâm cho AI apprentice theo
-Teaching Schema phù hợp. Hệ thống chuyển lời dạy thành knowledge state và cho người
-học xác nhận. AI chỉ dùng state đó để xử lý một task biến thể. Runner kiểm chứng kết
-quả và cung cấp failure evidence để người học sửa reasoning mà không nhận đáp án.
-Cuối module hoặc track, người học tự giải một task mới không có AI hỗ trợ. Sản phẩm
-được xây thành engine chung thông qua `Lab Teaching Spec`; research chạy song song,
-nhưng ưu tiên chính là build một hệ thống thực tế, mở rộng được và kiểm chứng được.
+## Study đầu tiên
+
+### Technical evaluation
+
+Trước khi có learner, hai chuyên gia gán claim, gap, question target và strategy trên một
+bộ transcript. Team đánh giá từng stage, không chỉ nhìn câu trả lời cuối:
+
+- state extraction và source grounding;
+- gap agreement;
+- target/strategy agreement;
+- groundedness, relevance, answer leakage và persona drift.
+
+### Comparative pilot
+
+Hai condition giữ nguyên model, prompt chung, persona, UI, lesson material, knowledge-state
+format, thời lượng và question opportunities.
+
+| Condition | Policy |
+| --- | --- |
+| Fixed | Đi theo lesson path và strategy order viết trước |
+| State-aware | Chọn target và strategy từ confirmed knowledge state |
+
+Việc giữ cùng question budget rất quan trọng. Nếu state-aware condition hỏi nhiều
+hơn, team không biết kết quả đến từ adaptivity hay chỉ từ thêm tương tác.
+
+Primary process outcome là knowledge-building rate. Technical fidelity, mental effort và UX
+được báo riêng. Independent transfer là learning outcome, nhưng ở feasibility pilot nhỏ
+nên được ghi là exploratory.
+
+Research question chính:
+
+> State-aware follow-up questioning có khơi gợi nhiều knowledge-building hơn fixed
+> questioning trong một phiên post-lab Learning-by-Teaching hay không?
+
+## Tại sao không cho AI chạy lại lab ở study này?
+
+Nếu AI nhận knowledge state rồi giải một task mới, output phụ thuộc vào ít nhất
+hai thứ: chất lượng lời learner dạy và capability của model. Khi output sai, team
+không dễ tách hai nguyên nhân. Bước runner phía sau chỉ xác nhận output sai; nó
+không tự giải quyết confound đó.
+
+Enactment vẫn là một cơ chế Learning-by-Teaching có cơ sở từ recursive feedback.
+Nhưng nó trả lời một research question khác. Team có thể nghiên cứu nó sau bằng
+một intervention riêng, khi đã thiết kế được cách kiểm soát model capability.
+
+## Phạm vi build
+
+### Giai đoạn 1
+
+Freeze một objective, teaching map, gap taxonomy và annotation guide. Tạo expert development
+set trước khi tối ưu prompt.
+
+### Giai đoạn 2
+
+Xây text session end-to-end: turn storage, state updater, confirmation, gap detector và question
+selector. Thêm fixed/state-aware policy trên cùng schedule.
+
+### Giai đoạn 3
+
+Chạy fidelity suite, expert evaluation và usability pilot. Sửa prompt/spec trước khi freeze
+comparative study.
+
+### Giai đoạn 4
+
+Preregister protocol, chạy pilot, báo effect estimate cùng uncertainty. Không diễn giải `p
+> .05` thành hai policy tương đương.
+
+### Sau pilot
+
+Quyết định có mở rộng sang lab thứ hai, delayed transfer hoặc enactment hay không
+dựa trên failure data. Chưa xây learner model xuyên track.
+
+## Không làm ở alpha
+
+- Không làm multi-domain authoring studio.
+- Không thêm voice/diagram trước text vertical slice.
+- Không dùng LLM judge chưa calibrate làm ground truth.
+- Không cá nhân hóa curriculum từ evidence chưa validate.
+- Không gọi knowledge-building là learning gain.
+- Không claim Mentee là teachable agent đầu tiên.
+
+## Hướng chốt trong một đoạn
+
+Mentee là một AI apprentice dùng sau khi learner hoàn thành lab. Learner dạy lại một
+skill hẹp; hệ thống lưu lời dạy thành external knowledge state có provenance. Từ
+state đó, Mentee phát hiện reasoning gap và chọn một follow-up question để learner làm
+rõ. AI Thực Chiến là testbed, còn bài toán nghiên cứu là state-aware question
+selection. Study đầu tiên so sánh policy này với một fixed policy trong cùng số câu
+hỏi và đo knowledge-building; independent transfer được đo riêng. AI enactment và runner
+không còn nằm trong core loop đầu tiên.
+
+### Changes
+
+| Pass | What changed | Examples |
+|-|-|-|
+| Structure | Chốt flow theo feedback | Knowledge state → gap → question |
+| Inflation | Bỏ claim platform và mastery | Một objective, một pilot trước |
+| Vocabulary | Giữ thuật ngữ có nguồn | Reflect–Respond, active questioning |
+| Grammar | Dùng ví dụ hội thoại | Câu hỏi grounded và câu hỏi leak |
+| Soul | Nêu lựa chọn của team | Enactment trả lời câu hỏi khác |

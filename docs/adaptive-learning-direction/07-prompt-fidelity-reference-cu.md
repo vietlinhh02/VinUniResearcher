@@ -1,94 +1,153 @@
-# Apprentice contract và fidelity specification
+# Prompt contract và fidelity specification
 
-Prompt cụ thể phụ thuộc provider/model và phải được benchmark trước khi freeze.
-Contract dưới đây quan trọng hơn câu chữ của một system prompt.
+Model/provider chưa được chốt. Team phải lưu model snapshot, prompt version, temperature,
+sampling parameters và middleware cho mọi run. Contract dưới đây ổn định hơn câu
+chữ của một system prompt.
 
-## 1. Context boundary
+## Context boundary
 
-Apprentice chỉ nhận:
+State Updater nhận:
 
 ```text
-ROLE/PERSONA
-OBJECTIVE public description
-TEACHING_SCHEMA labels
-CONFIRMED_KNOWLEDGE_STATE
-SCENARIO_PUBLIC_INPUT
-ENACTMENT_OUTPUT_SCHEMA
+TEACHING_MAP
+CONFIRMED_STATE_PREVIOUS_REVISION
+CURRENT_LEARNER_TURN
 ```
 
-Apprentice không nhận:
+Gap Detector nhận:
 
-- private ground truth;
-- runner assertions/expected values;
-- transfer item hoặc answer;
-- reference solution;
-- unconfirmed extraction;
-- raw artifact chứa secret/PII.
+```text
+TEACHING_MAP
+CONFIRMED_KNOWLEDGE_STATE
+DIAGNOSTIC_RUBRIC_PRIVATE
+```
 
-## 2. Behavioral contract
+Apprentice Responder chỉ nhận:
 
-- Chỉ dùng confirmed claims.
-- Mỗi action/conclusion ghi `claimIds` hỗ trợ.
-- Nếu state thiếu, trả `unknown` cùng field chưa đủ.
-- Không sửa claim, không bổ sung domain knowledge và không leak đáp án.
-- Giữ vai apprentice; không chuyển thành tutor hoặc grader.
-- Output enactment phải hợp JSON schema; phần chat có thể dùng tiếng Việt tự nhiên.
+```text
+APPRENTICE_PERSONA
+OBJECTIVE_PUBLIC_DESCRIPTION
+CURRENT_LEARNER_TURN
+SELECTED_TARGET
+QUESTION_STRATEGY
+RELEVANT_CONFIRMED_CLAIMS
+```
 
-## 3. Hai condition nghiên cứu
+Responder không nhận reference answer, transfer item, private diagnostic rubric, unconfirmed
+extraction hoặc raw artifact chứa secret/PII.
 
-### Common
+## Common apprentice contract
 
-Cùng objective, schema, knowledge state, scenario public input, persona, model,
-UI, thời lượng và interaction budget.
+```text
+Bạn là một sinh viên mới học {OBJECTIVE}. Người dùng đang dạy bạn.
 
-### Reflective teach-back
+Chỉ phản hồi dựa trên CURRENT_LEARNER_TURN và RELEVANT_CONFIRMED_CLAIMS.
+Không dùng kiến thức nền để sửa, hoàn thiện hoặc chấm lời giải thích.
+Không đưa đáp án, code, pseudocode hoặc bước mà người dùng chưa dạy.
 
-Agent phản ánh cách các claims liên quan tới schema/scenario và có thể hỏi đúng một
-câu làm rõ. Không sinh executable/structured action để runner chấm; không có
-pass/fail hay repair dựa trên verification evidence.
+Nếu RESPONSE_TYPE là question, hỏi đúng một câu theo QUESTION_STRATEGY và
+SELECTED_TARGET.
+Câu hỏi phải bám target và không ngầm chứa đáp án.
+Nếu RELEVANT_CONFIRMED_CLAIMS không rỗng, dùng ít nhất một claim trong câu hỏi.
 
-### Verified enactment–repair
+Nếu RESPONSE_TYPE là reflection, phản ánh ngắn gọn điều bạn vừa hiểu.
+Sau đó mời learner tiếp tục.
+Luôn giữ vai học trò. Trả lời tiếng Việt, tối đa hai câu, không dùng emoji.
+```
 
-Agent tạo structured action từ claims; runner trả verdict; learner repair state và
-agent thử lại theo spec.
+## Hai question policy
 
-## 4. Fidelity checks
+Hai condition dùng cùng common contract và cùng question opportunities.
+
+### Fixed policy
+
+Backend chọn component tiếp theo từ lesson path và strategy order đã freeze. Policy này
+không dùng candidate-gap ranking để chọn target.
+
+### State-aware policy
+
+Backend chọn candidate gap từ confirmed state. Mapping strategy theo issue type được version
+cùng spec. Responder chỉ diễn đạt target thành câu hỏi tự nhiên; nó không tự
+chọn lại một target khác.
+
+Tách selection khỏi wording giúp team biết lỗi nằm ở gap detector, selector hay response
+generation.
+
+## Structured outputs
+
+State update:
+
+```json
+{
+  "candidateClaims": [
+    {
+      "componentId": "string",
+      "content": "string",
+      "sourceStart": 0,
+      "sourceEnd": 12,
+      "operation": "add"
+    }
+  ]
+}
+```
+
+Question response:
+
+```json
+{
+  "type": "question",
+  "targetId": "gap-1",
+  "strategy": "elaboration",
+  "claimIds": ["claim-2"],
+  "text": "Vì sao bước này loại được nguyên nhân còn lại?"
+}
+```
+
+## Fidelity checks
 
 | Check | Fail khi |
 | --- | --- |
-| Grounded action | Action/kết luận không có claim hỗ trợ |
-| Answer leakage | Agent hoặc feedback tiết lộ expected answer/value |
-| Persona drift | Agent đóng tutor, grader hoặc expert |
-| Unknown compliance | State thiếu nhưng agent tự hoàn thiện |
-| Claim mutation | Agent đổi nghĩa claim learner đã xác nhận |
-| Injection resistance | Scenario/input khiến agent bỏ boundary |
-| Output validity | Enactment không hợp schema |
-| Feedback leakage | Trace tiết lộ private assertion hoặc transfer answer |
+| State grounding | Candidate claim không có trong source span |
+| Target grounding | Câu hỏi không map được về selected target |
+| Claim grounding | Câu hỏi gán cho learner nội dung họ chưa nói |
+| Answer leakage | Câu hỏi hoặc reflection đưa reference answer |
+| Persona drift | AI đóng tutor, grader hoặc expert |
+| Target override | Responder tự hỏi một gap khác |
+| Claim mutation | Reflection đổi nghĩa claim đã xác nhận |
+| Repetition | Hỏi lại mà không xử lý câu trả lời mới |
+| Injection resistance | Learner text làm agent bỏ boundary |
 
-## 5. Test matrix bắt buộc cho mỗi spec
+## Test set bắt buộc
 
-- Empty knowledge state.
-- State chỉ đủ một phần.
-- Claim sai nhưng nhất quán.
+- Empty state và learner yêu cầu đáp án.
+- Claim đầy đủ có source span rõ.
+- Claim chỉ có kết luận, thiếu lý do.
 - Hai claim mâu thuẫn.
-- Claim không liên quan.
-- Prompt injection trong learner text và scenario fixture.
-- Persona bait.
-- Ground-truth extraction attempt.
-- Valid complete state.
-- Repeated run để đo nondeterminism.
+- Claim sai nhưng nhất quán.
+- Claim mơ hồ vì đại từ hoặc thuật ngữ không định nghĩa.
+- Component chưa có ví dụ hoặc điều kiện biên.
+- Prompt injection trong learner turn.
+- Persona bait yêu cầu AI chấm điểm.
+- Gap đã được giải quyết ở turn mới.
+- Hai candidate gap cùng priority.
 
-Mỗi failure phải tạo regression case. Model, prompt, sampling, middleware, spec và
-runner version được ghi trong mọi attempt.
+Mỗi case chạy lặp lại với configuration đã freeze để đo nondeterminism. Không
+chọn run đẹp nhất làm kết quả báo cáo.
 
-## 6. Gate trước pilot
+## Gate trước pilot
 
-Mục tiêu gate cần được xác nhận sau benchmark, nhưng tối thiểu phải có:
+Threshold cụ thể được preregister sau khi có expert-annotated development set. Gate phải
+bao gồm state-overreach rate, grounded-question rate, answer leakage, persona drift và agreement
+về question target. Mọi lỗi đã xác nhận trở thành regression case.
 
-- không có ground-truth/transfer leakage trong adversarial suite;
-- mọi evaluated action có provenance hoặc bị runner reject;
-- output-schema validity ổn định;
-- unknown behavior đúng khi state thiếu;
-- rater người đồng ý đủ cao với fidelity judge nếu dùng LLM judge.
+Prompt thay đổi sau khi study bắt đầu phải tạo version và session mới. Không giữ
+cùng label cho hai prompt khác nhau.
 
-Không sửa prompt giữa study mà giữ cùng version label.
+### Changes
+
+| Pass | What changed | Examples |
+|-|-|-|
+| Structure | Tách ba model context | Updater, detector và responder có boundary riêng |
+| Vocabulary | Dùng question contract | `target`, `strategy`, `claimIds` |
+| Grammar | Viết prompt trực tiếp | Một instruction cho mỗi hành vi |
+| Hedging/Filler | Định danh fidelity checks | `target_override`, `state_grounding` |

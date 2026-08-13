@@ -1,44 +1,53 @@
-# Mentee — Adaptive Learning Direction
+# Mentee: hướng nghiên cứu hiện hành
 
-## Tài liệu hiện hành
+Đọc [Hướng chốt của project](HUONG-CHOT-PROJECT.md) trước. File đó là nguồn
+quyết định khi các tài liệu khác chưa được cập nhật đồng bộ.
 
-Đọc [Hướng chốt đầy đủ của project](HUONG-CHOT-PROJECT.md) trước. Đây là nguồn
-quyết định hiện hành khi có mâu thuẫn với tài liệu khác.
+Mentee vẫn là một AI apprentice mà người học dạy sau khi hoàn thành lab. Hướng
+nghiên cứu hiện tại kế thừa ba ý từ AlgoBo/TeachYou: AI giữ vai học trò,
+knowledge state nằm ngoài model và AI chủ động hỏi để người học giải thích
+sâu hơn.
 
-Điểm chốt về product flow:
+Flow đang dùng:
 
 ```text
-Hoàn thành toàn bộ lab
-→ một phiên Mentee sau lab
+Hoàn thành lab
 → learner dạy AI apprentice
-→ AI enact + runner verification
-→ learner repair
-→ independent transfer cuối module/track
+→ hệ thống cập nhật knowledge state
+→ phát hiện phần thiếu, mơ hồ hoặc mâu thuẫn
+→ chọn một follow-up question
+→ learner làm rõ và knowledge state được cập nhật
+→ independent transfer
 ```
 
-Checkpoint chỉ là evidence được tổng hợp trong `Lab Completion Summary`; checkpoint
-không kích hoạt một phiên Mentee.
+AI không chạy lại toàn bộ bài lab trong study đầu tiên. Kết quả của một bước
+như vậy phụ thuộc cả vào năng lực giải task của model, nên khó dùng để kết
+luận learner đang thiếu kiến thức ở đâu.
 
-## Research và thiết kế đang sử dụng
+## Tài liệu đang dùng
 
-Các file sau nằm ngoài archive vì vẫn là nguồn hỗ trợ cho quá trình build và
-research:
+1. [Hướng chốt của project](HUONG-CHOT-PROJECT.md)
+2. [Quyết định nghiên cứu](00-dinh-huong-chot.md)
+3. [Tổng quan product và research](01-tong-quan-huong-research.md)
+4. [Knowledge state và question policy](02-learner-model-va-adaptation-policy.md)
+5. [PRD cho phiên post-lab](03-prd-engine-xuyen-track.md)
+6. [Thiết kế kỹ thuật conversation engine](04-learning-activity-spec.md)
+7. [Literature synthesis](05-literature-review-nen-tang.md)
+8. [Evidence matrix](06-evidence-matrix.csv)
+9. [Prompt và fidelity specification](07-prompt-fidelity-reference-cu.md)
+10. [Instrumentation và assessment](08-instruments-reference-cu.md)
 
-1. [Định hướng chốt trước đây](00-dinh-huong-chot.md)
-2. [Tổng quan hướng research](01-tong-quan-huong-research.md)
-3. [Teaching Schema, learner model và policy](02-learner-model-va-adaptation-policy.md)
-4. [PRD engine đa lab](03-prd-engine-xuyen-track.md)
-5. [Literature review nền tảng](05-literature-review-nen-tang.md)
-6. [Evidence matrix](06-evidence-matrix.csv)
-7. [Prompt và fidelity specification](07-prompt-fidelity-reference-cu.md)
-8. [Instrumentation và assessment](08-instruments-reference-cu.md)
+Các ghi chú paper, protocol và instrument chi tiết nằm trong [`../research/`](../research/).
 
-Các file này cung cấp evidence, thiết kế và chi tiết triển khai. Nếu chúng còn nhắc
-đến flow sau checkpoint, ưu tiên định nghĩa post-lab trong
-`HUONG-CHOT-PROJECT.md`.
+## Tài liệu cũ
 
-## Tài liệu lưu trữ
+Những file trong [`archive/`](archive/) chỉ để lưu lịch sử. Không dùng chúng để
+quyết định product flow hoặc research question hiện tại.
 
-Các tài liệu cũ từng nằm trực tiếp trong `docs/` đã được chuyển vào
-[`archive/legacy-root-docs/`](archive/legacy-root-docs/). Chúng không còn được dùng
-để quyết định hướng sản phẩm hoặc research hiện hành.
+### Changes
+
+| Pass | What changed | Examples |
+|-|-|-|
+| Structure | Đưa quyết định lên đầu | Flow hỏi ngược xuất hiện trước |
+| Vocabulary | Bỏ cách viết quảng bá | Mô tả trực tiếp AlgoBo và Mentee |
+| Rhythm/Style | Rút câu và giảm lặp | Mỗi file chỉ có một vai trò rõ ràng |

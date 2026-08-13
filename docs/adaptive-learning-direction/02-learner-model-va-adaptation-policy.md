@@ -1,183 +1,170 @@
-# Teaching Schema, knowledge state và adaptation policy
+# Knowledge state và cách chọn câu hỏi tiếp theo
 
-## 1. Teaching Schema là gì?
+## Knowledge state dùng để làm gì?
 
-Teaching Schema là cấu trúc reasoning của một loại công việc, được course author
-chọn theo learning objective. Nó giúp learner không phải bắt đầu từ trang trắng và
-giúp runner xác định phần nào có thể kiểm chứng.
+Knowledge state ghi lại điều learner đã nói, không phải kiến thức mà LLM vốn
+biết. Nó giúp hệ thống trả lời ba câu hỏi thực dụng:
 
-Schema không phải đáp án mẫu. Label không được ngầm tiết lộ thứ tự hoặc quyết định
-đúng của scenario.
+1. Learner đã giải thích điều gì?
+2. Phần nào còn thiếu hoặc chưa rõ theo teaching map?
+3. Câu hỏi nào nên được đặt ở cơ hội tiếp theo?
 
-## 2. Schema family ban đầu
+State không gắn nhãn `mastered`. Một lời giải thích đầy đủ trong hội thoại
+cũng không chứng minh learner làm được transfer task.
 
-### Debugging
+## Teaching map
+
+Course author chia objective thành một số knowledge component đủ nhỏ để thảo luận.
+Mỗi component mô tả năng lực reasoning, không phải một từ khóa cần nhắc lại.
+
+Ví dụ với debugging:
 
 ```text
-Observed failure
-→ candidate hypotheses
-→ discriminating test
-→ observed result
+observed_failure
+→ candidate_cause
+→ discriminating_test
+→ evidence
 → conclusion
-→ fix and regression check
+→ fix_and_regression
 ```
 
-### RAG và evaluation
+Ví dụ với RAG evaluation:
 
 ```text
-Failure slice/query class
-→ hypothesized failure source
-→ proposed intervention
-→ evaluation design
-→ quality/latency/cost evidence
-→ ship/reject decision
-```
-
-### Prompt engineering
-
-```text
-Target behavior
-→ observed failure
-→ prompt change
-→ expected effect
-→ evaluation evidence
-→ regression risk
-```
-
-### Agent/tool workflow
-
-```text
-Current state
-→ selected tool/action
-→ expected observation
-→ guardrail
-→ recovery/termination condition
-```
-
-### Safety, privacy và PII
-
-```text
-Data class
-→ threat/failure mode
-→ control
-→ verification evidence
-→ residual risk/escalation
-```
-
-### Incident investigation
-
-```text
-Signal
-→ hypotheses
-→ investigation action
-→ evidence chain
-→ conclusion
-→ remediation/prevention
-```
-
-### System design
-
-```text
-Requirement/constraint
+failure_slice
+→ hypothesized_source
+→ intervention
+→ evaluation_design
+→ quality_latency_cost_tradeoff
 → decision
-→ rejected alternative
-→ trade-off
-→ validation evidence
 ```
 
-## 3. Knowledge-state contract
+Teaching map là scaffold và khung annotation. Nó không được chứa đáp án cụ thể
+của transfer task.
 
-Knowledge state chỉ chứa điều learner đã cung cấp và xác nhận:
+## Contract của một claim
 
 ```json
 {
-  "schemaVersion": 1,
-  "objectiveId": "rag.retrieval.failure_analysis",
-  "claims": [
-    {
-      "id": "claim-1",
-      "field": "hypothesized_failure_source",
-      "content": "Exact product identifiers may be missed by dense retrieval",
-      "sourceTurn": 2,
-      "sourceText": "...",
-      "learnerConfirmed": true
-    }
-  ]
+  "id": "claim-7",
+  "componentId": "discriminating_test",
+  "content": "Thay từng input một để phân biệt lỗi parser và lỗi retrieval",
+  "sourceTurn": 4,
+  "sourceText": "...",
+  "learnerConfirmed": true
 }
 ```
 
-Không tự thêm “kiến thức chuẩn” vào state learner. Reference knowledge và ground
-truth thuộc runner/spec, không được đưa cho apprentice.
+State updater chỉ được thêm nội dung truy được về lời learner. Nếu model suy
+diễn thêm một bước hợp lý nhưng learner chưa nói, bước đó không thuộc
+knowledge state.
 
-## 4. Confirmation loop
+## Trạng thái của knowledge component
 
-```text
-Learner input
-→ extractor tạo claims
-→ UI hiển thị claim + đoạn nguồn
-→ learner xác nhận/sửa/xóa
-→ state mới được dùng cho enactment
-```
+Một component có thể mang một trong các trạng thái mô tả sau:
 
-Extraction confidence không thay thế learner confirmation. Mọi sửa tự động phải
-có audit trail.
+| Status | Ý nghĩa |
+| --- | --- |
+| `unaddressed` | Learner chưa nói đến component |
+| `partial` | Đã có claim nhưng thiếu quan hệ, lý do hoặc điều kiện cần thiết |
+| `articulated` | Learner đã trình bày đủ theo rubric của phiên |
+| `ambiguous` | Claim có hơn một cách hiểu đáng kể |
+| `contradictory` | Có hai claim không thể cùng đúng trong cùng điều kiện |
 
-## 5. Enactment contract
+`articulated` mô tả lời trình bày, không xác nhận độ đúng.
+Độ đúng theo
+rubric là annotation riêng và cần expert validation. Cách tách này tránh biến
+confidence của LLM thành learner mastery.
 
-Spec định nghĩa output có cấu trúc. Apprentice:
+## Gap detector
 
-- chỉ điền slot được claim bao phủ;
-- dẫn `claimIds` đã dùng cho mỗi action/kết luận;
-- để `unknown` khi state chưa đủ;
-- không được đọc runner assertions hoặc transfer answer;
-- không tự sửa state.
-
-Ví dụ:
+Gap detector nhận teaching map và confirmed state, rồi tạo candidate target:
 
 ```json
 {
-  "action": "run_hybrid_retrieval_eval",
-  "claimIds": ["claim-1", "claim-3"],
-  "parameters": {"slice": "queries_with_product_ids"},
-  "expectedEvidence": ["recall_at_10", "p95_latency"]
+  "targetId": "gap-3",
+  "componentId": "discriminating_test",
+  "issueType": "missing_justification",
+  "claimIds": ["claim-7"],
+  "priorityReason": "required_component_incomplete"
 }
 ```
 
-## 6. Feedback và repair policy
+Các `issueType` đầu tiên gồm:
 
-Runner trả verdict theo assertion. Feedback chỉ mô tả discrepancy ở mức đủ để
-learner biết phần lời dạy cần xem lại.
+- `missing_component`;
+- `missing_justification`;
+- `missing_relationship`;
+- `ambiguous_claim`;
+- `internal_contradiction`;
+- `missing_boundary_or_example`.
 
-| Verdict | Feedback | Hoạt động tiếp theo |
+Không thêm taxonomy mới nếu chưa có ví dụ thật trong transcript và quy tắc để hai
+rater phân biệt nó.
+
+## Question strategy
+
+Question selector chọn đúng một target và một strategy:
+
+| Strategy | Dùng khi | Ví dụ dạng câu hỏi |
 | --- | --- | --- |
-| Missing coverage | Nêu schema field/claim chưa đủ | Bổ sung lời dạy |
-| Unsupported action | Nêu action không có claim nguồn | Sửa hoặc thêm reasoning |
-| Contradiction | Chỉ ra hai claim mâu thuẫn | Learner chọn/sửa dựa trên evidence |
-| Wrong application | Nêu assertion thất bại, không lộ expected value | Repair rồi enact lại |
-| Pass | Xác nhận phạm vi scenario đã pass | Kết thúc hoặc micro-transfer |
+| `clarification` | Claim mơ hồ | “Ý đó là bước nào?” |
+| `elaboration` | Thiếu cơ chế | “Vì sao test này phân biệt được?” |
+| `connection` | Thiếu liên kết | “Kết quả này dẫn đến bước sau thế nào?” |
+| `edge_case` | Thiếu điều kiện biên | “Input rỗng thì sao?” |
 
-Số vòng repair do spec quy định; mặc định 2 để kiểm soát thời gian, không phải quy
-tắc sư phạm phổ quát.
+Question record cần đủ thông tin để audit. `claimIds` có thể rỗng khi target là
+component learner chưa nhắc tới:
 
-## 7. Learner model: triển khai tối thiểu
-
-Ở alpha, chỉ lưu evidence ledger, chưa suy diễn state phức tạp:
-
-```text
-participant × objective
-  -> lab evidence
-  -> teaching claims
-  -> enactment verdicts
-  -> repairs
-  -> transfer verdict
+```json
+{
+  "opportunity": 2,
+  "targetId": "gap-3",
+  "strategy": "elaboration",
+  "claimIds": ["claim-7"],
+  "question": "Vì sao thay từng input giúp phân biệt hai nguyên nhân này?",
+  "policyVersion": "state-aware-v1"
+}
 ```
 
-Nếu cần UI progress, dùng nhãn mô tả evidence:
+`priorityReason` được lưu cho researcher nhưng không hiện cho learner. Learner chỉ thấy
+câu hỏi tự nhiên của AI apprentice.
 
-- `lab_completed`
-- `teaching_submitted`
-- `enactment_completed`
-- `transfer_completed`
+## Quy tắc ưu tiên
 
-Không dùng `mastered` cho đến khi có transfer rule được reviewer duyệt. Scheduler
-adaptive xuyên track là phase sau và phải có policy versioned, rationale và audit.
+Trong product, selector ưu tiên contradiction, component bắt buộc chưa được nói, claim
+thiếu lý do, rồi mới đến connection hoặc edge case. Course author có thể đổi thứ
+tự trong spec, nhưng phải version policy.
+
+Trong comparative study, hai condition có cùng thời điểm và số câu hỏi. Fixed policy
+lấy target tiếp theo từ lesson path. State-aware policy dùng candidate gap. Nhờ vậy
+biến can thiệp là cách chọn câu hỏi, không phải liều lượng tương tác.
+
+## Confirmation loop
+
+```text
+Learner turn
+→ extract claims và source spans
+→ learner xác nhận, sửa hoặc xóa
+→ tạo state revision
+→ detect gaps
+→ chọn câu hỏi nếu đến question opportunity
+```
+
+Không sửa in-place state đã dùng để sinh câu hỏi. Mỗi revision giữ parent ID và
+diff để researcher dựng lại phiên.
+
+## Điều kiện dừng
+
+Phiên dừng khi hết timebox, hết question budget, learner chủ động kết thúc hoặc
+không còn candidate target theo rubric. Hệ thống không nói “bạn đã hiểu hoàn
+toàn”. Nó chỉ báo rằng phiên hiện tại đã hoàn tất.
+
+### Changes
+
+| Pass | What changed | Examples |
+|-|-|-|
+| Structure | Tạo contract kiểm tra được | Claim → gap → question |
+| Vocabulary | Dùng nhãn mô tả thay cho mastery | `articulated`, không phải `mastered` |
+| Grammar | Cắt câu trừu tượng | Mỗi component trả lời một câu hỏi vận hành |
+| Soul | Nêu rõ giới hạn | Chỉ thêm taxonomy từ transcript thật |
