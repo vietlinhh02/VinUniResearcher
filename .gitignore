@@ -8,3 +8,6 @@ coverage.txt
 .agents/
 .claude/
 skills-lock.json
+
+# Local research materials (notes, exports, drafts, and other personal files)
+/docs/research/local/
